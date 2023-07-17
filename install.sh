@@ -212,6 +212,14 @@ EOF
   sudo sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
 }
 
+# k8s 安装
+function k8sInstall() {
+  sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
+  sudo systemctl daemon-reload
+  sudo systemctl restart kubelet
+  sudo systemctl enable kubelet
+}
+
 # 系统判断
 osName
 
@@ -248,4 +256,5 @@ aliyunKubernetesRepo
 # k8s 配置
 k8sConf
 
-echo '安装中'
+# k8s 安装
+k8sInstall
