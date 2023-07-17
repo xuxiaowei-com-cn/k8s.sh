@@ -84,6 +84,14 @@ function stopFirewalld() {
   sudo systemctl disable firewalld.service
 }
 
+# 关闭交换空间
+function swapOff() {
+  free -h
+  sudo swapoff -a
+  sudo sed -i 's/.*swap.*/#&/' /etc/fstab
+  free -h
+}
+
 # 系统判断
 osName
 
@@ -104,5 +112,8 @@ bashCompletionInstall
 
 # 停止防火墙
 stopFirewalld
+
+# 关闭交换空间
+swapOff
 
 echo '安装中'
