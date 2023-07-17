@@ -78,6 +78,12 @@ function bashCompletionInstall() {
   source /etc/profile
 }
 
+# 停止防火墙
+function stopFirewalld() {
+  sudo systemctl stop firewalld.service
+  sudo systemctl disable firewalld.service
+}
+
 # 系统判断
 osName
 
@@ -95,5 +101,8 @@ ntpdateInstall
 
 # bash-completion 安装、配置
 bashCompletionInstall
+
+# 停止防火墙
+stopFirewalld
 
 echo '安装中'
