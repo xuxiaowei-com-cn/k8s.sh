@@ -225,7 +225,10 @@ function k8sInit() {
   kubeadm init --image-repository=registry.aliyuncs.com/google_containers
   echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >>/etc/profile
   source /etc/profile
+  source <(kubectl completion bash)
+  echo "source <(kubectl completion bash)" >>~/.bashrc
   kubectl cluster-info
+  kubectl get pod,svc --all-namespaces
 }
 
 # 系统判断
