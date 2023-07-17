@@ -92,6 +92,15 @@ function swapOff() {
   free -h
 }
 
+# 关闭 selinux
+function selinuxPermissive() {
+  getenforce
+  cat /etc/selinux/config
+  sudo setenforce 0
+  sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+  cat /etc/selinux/config
+}
+
 # 系统判断
 osName
 
@@ -115,5 +124,8 @@ stopFirewalld
 
 # 关闭交换空间
 swapOff
+
+# 关闭 selinux
+selinuxPermissive
 
 echo '安装中'
