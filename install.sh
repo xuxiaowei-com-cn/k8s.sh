@@ -72,6 +72,12 @@ function ntpdateInstall() {
   sudo systemctl enable ntpdate
 }
 
+# bash-completion 安装、配置
+function bashCompletionInstall() {
+  sudo yum -y install bash-completion
+  source /etc/profile
+}
+
 # 系统判断
 osName
 
@@ -86,5 +92,8 @@ sudo yum -y install wget
 
 # 安装、配置 NTP（网络时间协议）
 ntpdateInstall
+
+# bash-completion 安装、配置
+bashCompletionInstall
 
 echo '安装中'
