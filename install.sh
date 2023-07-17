@@ -181,6 +181,37 @@ gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors
 EOF
 }
 
+# k8s 配置
+function k8sConf() {
+  # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
+  cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+
+  sudo modprobe overlay
+  sudo modprobe br_netfilter
+
+  # 设置所需的 sysctl 参数，参数在重新启动后保持不变
+  cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+
+  # 应用 sysctl 参数而不重新启动
+  sudo sysctl --system
+
+  # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
+  # 通过运行以下指令确认 br_netfilter 和 overlay 模块被加载：
+  lsmod | grep br_netfilter
+  lsmod | grep overlay
+
+  # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
+  # 通过运行以下指令确认 net.bridge.bridge-nf-call-iptables、net.bridge.bridge-nf-call-ip6tables 和 net.ipv4.ip_forward 系统变量在你的 sysctl 配置中被设置为 1：
+  sudo sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
+}
+
 # 系统判断
 osName
 
@@ -213,5 +244,8 @@ dockerInstall
 
 # 阿里云 kubernetes 仓库
 aliyunKubernetesRepo
+
+# k8s 配置
+k8sConf
 
 echo '安装中'
