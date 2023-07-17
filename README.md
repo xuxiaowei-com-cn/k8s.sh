@@ -111,11 +111,13 @@
 
 ## 使用说明
 
-```shell
-# 下载脚本，下载后的文件名为 install.sh
-wget -O install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
-# 授权
-chmod +x install.sh
-# 执行安装命令
-./install.sh
-```
+1. 单节点
+
+    ```shell
+    # 下载脚本，下载后的文件名为 install.sh
+    wget -O install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+    # 授权
+    chmod +x install.sh
+    # 执行安装命令
+    ./install.sh
+    ```
