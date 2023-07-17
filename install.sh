@@ -239,6 +239,11 @@ function calicoInstall() {
   kubectl get pod,svc --all-namespaces -o wide
 }
 
+# 全部去污
+function taintNodesAll() {
+  kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+}
+
 # 系统判断
 osName
 
@@ -283,3 +288,6 @@ k8sInit
 
 # calico 网络插件
 calicoInstall
+
+# 全部去污
+taintNodesAll
