@@ -298,3 +298,6 @@ calicoInstall
 
 # 全部去污
 taintNodesAll
+
+echo '重新连接或者执行 source /etc/profile 命令，使配置文件生效，即可执行 kubectl 命令'
+echo '执行 kubectl get pod --all-namespaces -o wide，当所有的 pod 均为 Running 说明初始化完成了'
