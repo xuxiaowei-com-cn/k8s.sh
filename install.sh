@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # 作者：徐晓伟 xuxiaowei@xuxiaowei.com.cn
-# 使用：sudo sh install.sh
+# 使用：chmod +x install.sh && ./install.sh
 # 仓库：https://jihulab.com/xuxiaowei-com-cn/k8s.sh
 #
 
@@ -228,7 +228,15 @@ function k8sInit() {
   source <(kubectl completion bash)
   echo "source <(kubectl completion bash)" >>~/.bashrc
   kubectl cluster-info
-  kubectl get pod,svc --all-namespaces
+  kubectl get pod,svc --all-namespaces -o wide
+}
+
+# calico 网络插件 安装
+function calicoInstall() {
+  wget --no-check-certificate https://docs.tigera.io/archive/v3.25/manifests/calico.yaml
+  sed -i '/k8s,bgp/a \            - name: IP_AUTODETECTION_METHOD\n              value: "interface=INTERFACE_NAME"' calico.yaml
+  sed -i "s#INTERFACE_NAME#$INTERFACE_NAME#g" calico.
+  kubectl get pod,svc --all-namespaces -o wide
 }
 
 # 系统判断
@@ -272,3 +280,6 @@ k8sInstall
 
 # k8s 初始化
 k8sInit
+
+# calico 网络插件
+calicoInstall
