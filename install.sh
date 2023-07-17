@@ -220,6 +220,14 @@ function k8sInstall() {
   sudo systemctl enable kubelet
 }
 
+# k8s 初始化
+function k8sInit() {
+  kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+  echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >>/etc/profile
+  source /etc/profile
+  kubectl cluster-info
+}
+
 # 系统判断
 osName
 
@@ -258,3 +266,6 @@ k8sConf
 
 # k8s 安装
 k8sInstall
+
+# k8s 初始化
+k8sInit
