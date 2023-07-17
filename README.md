@@ -109,6 +109,15 @@
   </a>
 </div>
 
+## 环境变量说明
+
+| 环境变量                            | 说明                                   | 原始镜像                                                                                        | 使用示例                                                        |
+|---------------------------------|--------------------------------------|---------------------------------------------------------------------------------------------|-------------------------------------------------------------|
+| CALICO_MIRRORS                  | calico 网络组件加速镜像                      | 包含 docker.io/calico/cni、docker.io/calico/kube-controllers、docker.io/calico/kube-controllers | export CALICO_MIRRORS=hub-mirror.c.163.com                  |
+| CALICO_MIRRORS_CALICO_CNI       | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/cni                                                                        | export CALICO_MIRRORS_CALICO_CNI=hub-mirror.c.163.com       |
+| CALICO_MIRRORS_KUBE_CONTROLLERS | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/kube-controllers                                                           | export CALICO_MIRRORS_KUBE_CONTROLLERS=hub-mirror.c.163.com |
+| CALICO_MIRRORS_CALICO_NODE      | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/node                                                                       | export CALICO_MIRRORS_CALICO_NODE=hub-mirror.c.163.com      |
+
 ## 使用说明
 
 1. 单节点
