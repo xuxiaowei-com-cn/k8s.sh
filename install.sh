@@ -243,7 +243,9 @@ function calicoInstall() {
 
 # 全部去污
 function taintNodesAll() {
+  kubectl get no -o yaml | grep taint -A 20
   kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+  kubectl get no -o yaml | grep taint -A 20
 }
 
 # 系统判断
