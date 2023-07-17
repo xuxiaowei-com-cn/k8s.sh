@@ -5,6 +5,9 @@
 # 仓库：https://jihulab.com/xuxiaowei-com-cn/k8s.sh
 #
 
+ETC_HOSTNAME=$(cat /etc/hostname)
+CMD_HOSTNAME=$(hostname)
+
 # 系统判断
 function osName() {
   if grep -q "CentOS" /etc/os-release; then
@@ -19,13 +22,15 @@ function osName() {
 
 # 主机名判断
 function hostName() {
-  if [[ hostname =~ ^[A-Za-z0-9\.\-]+$ ]]; then
-    if [ $(cat /etc/hostname) == $(hostname) ]; then
+  if [[ $CMD_HOSTNAME =~ ^[A-Za-z0-9\.\-]+$ ]]; then
+    if [ $ETC_HOSTNAME == $CMD_HOSTNAME ]; then
       echo "主机名符合要求"
     else
-      echo "主机名符合要求，但是配置文件与主机名不同，重启后可能造成 k8s 无法正常运行。"
+      echo "临时主机名：$CMD_HOSTNAME"
+      echo "配置文件主机名：$ETC_HOSTNAME"
+      echo "临时主机名符合要求，但是配置文件与临时主机名不同，系统重启后，将使用配置文件主机名，可能造成 k8s 无法正常运行。"
       echo "由于某些软件基于主机名才能正常运行，为了避免风险，脚本不支持修改主机名，请将配置文件 /etc/hostname 中的主机名与命令 hostname 修改成一致的名称。"
-      echo "hostname 是临时主机名，重启后使用 /etc/hostname 文件中的主机名。"
+      echo "hostname 是临时主机名，重启后使用 /etc/hostname 文件中的内容作为主机名。"
       exit 1
     fi
   else
