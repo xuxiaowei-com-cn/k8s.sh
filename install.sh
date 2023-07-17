@@ -240,22 +240,22 @@ function calicoInstall() {
 
   if [ "$CALICO_MIRRORS_CALICO_CNI" ]; then
     echo "接收到环境变量中的参数 CALICO_MIRRORS_CALICO_CNI：$CALICO_MIRRORS_CALICO_CNI"
-    sed -i "s/docker\.io/$CALICO_MIRRORS_CALICO_CNI/g" calico.yaml
+    sed -i "s#docker\.io#$CALICO_MIRRORS_CALICO_CNI#g" calico.yaml
   fi
 
   if [ "$CALICO_MIRRORS_KUBE_CONTROLLERS" ]; then
     echo "接收到环境变量中的参数 CALICO_MIRRORS_KUBE_CONTROLLERS：$CALICO_MIRRORS_KUBE_CONTROLLERS"
-    sed -i "s/docker\.io/$CALICO_MIRRORS_KUBE_CONTROLLERS/g" calico.yaml
+    sed -i "s#docker\.io#$CALICO_MIRRORS_KUBE_CONTROLLERS#g" calico.yaml
   fi
 
   if [ "$CALICO_MIRRORS_CALICO_NODE" ]; then
     echo "接收到环境变量中的参数 CALICO_MIRRORS_CALICO_NODE：$CALICO_MIRRORS_CALICO_NODE"
-    sed -i "s/docker\.io/$CALICO_MIRRORS_CALICO_NODE/g" calico.yaml
+    sed -i "s#docker\.io#$CALICO_MIRRORS_CALICO_NODE#g" calico.yaml
   fi
 
   if [ "$CALICO_MIRRORS" ]; then
     echo "接收到环境变量中的参数 CALICO_MIRRORS：$CALICO_MIRRORS"
-    sed -i "s/docker\.io/$CALICO_MIRRORS/g" calico.yaml
+    sed -i "s#docker\.io#$CALICO_MIRRORS#g" calico.yaml
   fi
 
   kubectl apply -f calico.yaml
