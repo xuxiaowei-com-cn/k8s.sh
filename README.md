@@ -121,3 +121,18 @@
     # 执行安装命令
     ./install.sh
     ```
+
+## 常见问题
+
+1. ImagePullBackOff：Docker 镜像拉取失败，解决办法如下：
+    1. 等待 k8s 自己重试（时间较久）
+    2. 删除 pod，删除后，k8s 会根据需求，选择性创建 Pod（不懂时慎用）
+        1. kube-system 命名空间的，都会自动创建
+        2. 属于 Deployment 的 pod，都会自动创建
+        3. 命令
+
+            ```shell
+            kubectl -n 命名空间 delete pod Pod的名称
+            ```
+    3. 如果根据上方尝试很多次，都拉取不下来，请自行拉取镜像并导入到 k8s 中，代码可参考
+        1. [Docker Images 迁移](https://xuxiaowei-tools.gitee.io/#/docker/images/migrate)
