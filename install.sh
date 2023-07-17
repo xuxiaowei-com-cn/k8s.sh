@@ -101,6 +101,69 @@ function selinuxPermissive() {
   cat /etc/selinux/config
 }
 
+# 安装、配置 Docker、containerd
+function dockerInstall() {
+  # https://docs.docker.com/engine/install/centos/
+  # 经过测试，可不安装 docker 也可使 k8s 正常运行：只需要不安装 docker-ce、docker-ce-cli、docker-compose-plugin 即可
+
+  # 卸载旧 docker
+  sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+
+  # 安装 docker 仓库
+  sudo yum install -y yum-utils
+  sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+  # 搜索 docker 版本
+  # yum --showduplicates list docker-ce
+
+  # 安装 docker
+  sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+  # 启动 docker 时，会启动 containerd
+  # sudo systemctl status containerd.service
+  sudo systemctl stop containerd.service
+
+  sudo cp /etc/containerd/config.toml /etc/containerd/config.toml.bak
+  sudo containerd config default >$HOME/config.toml
+  sudo cp "$HOME/config.toml" /etc/containerd/config.toml
+  # 修改 /etc/containerd/config.toml 文件后，要将 docker、containerd 停止后，再启动
+  sudo sed -i "s#registry.k8s.io/pause#registry.aliyuncs.com/google_containers/pause#g" /etc/containerd/config.toml
+  # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/#containerd-systemd
+  # 确保 /etc/containerd/config.toml 中的 disabled_plugins 内不存在 cri
+  sudo sed -i "s#SystemdCgroup = false#SystemdCgroup = true#g" /etc/containerd/config.toml
+
+  # containerd 忽略证书验证的配置
+  #      [plugins."io.containerd.grpc.v1.cri".registry.configs]
+  #        [plugins."io.containerd.grpc.v1.cri".registry.configs."192.168.0.12:8001".tls]
+  #          insecure_skip_verify = true
+
+  sudo systemctl enable --now containerd.service
+  # sudo systemctl status containerd.service
+
+  # sudo systemctl status docker.service
+  sudo systemctl start docker.service
+  # sudo systemctl status docker.service
+  sudo systemctl enable docker.service
+  sudo systemctl enable docker.socket
+  sudo systemctl list-unit-files | grep docker
+
+  sudo mkdir -p /etc/docker
+
+  sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://hnkfbj7x.mirror.aliyuncs.com"],
+  "exec-opts": ["native.cgroupdriver=systemd"]
+}
+EOF
+
+  sudo systemctl daemon-reload
+  sudo systemctl restart docker
+  sudo docker info
+
+  sudo systemctl status docker.service
+  sudo systemctl status containerd.service
+}
+
 # 系统判断
 osName
 
@@ -127,5 +190,8 @@ swapOff
 
 # 关闭 selinux
 selinuxPermissive
+
+# 安装、配置 Docker、containerd
+dockerInstall
 
 echo '安装中'
