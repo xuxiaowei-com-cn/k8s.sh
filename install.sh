@@ -23,7 +23,7 @@ function osName() {
 # 主机名判断
 function hostName() {
   if [[ $CMD_HOSTNAME =~ ^[A-Za-z0-9\.\-]+$ ]]; then
-    if [ $ETC_HOSTNAME == $CMD_HOSTNAME ]; then
+    if [ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]; then
       echo "主机名符合要求"
     else
       echo "临时主机名：$CMD_HOSTNAME"
