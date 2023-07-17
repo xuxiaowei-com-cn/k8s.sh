@@ -124,8 +124,8 @@ function dockerInstall() {
   sudo systemctl stop containerd.service
 
   sudo cp /etc/containerd/config.toml /etc/containerd/config.toml.bak
-  sudo containerd config default >$HOME/config.toml
-  sudo cp "$HOME/config.toml" /etc/containerd/config.toml
+  containerd config default >~/config.toml
+  sudo cp ~/config.toml /etc/containerd/config.toml
   # 修改 /etc/containerd/config.toml 文件后，要将 docker、containerd 停止后，再启动
   sudo sed -i "s#registry.k8s.io/pause#registry.aliyuncs.com/google_containers/pause#g" /etc/containerd/config.toml
   # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/#containerd-systemd
