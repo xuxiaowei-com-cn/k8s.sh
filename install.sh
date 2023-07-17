@@ -228,6 +228,7 @@ function k8sInit() {
   source <(kubectl completion bash)
   echo "source <(kubectl completion bash)" >>~/.bashrc
   kubectl cluster-info
+  kubectl get nodes
   kubectl get pod,svc --all-namespaces -o wide
 }
 
