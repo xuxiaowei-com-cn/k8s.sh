@@ -62,6 +62,16 @@ function interfaceName() {
   fi
 }
 
+# 安装、配置 NTP（网络时间协议）
+function ntpdateInstall() {
+  sudo yum -y install ntpdate
+  sudo ntpdate ntp1.aliyun.com
+  sudo systemctl status ntpdate
+  sudo systemctl start ntpdate
+  sudo systemctl status ntpdate
+  sudo systemctl enable ntpdate
+}
+
 # 系统判断
 osName
 
@@ -73,5 +83,8 @@ interfaceName
 
 # 安装 wget
 sudo yum -y install wget
+
+# 安装、配置 NTP（网络时间协议）
+ntpdateInstall
 
 echo '安装中'
