@@ -164,6 +164,23 @@ EOF
   sudo systemctl status containerd.service
 }
 
+# 阿里云 kubernetes 仓库
+function aliyunKubernetesRepo() {
+  cat <<EOF >/etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+# 是否开启本仓库
+enabled=1
+# 是否检查 gpg 签名文件
+gpgcheck=0
+# 是否检查 gpg 签名文件
+repo_gpgcheck=0
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+
+EOF
+}
+
 # 系统判断
 osName
 
@@ -193,5 +210,8 @@ selinuxPermissive
 
 # 安装、配置 Docker、containerd
 dockerInstall
+
+# 阿里云 kubernetes 仓库
+aliyunKubernetesRepo
 
 echo '安装中'
