@@ -118,13 +118,25 @@
 | CALICO_MIRRORS_KUBE_CONTROLLERS | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/kube-controllers                                                           | export CALICO_MIRRORS_KUBE_CONTROLLERS=hub-mirror.c.163.com | export CALICO_MIRRORS_KUBE_CONTROLLERS=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud |
 | CALICO_MIRRORS_CALICO_NODE      | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/node                                                                       | export CALICO_MIRRORS_CALICO_NODE=hub-mirror.c.163.com      | export CALICO_MIRRORS_CALICO_NODE=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud      |
 
-| 安装/配置环境变量          | 说明                                     | 默认值                   | 使用示例                                    |
-|--------------------|----------------------------------------|-----------------------|-----------------------------------------|
-| INTERFACE_NAME     | 指定 k8s 网络插件使用的网卡名称                     | 使用 ip route 获取上网的网卡名称 | export CALICO_MIRRORS_CALICO_NODE=ens33 |
-| KUBERNETES_VERSION | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母） | 使用最新版 k8s             | export KUBERNETES_VERSION=1.26.0        |
-| CALICO_VERSION     | 指定 calico 版本（版本号不带字母）                  | 使用 3.25               | export CALICO_VERSION=3.25              |
-| INSTALL_ONLY       | 仅安装、不初始化                               | 默认为空，默认初始化            | export INSTALL_ONLY=true                |
-| IMAGES_PULL        | 初始化前，先拉取镜像                             | 默认为空，默认在初始化时拉取镜像      | export IMAGES_PULL=true                 |
+| 安装/配置环境变量          | 说明                                     | 默认值                                                      | 使用示例                                    |
+|--------------------|----------------------------------------|----------------------------------------------------------|-----------------------------------------|
+| INTERFACE_NAME     | 指定 k8s 网络插件使用的网卡名称                     | 使用 ip route 获取上网的网卡名称                                    | export CALICO_MIRRORS_CALICO_NODE=ens33 |
+| KUBERNETES_VERSION | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母） | 使用最新版 k8s                                                | export KUBERNETES_VERSION=1.26.0        |
+| CALICO_VERSION     | 指定 calico 版本（版本号不带字母）                  | 使用 3.25                                                  | export CALICO_VERSION=3.25              |
+| INSTALL_ONLY       | 仅安装、不初始化                               | 默认为空，默认初始化                                               | export INSTALL_ONLY=true                |
+| INSTALL_MODE       | 集群模式                                   | 默认值：standalone，合法值：standalone（单机）、master（主节点）、node（工作节点） | export INSTALL_MODE=master              |
+| IMAGES_PULL        | 初始化前，先拉取镜像                             | 默认为空，默认在初始化时拉取镜像                                         | export IMAGES_PULL=true                 |
+
+## 使用前说明
+
+1. k8s 各节点主机名唯一，不能存在相同的
+2. k8s 主机名只能包含：字母、数字、小数点、英文横杠
+3. 由于某些软件基于主机名才能正常运行，为了避免风险，脚本不支持修改主机名，请自行修改
+4. 命令 hostname 为临时修改主机名，配置文件 /etc/hostname 为配置文件中的主机名，服务器重启后，会 hostname 配置的主机名会消失，恢复成
+   /etc/hostname 中的主机名
+5. 集群主节点初始化错误、集群工作节点加入集群错误，请使用 `kubeadm reset`
+   重置节点的配置，并根据提示手动删除 `$HOME/.kube/config`、`/etc/cni/net.d` 文件（夹）等
+6. 安装配置过程将关闭防火墙，推荐使用独立机器部署 k8s
 
 ## 使用说明
 
@@ -197,6 +209,42 @@
     # 执行安装命令
     ./install.sh
     ```
+
+7. k8s 集群（一主多从）
+    1. 主节点：安装软件、初始化
+        ```shell
+        # 下载脚本，下载后的文件名为 install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+        # 授权
+        chmod +x install.sh
+        # 执行安装命令
+        export INSTALL_MODE=master && ./install.sh
+        
+        
+        # 暂存初始化完成后控制台打印的工作节点加入集群的命令，例如：
+        # kubeadm join 192.168.61.147:6443 --token ykrnfh.i4qwth17fopc0gtx \
+        # --discovery-token-ca-cert-hash sha256:9e81fa0b04a57517feb1c9e34edc0aa6563b64db54887fc072a08d7d1235861d
+        
+        
+        # 也可使用命令在主节点生成工作节点加入集群的命令：kubeadm token create --print-join-command
+        
+        
+        ```
+    2. 工作节点：安装软件、加入集群
+        ```shell
+        # 下载脚本，下载后的文件名为 install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+        # 授权
+        chmod +x install.sh
+        # 执行安装命令
+        export INSTALL_MODE=node && ./install.sh
+        
+        
+        # 执行在主节点得到的工作加入集群的命令，例如：
+        # kubeadm join 192.168.61.147:6443 --token ykrnfh.i4qwth17fopc0gtx --discovery-token-ca-cert-hash sha256:9e81fa0b04a57517feb1c9e34edc0aa6563b64db54887fc072a08d7d1235861d
+        
+        
+        ```
 
 ## 常见问题
 

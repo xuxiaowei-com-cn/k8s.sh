@@ -8,6 +8,17 @@
 ETC_HOSTNAME=$(cat /etc/hostname)
 CMD_HOSTNAME=$(hostname)
 
+if [ "$INSTALL_MODE" ]; then
+  if ! [[ "$INSTALL_MODE" =~ ^(standalone|master|node)$ ]]; then
+    echo "k8s集群模式：$INSTALL_MODE，不合法，停止安装"
+    exit 1
+  fi
+else
+  INSTALL_MODE=standalone
+fi
+
+echo "k8s集群模式：$INSTALL_MODE"
+
 # k8s 版本
 function k8sVersion() {
   if [ "$KUBERNETES_VERSION" ]; then
@@ -359,21 +370,46 @@ if [ "$INSTALL_ONLY" == true ]; then
   echo ''
   echo "仅安装，不进行初始化"
 else
-  # k8s 初始化
-  k8sInit
 
-  # calico 网络插件
-  calicoInstall
+  if [ "$INSTALL_MODE" == standalone ]; then
+    # 单机
 
-  # 全部去污
-  taintNodesAll
+    # k8s 初始化
+    k8sInit
+
+    # calico 网络插件
+    calicoInstall
+
+    # 全部去污
+    taintNodesAll
+
+  elif [ "$INSTALL_MODE" == master ]; then
+    # 主节点
+
+    # k8s 初始化
+    k8sInit
+
+    # calico 网络插件
+    calicoInstall
+
+  elif [ "$INSTALL_MODE" == node ]; then
+    # 工作节点
+
+    echo ''
+    echo ''
+    echo ''
+    echo "当前节点是工作节点：请运行主节点加入集群的命令，例如：kubeadm join 1.2.3.4:6443 --token abcdef.1234567890abcdef --discovery-token-ca-cert-hash sha256:1234..cdef"
+  fi
+
+  if [[ "$INSTALL_MODE" =~ ^(standalone|master)$ ]]; then
+    echo ''
+    echo ''
+    echo ''
+    echo 'SSH 重新连接或者执行 source /etc/profile、source ~/.bashrc 命令，使配置文件生效，即可执行 kubectl 命令'
+    echo '执行 kubectl get pod --all-namespaces -o wide，当所有的 pod 均为 Running 说明初始化完成了'
+    echo ''
+    echo ''
+    echo ''
+  fi
+
 fi
-
-echo ''
-echo ''
-echo ''
-echo 'SSH 重新连接或者执行 source /etc/profile、source ~/.bashrc 命令，使配置文件生效，即可执行 kubectl 命令'
-echo '执行 kubectl get pod --all-namespaces -o wide，当所有的 pod 均为 Running 说明初始化完成了'
-echo ''
-echo ''
-echo ''
