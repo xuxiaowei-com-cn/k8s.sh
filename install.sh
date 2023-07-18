@@ -238,6 +238,18 @@ function k8sInstall() {
   sudo systemctl enable kubelet
 }
 
+function imagesPull() {
+  if [ "$IMAGES_PULL" ]; then
+    if [ "$KUBERNETES_VERSION" ]; then
+      kubeadm config images list --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$KUBERNETES_VERSION"
+      kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$KUBERNETES_VERSION"
+    else
+      kubeadm config images list --image-repository=registry.aliyuncs.com/google_containers
+      kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers
+    fi
+  fi
+}
+
 # k8s 初始化
 function k8sInit() {
   if [ "$KUBERNETES_VERSION" ]; then
@@ -337,6 +349,9 @@ k8sConf
 
 # k8s 安装
 k8sInstall
+
+# 拉取镜像
+imagesPull
 
 if [ "$INSTALL_ONLY" == true ]; then
   echo ''

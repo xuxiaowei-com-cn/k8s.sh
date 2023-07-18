@@ -124,6 +124,7 @@
 | KUBERNETES_VERSION | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母） | 使用最新版 k8s             | export KUBERNETES_VERSION=1.26.0        |
 | CALICO_VERSION     | 指定 calico 版本（版本号不带字母）                  | 使用 3.25               | export CALICO_VERSION=3.25              |
 | INSTALL_ONLY       | 仅安装、不初始化                               | 默认为空，默认初始化            | export INSTALL_ONLY=true                |
+| IMAGES_PULL        | 初始化前，先拉取镜像                             | 默认为空，默认在初始化时拉取镜像      | export IMAGES_PULL=true                 |
 
 ## 使用说明
 
@@ -160,7 +161,17 @@
     export INSTALL_ONLY=true && ./install.sh
     ```
 
-4. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 指定版本
+4. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装、拉取镜像，不进行初始化
+    ```shell
+    # 下载脚本，下载后的文件名为 install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+    # 授权
+    chmod +x install.sh
+    # 执行安装命令，仅安装、拉取镜像，不进行初始化
+    export INSTALL_ONLY=true IMAGES_PULL=true && ./install.sh
+    ```
+
+5. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 指定版本
     ```shell
     # 下载脚本，下载后的文件名为 install.sh
     curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
@@ -172,7 +183,7 @@
     export CALICO_VERSION=3.24 && ./install.sh
     ```
 
-5. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 网络组件的加速镜像
+6. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 网络组件的加速镜像
     ```shell
     # calico 网络组件：使用网易云
     # 如果自己有镜像，也可使用自己的镜像
