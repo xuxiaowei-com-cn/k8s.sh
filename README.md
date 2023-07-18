@@ -119,14 +119,14 @@
 | CALICO_MIRRORS_KUBE_CONTROLLERS | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/kube-controllers                                                           | export CALICO_MIRRORS_KUBE_CONTROLLERS=hub-mirror.c.163.com | export CALICO_MIRRORS_KUBE_CONTROLLERS=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud |
 | CALICO_MIRRORS_CALICO_NODE      | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/node                                                                       | export CALICO_MIRRORS_CALICO_NODE=hub-mirror.c.163.com      | export CALICO_MIRRORS_CALICO_NODE=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud      |
 
-| 安装/配置环境变量          | 说明                                     | 默认值                                                      | 使用示例                                    |
-|--------------------|----------------------------------------|----------------------------------------------------------|-----------------------------------------|
-| INTERFACE_NAME     | 指定 k8s 网络插件使用的网卡名称                     | 使用 ip route 获取上网的网卡名称                                    | export CALICO_MIRRORS_CALICO_NODE=ens33 |
-| KUBERNETES_VERSION | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母） | 使用最新版 k8s                                                | export KUBERNETES_VERSION=1.26.0        |
-| CALICO_VERSION     | 指定 calico 版本（版本号不带字母）                  | 使用 3.25                                                  | export CALICO_VERSION=3.25              |
-| INSTALL_ONLY       | 仅安装、不初始化                               | 默认为空，默认初始化                                               | export INSTALL_ONLY=true                |
-| INSTALL_MODE       | 集群模式                                   | 默认值：standalone，合法值：standalone（单机）、master（主节点）、node（工作节点） | export INSTALL_MODE=master              |
-| IMAGES_PULL        | 初始化前，先拉取镜像                             | 默认为空，默认在初始化时拉取镜像                                         | export IMAGES_PULL=true                 |
+| 安装/配置环境变量          | 说明                                           | 默认值                                                      | 使用示例                                    |
+|--------------------|----------------------------------------------|----------------------------------------------------------|-----------------------------------------|
+| INTERFACE_NAME     | 指定 k8s 网络插件使用的网卡名称，如果 k8s 宿主机有多个网卡，请自行指定网卡名称 | 使用 ip route 获取上网的网卡名称                                    | export CALICO_MIRRORS_CALICO_NODE=ens33 |
+| KUBERNETES_VERSION | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母）       | 使用最新版 k8s                                                | export KUBERNETES_VERSION=1.26.0        |
+| CALICO_VERSION     | 指定 calico 版本（版本号不带字母）                        | 使用 3.25                                                  | export CALICO_VERSION=3.25              |
+| INSTALL_ONLY       | 仅安装、不初始化                                     | 默认为空，默认初始化                                               | export INSTALL_ONLY=true                |
+| INSTALL_MODE       | 集群模式                                         | 默认值：standalone，合法值：standalone（单机）、master（主节点）、node（工作节点） | export INSTALL_MODE=master              |
+| IMAGES_PULL        | 初始化前，先拉取镜像                                   | 默认为空，默认在初始化时拉取镜像                                         | export IMAGES_PULL=true                 |
 
 ## 使用前说明
 
@@ -138,6 +138,7 @@
 5. 集群主节点初始化错误、集群工作节点加入集群错误，请使用 `kubeadm reset`
    重置节点的配置，并根据提示手动删除 `$HOME/.kube/config`、`/etc/cni/net.d` 文件（夹）等
 6. 安装配置过程将关闭防火墙，推荐使用独立机器部署 k8s
+7. 如果 k8s 宿主机有多个网卡，请自行指定网卡名称
 
 ## 使用说明
 
