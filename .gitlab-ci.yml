@@ -1,7 +1,8 @@
 stages:
-  - images-mirrors
+  - images-list
+  - images-sync
 
-images-mirrors:
+images-list:latest:
   stage: images-mirrors
   image: openanolis/anolisos:7.9-x86_64
   before_script:
@@ -22,3 +23,49 @@ images-mirrors:
   script:
     - yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
     - kubeadm config images list
+    - kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g'
+    - kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g'
+    - |
+      echo "" >images.sh
+      images=$(kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g')
+      for image in $images; do
+        echo "docker pull $image" >>images.sh
+        if echo "$image" | grep -q "coredns"; then
+          new_image="registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/coredns/$(basename $image)"
+          echo "docker tag $image $new_image" >>images.sh
+          echo "docker push $new_image" >>images.sh
+        fi
+        new_image="registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/$(basename $image)"
+        echo "docker tag $image $new_image" >>images.sh
+        echo "docker push $new_image" >>images.sh
+      done
+    - cat images.sh
+  artifacts:
+    name: "${CI_JOB_NAME}"
+    paths:
+      - images.sh
+  only:
+    - images-mirrors/latest
+  tags:
+    - jihulab
+
+images-sync:latest:
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  stage: images-sync
+  needs:
+    - job: images-list:latest
+      artifacts: true
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  before_script:
+    - docker info
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - cat images.sh
+    - cat images.sh | bash
+  only:
+    - images-mirrors/latest
+  tags:
+    - jihulab
