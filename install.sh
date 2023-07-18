@@ -214,7 +214,7 @@ EOF
 
 # k8s 安装
 function k8sInstall() {
-  sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
+  sudo yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
   sudo systemctl daemon-reload
   sudo systemctl restart kubelet
   sudo systemctl enable kubelet
@@ -222,7 +222,7 @@ function k8sInstall() {
 
 # k8s 初始化
 function k8sInit() {
-  kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+  kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v1.24.0
   echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >>/etc/profile
   source /etc/profile
   source <(kubectl completion bash)
