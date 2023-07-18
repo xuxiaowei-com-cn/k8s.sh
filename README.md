@@ -23,7 +23,10 @@
 <p></p>
 
 <div align="center" style="text-align: center;">
-    <div>支持 CentOS/Anolis 7/8</div>
+    <div>支持 CentOS/Anolis 7/8 系统</div>
+    <div>一键支持 自定义 Kubernetes（k8s）、Calico 版本</div>
+    <div>一键支持 单机集群</div>
+    <div>一键支持 一主多从</div>
     <div>自动安装、配置 Docker、Containerd</div>
     <div>自动安装、配置 Kubernetes（k8s）</div>
     <div>自动安装、配置 Calico 网络插件</div>
