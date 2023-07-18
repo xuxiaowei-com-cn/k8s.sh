@@ -118,6 +118,10 @@
 | CALICO_MIRRORS_KUBE_CONTROLLERS | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/kube-controllers                                                           | export CALICO_MIRRORS_KUBE_CONTROLLERS=hub-mirror.c.163.com | export CALICO_MIRRORS_KUBE_CONTROLLERS=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud |
 | CALICO_MIRRORS_CALICO_NODE      | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/node                                                                       | export CALICO_MIRRORS_CALICO_NODE=hub-mirror.c.163.com      | export CALICO_MIRRORS_CALICO_NODE=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud      |
 
+| 环境变量           | 说明                 | 默认值                   | 使用示例                                    |
+|----------------|--------------------|-----------------------|-----------------------------------------|
+| INTERFACE_NAME | 指定 k8s 网络插件使用的网卡名称 | 使用 ip route 获取上网的网卡名称 | export CALICO_MIRRORS_CALICO_NODE=ens33 |
+
 ## 使用说明
 
 1. 单节点安装
