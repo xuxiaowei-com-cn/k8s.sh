@@ -5,9 +5,6 @@
 # 仓库：https://jihulab.com/xuxiaowei-com-cn/k8s.sh
 #
 
-ETC_HOSTNAME=$(cat /etc/hostname)
-CMD_HOSTNAME=$(hostname)
-
 # 系统判断
 function osName() {
   if grep -q "CentOS" /etc/os-release; then
@@ -50,6 +47,8 @@ function k8sVersion() {
 
 # 主机名判断
 function hostName() {
+  ETC_HOSTNAME=$(cat /etc/hostname)
+  CMD_HOSTNAME=$(hostname)
   if [[ $CMD_HOSTNAME =~ ^[A-Za-z0-9\.\-]+$ ]]; then
     if [ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]; then
       echo "主机名符合要求"
