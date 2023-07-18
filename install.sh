@@ -333,14 +333,21 @@ k8sConf
 # k8s 安装
 k8sInstall
 
-# k8s 初始化
-k8sInit
+if [ "$INSTALL_ONLY" == true ]; then
+  echo ''
+  echo ''
+  echo ''
+  echo "仅安装，不进行初始化"
+else
+  # k8s 初始化
+  k8sInit
 
-# calico 网络插件
-calicoInstall
+  # calico 网络插件
+  calicoInstall
 
-# 全部去污
-taintNodesAll
+  # 全部去污
+  taintNodesAll
+fi
 
 echo ''
 echo ''

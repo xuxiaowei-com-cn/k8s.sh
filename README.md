@@ -122,11 +122,11 @@
 |--------------------|----------------------------------------|-----------------------|-----------------------------------------|
 | INTERFACE_NAME     | 指定 k8s 网络插件使用的网卡名称                     | 使用 ip route 获取上网的网卡名称 | export CALICO_MIRRORS_CALICO_NODE=ens33 |
 | KUBERNETES_VERSION | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母） | 使用最新版 k8s             | export KUBERNETES_VERSION=1.26.0        |
+| INSTALL_ONLY       | 仅安装、不初始化                               | 默认为空，默认初始化            | export INSTALL_ONLY=true                |
 
 ## 使用说明
 
 1. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试）
-
     ```shell
     # 下载脚本，下载后的文件名为 install.sh
     curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
@@ -149,8 +149,17 @@
     export KUBERNETES_VERSION=1.26.0 && ./install.sh
     ```
 
-3. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 网络组件的加速镜像
+3. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装，不进行初始化
+    ```shell
+    # 下载脚本，下载后的文件名为 install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+    # 授权
+    chmod +x install.sh
+    # 执行安装命令，仅安装，不进行初始化
+    export INSTALL_ONLY=true && ./install.sh
+    ```
 
+4. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 网络组件的加速镜像
     ```shell
     # calico 网络组件：使用网易云
     # 如果自己有镜像，也可使用自己的镜像
