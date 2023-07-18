@@ -64,7 +64,7 @@ images-sync:latest:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - cat images.sh
-    - cat images.sh | bash
+    - cat images.sh | sh
   only:
     - images-mirrors/latest
   tags:
