@@ -8,6 +8,18 @@
 ETC_HOSTNAME=$(cat /etc/hostname)
 CMD_HOSTNAME=$(hostname)
 
+# 系统判断
+function osName() {
+  if grep -q "CentOS" /etc/os-release; then
+    echo "当前系统是 CentOS"
+  elif grep -q "Anolis" /etc/os-release; then
+    echo "系统是 Anolis"
+  else
+    echo "系统不是 CentOS 或 Anolis，不支持，停止安装"
+    exit 1
+  fi
+}
+
 if [ "$INSTALL_MODE" ]; then
   if ! [[ "$INSTALL_MODE" =~ ^(standalone|master|node)$ ]]; then
     echo "k8s集群模式：$INSTALL_MODE，不合法，停止安装"
@@ -30,18 +42,6 @@ function k8sVersion() {
     fi
   else
     echo "未指定 k8s 版本，安装最新版 k8s"
-  fi
-}
-
-# 系统判断
-function osName() {
-  if grep -q "CentOS" /etc/os-release; then
-    echo "当前系统是 CentOS"
-  elif grep -q "Anolis" /etc/os-release; then
-    echo "系统是 Anolis"
-  else
-    echo "系统不是 CentOS 或 Anolis，不支持，停止安装"
-    exit 1
   fi
 }
 
@@ -322,11 +322,11 @@ function taintNodesAll() {
   kubectl get pod,svc --all-namespaces -o wide
 }
 
-# k8s 版本
-k8sVersion
-
 # 系统判断
 osName
+
+# k8s 版本
+k8sVersion
 
 # 主机名判断
 hostName
