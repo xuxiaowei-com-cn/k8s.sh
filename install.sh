@@ -389,6 +389,9 @@ else
     # 全部去污
     taintNodesAll
 
+    # 等待 pod 就绪
+    kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+
   elif [ "$INSTALL_MODE" == master ]; then
     # 主节点
 
@@ -397,6 +400,9 @@ else
 
     # calico 网络插件
     calicoInstall
+
+    # 等待 pod 就绪
+    kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
 
   elif [ "$INSTALL_MODE" == node ]; then
     # 工作节点
@@ -411,7 +417,7 @@ else
     echo ''
     echo ''
     echo ''
-    echo 'SSH 重新连接或者执行 source /etc/profile、source ~/.bashrc 命令，使配置文件生效，即可执行 kubectl 命令'
+    echo 'SSH 重新连接或者执行 source /etc/profile && source ~/.bashrc 命令，使配置文件生效，即可执行 kubectl 命令'
     echo '执行 kubectl get pod --all-namespaces -o wide，当所有的 pod 均为 Running 说明初始化完成了'
     echo ''
     echo ''
