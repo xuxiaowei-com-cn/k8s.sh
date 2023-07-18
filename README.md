@@ -128,7 +128,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 install.sh
-    wget -O install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
     # 授权
     chmod +x install.sh
     # 执行安装命令
@@ -144,7 +144,7 @@
     export CALICO_MIRRORS=hub-mirror.c.163.com
     
     # 下载脚本，下载后的文件名为 install.sh
-    wget -O install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
     # 授权
     chmod +x install.sh
     # 执行安装命令

@@ -234,7 +234,7 @@ function k8sInit() {
 
 # calico 网络插件 安装
 function calicoInstall() {
-  wget -O calico.yaml --no-check-certificate https://docs.tigera.io/archive/v3.25/manifests/calico.yaml
+  curl -o calico.yaml https://docs.tigera.io/archive/v3.25/manifests/calico.yaml
   sed -i '/k8s,bgp/a \            - name: IP_AUTODETECTION_METHOD\n              value: "interface=INTERFACE_NAME"' calico.yaml
   sed -i "s#INTERFACE_NAME#$INTERFACE_NAME#g" calico.yaml
 
@@ -280,9 +280,6 @@ hostName
 
 # 网卡选择
 interfaceName
-
-# 安装 wget
-sudo yum -y install wget
 
 # 安装、配置 NTP（网络时间协议）
 ntpdateInstall
