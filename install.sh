@@ -256,7 +256,12 @@ function k8sInit() {
 
 # calico 网络插件 安装
 function calicoInstall() {
-  curl -o calico.yaml https://docs.tigera.io/archive/v3.25/manifests/calico.yaml
+  if [ "$CALICO_VERSION" ]; then
+    curl -o calico.yaml https://docs.tigera.io/archive/v"$CALICO_VERSION"/manifests/calico.yaml
+  else
+    curl -o calico.yaml https://docs.tigera.io/archive/v3.25/manifests/calico.yaml
+  fi
+
   sed -i '/k8s,bgp/a \            - name: IP_AUTODETECTION_METHOD\n              value: "interface=INTERFACE_NAME"' calico.yaml
   sed -i "s#INTERFACE_NAME#$INTERFACE_NAME#g" calico.yaml
 
