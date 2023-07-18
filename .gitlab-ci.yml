@@ -22,12 +22,12 @@ images-list:1.24.0-0:
       EOF
   script:
     - yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
-    - kubeadm config images list
-    - kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g'
-    - kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g'
+    - kubeadm config images list --kubernetes-version=v1.24.0
+    - kubeadm config images list --kubernetes-version=v1.24.0 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g'
+    - kubeadm config images list --kubernetes-version=v1.24.0 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g'
     - |
       echo "" >images.sh
-      images=$(kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g')
+      images=$(kubeadm config images list --kubernetes-version=v1.24.0 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g')
       for image in $images; do
         echo "docker pull $image" >>images.sh
         if echo "$image" | grep -q "coredns"; then
