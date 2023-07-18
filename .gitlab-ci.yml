@@ -1,0 +1,24 @@
+stages:
+  - images-mirrors
+
+images-mirrors:
+  stage: images-mirrors
+  image: openanolis/anolisos:7.9-x86_64
+  before_script:
+    - |
+      cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+      [kubernetes]
+      name=Kubernetes
+      baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+      # 是否开启本仓库
+      enabled=1
+      # 是否检查 gpg 签名文件
+      gpgcheck=0
+      # 是否检查 gpg 签名文件
+      repo_gpgcheck=0
+      gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+
+      EOF
+  script:
+    - yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
+    - kubeadm config images list
