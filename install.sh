@@ -8,6 +8,20 @@
 ETC_HOSTNAME=$(cat /etc/hostname)
 CMD_HOSTNAME=$(hostname)
 
+# k8s 版本
+function k8sVersion() {
+  if [ "$KUBERNETES_VERSION" ]; then
+    if [[ $KUBERNETES_VERSION =~ ^[0-9.]+$ ]]; then
+      echo "指定 k8s 版本：$KUBERNETES_VERSION"
+    else
+      echo "不支持 k8s 版本：$KUBERNETES_VERSION，停止安装（版本号只能包含：数字、小数点）"
+      exit 1
+    fi
+  else
+    echo "未指定 k8s 版本，安装最新版 k8s"
+  fi
+}
+
 # 系统判断
 function osName() {
   if grep -q "CentOS" /etc/os-release; then
@@ -214,7 +228,11 @@ EOF
 
 # k8s 安装
 function k8sInstall() {
-  sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
+  if [ "$KUBERNETES_VERSION" ]; then
+    sudo yum install -y kubelet-"$KUBERNETES_VERSION"-0 kubeadm-"$KUBERNETES_VERSION"-0 kubectl-"$KUBERNETES_VERSION"-0 --disableexcludes=kubernetes --nogpgcheck
+  else
+    sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
+  fi
   sudo systemctl daemon-reload
   sudo systemctl restart kubelet
   sudo systemctl enable kubelet
@@ -222,7 +240,11 @@ function k8sInstall() {
 
 # k8s 初始化
 function k8sInit() {
-  kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+  if [ "$KUBERNETES_VERSION" ]; then
+    kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$KUBERNETES_VERSION"
+  else
+    kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+  fi
   echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >>/etc/profile
   source /etc/profile
   source <(kubectl completion bash)
@@ -272,6 +294,9 @@ function taintNodesAll() {
   kubectl get pod,svc --all-namespaces -o wide
 }
 
+# k8s 版本
+k8sVersion
+
 # 系统判断
 osName
 
@@ -317,5 +342,11 @@ calicoInstall
 # 全部去污
 taintNodesAll
 
+echo ''
+echo ''
+echo ''
 echo 'SSH 重新连接或者执行 source /etc/profile、source ~/.bashrc 命令，使配置文件生效，即可执行 kubectl 命令'
 echo '执行 kubectl get pod --all-namespaces -o wide，当所有的 pod 均为 Running 说明初始化完成了'
+echo ''
+echo ''
+echo ''

@@ -111,20 +111,21 @@
 
 ## 环境变量说明
 
-| 环境变量                            | 说明                                   | 原始镜像                                                                                        | 加速镜像使用示例                                                    | 作者个人镜像                                                                                      |
+| 镜像环境变量                          | 说明                                   | 原始镜像                                                                                        | 加速镜像使用示例                                                    | 作者个人镜像                                                                                      |
 |---------------------------------|--------------------------------------|---------------------------------------------------------------------------------------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | CALICO_MIRRORS                  | calico 网络组件加速镜像                      | 包含 docker.io/calico/cni、docker.io/calico/kube-controllers、docker.io/calico/kube-controllers | export CALICO_MIRRORS=hub-mirror.c.163.com                  | export CALICO_MIRRORS=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud                  |
 | CALICO_MIRRORS_CALICO_CNI       | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/cni                                                                        | export CALICO_MIRRORS_CALICO_CNI=hub-mirror.c.163.com       | export CALICO_MIRRORS_CALICO_CNI=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud       |
 | CALICO_MIRRORS_KUBE_CONTROLLERS | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/kube-controllers                                                           | export CALICO_MIRRORS_KUBE_CONTROLLERS=hub-mirror.c.163.com | export CALICO_MIRRORS_KUBE_CONTROLLERS=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud |
 | CALICO_MIRRORS_CALICO_NODE      | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/node                                                                       | export CALICO_MIRRORS_CALICO_NODE=hub-mirror.c.163.com      | export CALICO_MIRRORS_CALICO_NODE=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud      |
 
-| 环境变量           | 说明                 | 默认值                   | 使用示例                                    |
-|----------------|--------------------|-----------------------|-----------------------------------------|
-| INTERFACE_NAME | 指定 k8s 网络插件使用的网卡名称 | 使用 ip route 获取上网的网卡名称 | export CALICO_MIRRORS_CALICO_NODE=ens33 |
+| 安装/配置环境变量          | 说明                                     | 默认值                   | 使用示例                                    |
+|--------------------|----------------------------------------|-----------------------|-----------------------------------------|
+| INTERFACE_NAME     | 指定 k8s 网络插件使用的网卡名称                     | 使用 ip route 获取上网的网卡名称 | export CALICO_MIRRORS_CALICO_NODE=ens33 |
+| KUBERNETES_VERSION | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母） | 使用最新版 k8s             | export KUBERNETES_VERSION=1.26.0        |
 
 ## 使用说明
 
-1. 单节点安装
+1. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试）
 
     ```shell
     # 下载脚本，下载后的文件名为 install.sh
@@ -135,7 +136,20 @@
     ./install.sh
     ```
 
-2. 单节点安装，使用 calico 网络组件的加速镜像
+2. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 k8s 指定版本
+    ```shell
+    # 下载脚本，下载后的文件名为 install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+    # 授权
+    chmod +x install.sh
+    # 执行安装命令
+    # 指定版本号（版本号不带字母）
+    # 在 GitHub 查看 k8s 发布的版本：https://github.com/kubernetes/kubernetes/tags
+    # 在 GitCode 查看 k8s 发布的版本：https://gitcode.net/mirrors/kubernetes/kubernetes/-/tags
+    export KUBERNETES_VERSION=1.26.0 && ./install.sh
+    ```
+
+3. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 网络组件的加速镜像
 
     ```shell
     # calico 网络组件：使用网易云
