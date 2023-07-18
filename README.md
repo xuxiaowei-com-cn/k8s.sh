@@ -23,19 +23,6 @@
 <p></p>
 
 <div align="center" style="text-align: center;">
-    <div>支持 CentOS/Anolis 7/8 系统</div>
-    <div>一键支持 自定义 Kubernetes（k8s）、Calico 版本</div>
-    <div>一键支持 单机集群</div>
-    <div>一键支持 一主多从</div>
-    <div>自动安装、配置 Docker、Containerd</div>
-    <div>自动安装、配置 Kubernetes（k8s）</div>
-    <div>自动安装、配置 Calico 网络插件</div>
-    <div>自动安装、配置 kubectl 命令自动补充</div>
-</div>
-
-<p></p>
-
-<div align="center" style="text-align: center;">
   为简化开发工作、提高生产率、解决常见问题而生
 </div>
 
@@ -111,6 +98,17 @@
     <img alt="code style" src="https://img.shields.io/badge/license-Apache 2-blue">
   </a>
 </div>
+
+<p></p>
+
+1. 支持 CentOS/Anolis 7/8 系统
+2. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
+3. 一键支持 单机集群
+4. 一键支持 一主多从
+5. 自动安装、配置 Docker、Containerd
+6. 自动安装、配置 Kubernetes（k8s）
+7. 自动安装、配置 Calico 网络插件
+8. 自动安装、配置 kubectl 命令自动补充
 
 ## 环境变量说明
 
