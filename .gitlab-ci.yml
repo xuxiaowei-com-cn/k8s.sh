@@ -3,7 +3,7 @@ stages:
   - images-sync
 
 images-list:latest:
-  stage: images-mirrors
+  stage: images-list
   image: openanolis/anolisos:7.9-x86_64
   before_script:
     - |
