@@ -20,16 +20,19 @@ function osName() {
   fi
 }
 
-if [ "$INSTALL_MODE" ]; then
-  if ! [[ "$INSTALL_MODE" =~ ^(standalone|master|node)$ ]]; then
-    echo "k8s集群模式：$INSTALL_MODE，不合法，停止安装"
-    exit 1
+# k8s集群模式
+function installMode() {
+  if [ "$INSTALL_MODE" ]; then
+    if ! [[ "$INSTALL_MODE" =~ ^(standalone|master|node)$ ]]; then
+      echo "k8s集群模式：$INSTALL_MODE，不合法，停止安装"
+      exit 1
+    fi
+  else
+    INSTALL_MODE=standalone
   fi
-else
-  INSTALL_MODE=standalone
-fi
 
-echo "k8s集群模式：$INSTALL_MODE"
+  echo "k8s集群模式：$INSTALL_MODE"
+}
 
 # k8s 版本
 function k8sVersion() {
@@ -363,6 +366,9 @@ k8sInstall
 
 # 拉取镜像
 imagesPull
+
+# k8s集群模式
+installMode
 
 if [ "$INSTALL_ONLY" == true ]; then
   echo ''
