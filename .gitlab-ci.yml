@@ -61,7 +61,7 @@ images-sync:latest:
     - docker:20.10.16-dind
   before_script:
     - docker info
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker login -u $CI_REGISTRY_USER -p $DOCKER_PRIVATE_TOKEN $CI_REGISTRY
   script:
     - cat images.sh
     - cat images.sh | sh
