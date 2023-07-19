@@ -274,6 +274,7 @@
         # 执行在主节点得到的工作加入集群的命令，例如：
         # kubeadm join 192.168.61.147:6443 --token ykrnfh.i4qwth17fopc0gtx --discovery-token-ca-cert-hash sha256:9e81fa0b04a57517feb1c9e34edc0aa6563b64db54887fc072a08d7d1235861d
         
+        # 可使用 kubeadm token create --print-join-command 创建工作节点加入集群的命令
         
         ```
 
@@ -314,18 +315,67 @@
     2. 主节点：第一台机器：安装软件、初始化集群
 
         ```shell
-
+        # 下载脚本，下载后的文件名为 install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+        # 授权
+        chmod +x install.sh
+        
+        # 指定 VIP 进行 k8s 集群 第一个主节点 初始化
+        export AVAILABILITY_VIP=192.168.80.100 && ./install.sh -m
+        
         ```
 
     3. 主节点：其余机器：安装软件、使用主节点角色加入集群
+
+        ```shell
+        # 下载脚本，下载后的文件名为 install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+        # 授权
+        chmod +x install.sh
+        
+        # 执行安装命令，仅安装，不进行初始化
+        export INSTALL_ONLY=true && ./install.sh
+        
+        # 运行 k8s 集群 第一个主节点 初始化完成后 使用主节点角色加入集群的命令，例如：
+        # kubeadm join 192.168.80.100:9443 --token ykrnfh.i4qwth17fopc0gtx \
+        #   --discovery-token-ca-cert-hash sha256:9e81fa0b04a57517feb1c9e34edc0aa6563b64db54887fc072a08d7d1235861d \
+        #   --control-plane --certificate-key 7c3cb3aaedcadfc636b7d476e3fb564a0985eadffe68e9e74c21bab38f007479
+
+        # 也可以在已正常运行的主节点运行下列命令后，将结果拼接成上方示例
+        # kubeadm token create --print-join-command
+        # kubeadm init phase upload-certs --upload-certs
+
+        # 添加环境变量
+        echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >>/etc/profile
+        # 刷新环境变量
+        source /etc/profile
+        
+        # 等待 pod 就绪
+        kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+        
+        ```
 
     4. 工作节点：安装软件、使用工作节点角色加入集群
 
        工作节点 至少需要部署**2**台机器（请保证单个工作节点的资源可以负载所有任务，否则请增加工作节点）
 
-         ```shell
-         
-         ```
+       每个工作节点执行的命令相同
+
+        ```shell
+        # 下载脚本，下载后的文件名为 install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+        # 授权
+        chmod +x install.sh
+        
+        # 执行安装命令，仅安装，不进行初始化
+        export INSTALL_ONLY=true && ./install.sh
+        
+        # 执行在主节点得到的工作加入集群的命令，例如：
+        # kubeadm join 192.168.80.100:9443 --token ykrnfh.i4qwth17fopc0gtx --discovery-token-ca-cert-hash sha256:9e81fa0b04a57517feb1c9e34edc0aa6563b64db54887fc072a08d7d1235861d
+        
+        # 可使用 kubeadm token create --print-join-command 创建工作节点加入集群的命令
+        
+        ```
 
 ## 常见问题
 

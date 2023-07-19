@@ -671,8 +671,11 @@ else
     # calico 网络插件
     calicoInstall
 
-    # 全部去污
-    taintNodesAll
+    # 使用 VIP 创建主节点时，不去污
+    if ! [ "$AVAILABILITY_MASTER" ]; then
+      # 全部去污
+      taintNodesAll
+    fi
 
     # 等待 pod 就绪
     kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
