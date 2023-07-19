@@ -105,10 +105,12 @@
 2. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
 3. 一键支持 单机集群
 4. 一键支持 一主多从
-5. 自动安装、配置 Docker、Containerd
-6. 自动安装、配置 Kubernetes（k8s）
-7. 自动安装、配置 Calico 网络插件
-8. 自动安装、配置 kubectl 命令自动补充
+5. 一键支持 高可用
+6. 自动安装、配置 Docker、Containerd
+7. 自动安装、配置 Kubernetes（k8s）
+8. 自动安装、配置 Calico 网络插件
+9. 自动安装、配置 kubectl 命令自动补充
+10. 自动安装、配置 VIP（Virtual IP Address，虚拟 IP 地址）
 
 ## 环境变量说明
 
