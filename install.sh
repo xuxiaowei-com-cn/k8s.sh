@@ -5,6 +5,30 @@
 # 仓库：https://jihulab.com/xuxiaowei-com-cn/k8s.sh
 #
 
+while getopts "vm" opt; do
+  case $opt in
+  v)
+    # 用于创建 VIP
+
+    AVAILABILITY=true
+    echo "选项 -v 被激活"
+    ;;
+  m)
+    # 用于使用 VIP 创建主节点
+
+    AVAILABILITY_MASTER=true
+    if ! [ "$AVAILABILITY_VIP" ]; then
+      echo "高可用 VIP 不存在，停止安装。请设置环境变量 AVAILABILITY_VIP"
+      exit 1
+    fi
+    echo "选项 -m 被激活"
+    ;;
+  \?)
+    echo "无效的选项: -$OPTARG"
+    ;;
+  esac
+done
+
 # 系统判断
 function osName() {
   if grep -q "CentOS" /etc/os-release; then
@@ -15,6 +39,256 @@ function osName() {
     echo "系统不是 CentOS 或 Anolis，不支持，停止安装"
     exit 1
   fi
+}
+
+# VIP 网卡选择
+function availabilityInterfaceName() {
+  if ip link show "$AVAILABILITY_INTERFACE_NAME" >/dev/null 2>&1; then
+    echo "VIP 网卡 $AVAILABILITY_INTERFACE_NAME 存在"
+  else
+    echo "VIP 网卡 $AVAILABILITY_INTERFACE_NAME 不存在，停止安装。请重新定义变量 AVAILABILITY_INTERFACE_NAME 选择 VIP 网卡，命令示例：export AVAILABILITY_INTERFACE_NAME=VIP要使用的网卡名称"
+    exit 1
+  fi
+}
+
+function availabilityMaster() {
+
+  if ! [ "$AVAILABILITY_VIP" ]; then
+    echo "高可用 VIP 不存在，停止安装。请设置环境变量 AVAILABILITY_VIP"
+    exit 1
+  fi
+
+  if ! [ "$AVAILABILITY_INTERFACE_NAME" ]; then
+    echo "高可用 网卡名称 不存在，停止安装。请设置环境变量 AVAILABILITY_INTERFACE_NAME"
+    exit 1
+  fi
+
+  if ! [ "$AVAILABILITY_MASTER" ]; then
+    echo "k8s 主节点信息 不存在，停止安装。请设置环境变量 AVAILABILITY_MASTER"
+    exit 1
+  fi
+
+  AVAILABILITY_MASTER_ARRAY=()
+
+  # 解析环境变量的值
+  IFS=',' read -ra masters <<<"$AVAILABILITY_MASTER"
+  for master in "${masters[@]}"; do
+    IFS='@' read -ra parts <<<"$master"
+    name="${parts[0]}"
+    address="${parts[1]}"
+
+    echo "名称: $name"
+    echo "地址: $address"
+
+    # 将解析结果存入数组
+    AVAILABILITY_MASTER_ARRAY+=("$name $address")
+  done
+
+  if ! [ "$AVAILABILITY_VIP_NO" ]; then
+    echo "VIP 编号 不存在，停止安装。请设置环境变量 AVAILABILITY_VIP_NO"
+    exit 1
+  fi
+
+  # 验证 AVAILABILITY_VIP_NO 是否为整数
+  if ! [[ "$AVAILABILITY_VIP_NO" =~ ^[0-9]+$ ]]; then
+    echo "VIP 编号 AVAILABILITY_VIP_NO 必须是整数，停止安装。请重新设置环境变量 AVAILABILITY_VIP_NO"
+    exit 1
+  fi
+
+  # 验证 AVAILABILITY_VIP_NO 是否大于 0
+  if ((AVAILABILITY_VIP_NO <= 0)); then
+    echo "VIP 编号 AVAILABILITY_VIP_NO 必须大于 0，停止安装。请重新设置环境变量 AVAILABILITY_VIP_NO"
+    exit 1
+  fi
+
+  if [ "$AVAILABILITY_VIP_NO" == 1 ]; then
+    AVAILABILITY_VIP_STATE=MASTER
+  else
+    AVAILABILITY_VIP_STATE=BACKUP
+  fi
+
+}
+
+# VIP haproxy
+function availabilityHaproxy() {
+  if ! [ "$AVAILABILITY_HAPROXY_USERNAME" ]; then
+    AVAILABILITY_HAPROXY_USERNAME=admin
+  fi
+  if ! [ "$AVAILABILITY_HAPROXY_PASSWORD" ]; then
+    AVAILABILITY_HAPROXY_PASSWORD=password
+  fi
+
+  mkdir -p /etc/kubernetes/
+
+  cat >/etc/kubernetes/haproxy.cfg <<EOF
+global
+    log         127.0.0.1 local2
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4096
+    user        haproxy
+    group       haproxy
+    daemon
+    stats socket /var/lib/haproxy/stats
+
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option                  http-server-close
+    option                  forwardfor    except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+frontend  kube-apiserver
+    mode                 tcp
+    bind                 *:9443
+    option               tcplog
+    default_backend      kube-apiserver
+
+listen stats
+    mode                 http
+    bind                 *:8888
+    stats auth           $AVAILABILITY_HAPROXY_USERNAME:$AVAILABILITY_HAPROXY_PASSWORD
+    stats refresh        5s
+    stats realm          HAProxy\ Statistics
+    stats uri            /stats
+    log                  127.0.0.1 local3 err
+
+backend kube-apiserver
+    mode        tcp
+    balance     roundrobin
+EOF
+
+  cat /etc/kubernetes/haproxy.cfg
+
+  # 遍历数组
+  for master in "${AVAILABILITY_MASTER_ARRAY[@]}"; do
+    echo "    server  $master check" >>/etc/kubernetes/haproxy.cfg
+  done
+
+  echo "" >>/etc/kubernetes/haproxy.cfg
+
+  cat /etc/kubernetes/haproxy.cfg
+
+  docker run \
+    -d \
+    --name k8s-haproxy \
+    --net=host \
+    --restart=always \
+    -v /etc/kubernetes/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro \
+    haproxytech/haproxy-debian:2.3
+
+}
+
+# VIP keepalived
+function availabilityKeepalived() {
+
+  mkdir -p /etc/kubernetes/
+
+  cat >/etc/kubernetes/keepalived.conf <<EOF
+! Configuration File for keepalived
+
+global_defs {
+   router_id LVS_$AVAILABILITY_VIP_NO
+}
+
+vrrp_script checkhaproxy
+{
+    script "/usr/bin/check-haproxy.sh"
+    interval 2
+    weight -30
+}
+
+vrrp_instance VI_1 {
+    state $AVAILABILITY_VIP_STATE
+    interface $AVAILABILITY_INTERFACE_NAME
+    virtual_router_id 51
+    priority 100
+    advert_int 1
+
+    virtual_ipaddress {
+        $AVAILABILITY_VIP/24 dev $AVAILABILITY_INTERFACE_NAME
+    }
+
+    authentication {
+        auth_type PASS
+        auth_pass password
+    }
+
+    track_script {
+        checkhaproxy
+    }
+}
+
+EOF
+
+  cat >/etc/kubernetes/check-haproxy.sh <<EOF
+#!/bin/bash
+
+count=\`netstat -apn | grep 9443 | wc -l\`
+
+if [ $count -gt 0 ]; then
+    exit 0
+else
+    exit 1
+fi
+
+EOF
+
+  cat /etc/kubernetes/keepalived.conf
+  cat /etc/kubernetes/check-haproxy.sh
+
+  docker run \
+    -d \
+    --name k8s-keepalived \
+    --restart=always \
+    --net=host \
+    --cap-add=NET_ADMIN \
+    --cap-add=NET_BROADCAST \
+    --cap-add=NET_RAW \
+    -v /etc/kubernetes/keepalived.conf:/container/service/keepalived/assets/keepalived.conf \
+    -v /etc/kubernetes/check-haproxy.sh:/usr/bin/check-haproxy.sh \
+    osixia/keepalived:2.0.20 \
+    --copy-service
+
+}
+
+# VIP
+function availabilityVip() {
+  if [ "$AVAILABILITY" == true ]; then
+    echo "开始创建 VIP"
+
+    availabilityMaster
+
+    availabilityInterfaceName
+
+    dockerInstall
+
+    availabilityHaproxy
+
+    availabilityKeepalived
+
+    echo ""
+    echo ""
+    echo ""
+    echo "VIP 创建完成，退出程序。"
+    echo "访问本机IP，端口 8888，路径 /stats，用户名密码个人未指定时是 admin/password"
+    echo ""
+    echo ""
+    echo ""
+    exit 0
+  fi
+
 }
 
 # k8s集群模式
@@ -265,11 +539,20 @@ function imagesPull() {
 
 # k8s 初始化
 function k8sInit() {
-  if [ "$KUBERNETES_VERSION" ]; then
-    kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$KUBERNETES_VERSION"
+  if [ "$AVAILABILITY_MASTER" ]; then
+    if [ "$KUBERNETES_VERSION" ]; then
+      kubeadm init --image-repository=registry.aliyuncs.com/google_containers --control-plane-endpoint "$AVAILABILITY_VIP:9443" --upload-certs --kubernetes-version=v"$KUBERNETES_VERSION"
+    else
+      kubeadm init --image-repository=registry.aliyuncs.com/google_containers --control-plane-endpoint "$AVAILABILITY_VIP:9443" --upload-certs
+    fi
   else
-    kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+    if [ "$KUBERNETES_VERSION" ]; then
+      kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$KUBERNETES_VERSION"
+    else
+      kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+    fi
   fi
+
   echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >>/etc/profile
   source /etc/profile
   source <(kubectl completion bash)
@@ -327,6 +610,21 @@ function taintNodesAll() {
 # 系统判断
 osName
 
+# 安装、配置 NTP（网络时间协议）
+ntpdateInstall
+
+# bash-completion 安装、配置
+bashCompletionInstall
+
+# 关闭 selinux
+selinuxPermissive
+
+# 停止防火墙
+stopFirewalld
+
+# 创建 VIP
+availabilityVip
+
 # k8s 版本
 k8sVersion
 
@@ -336,20 +634,8 @@ hostName
 # 网卡选择
 interfaceName
 
-# 安装、配置 NTP（网络时间协议）
-ntpdateInstall
-
-# bash-completion 安装、配置
-bashCompletionInstall
-
-# 停止防火墙
-stopFirewalld
-
 # 关闭交换空间
 swapOff
-
-# 关闭 selinux
-selinuxPermissive
 
 # 安装、配置 Docker、containerd
 dockerInstall
@@ -385,8 +671,11 @@ else
     # calico 网络插件
     calicoInstall
 
-    # 全部去污
-    taintNodesAll
+    # 使用 VIP 创建主节点时，不去污
+    if ! [ "$AVAILABILITY_MASTER" ]; then
+      # 全部去污
+      taintNodesAll
+    fi
 
     # 等待 pod 就绪
     kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
