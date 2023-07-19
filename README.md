@@ -119,26 +119,55 @@
 | CALICO_MIRRORS_KUBE_CONTROLLERS | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/kube-controllers                                                           | export CALICO_MIRRORS_KUBE_CONTROLLERS=hub-mirror.c.163.com | export CALICO_MIRRORS_KUBE_CONTROLLERS=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud |
 | CALICO_MIRRORS_CALICO_NODE      | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/node                                                                       | export CALICO_MIRRORS_CALICO_NODE=hub-mirror.c.163.com      | export CALICO_MIRRORS_CALICO_NODE=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud      |
 
-| 安装/配置环境变量          | 说明                                           | 默认值                                                      | 使用示例                                    |
-|--------------------|----------------------------------------------|----------------------------------------------------------|-----------------------------------------|
-| INTERFACE_NAME     | 指定 k8s 网络插件使用的网卡名称，如果 k8s 宿主机有多个网卡，请自行指定网卡名称 | 使用 ip route 获取上网的网卡名称                                    | export CALICO_MIRRORS_CALICO_NODE=ens33 |
-| KUBERNETES_VERSION | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母）       | 使用最新版 k8s                                                | export KUBERNETES_VERSION=1.26.0        |
-| CALICO_VERSION     | 指定 calico 版本（版本号不带字母）                        | 使用 3.25                                                  | export CALICO_VERSION=3.25              |
-| INSTALL_ONLY       | 仅安装、不初始化                                     | 默认为空，默认初始化                                               | export INSTALL_ONLY=true                |
-| INSTALL_MODE       | 集群模式                                         | 默认值：standalone，合法值：standalone（单机）、master（主节点）、node（工作节点） | export INSTALL_MODE=master              |
-| IMAGES_PULL        | 初始化前，先拉取镜像                                   | 默认为空，默认在初始化时拉取镜像                                         | export IMAGES_PULL=true                 |
+| 安装/配置环境变量                     | 说明                                                                                                | 默认值                                                      | 使用示例                                                                                                                    |
+|-------------------------------|---------------------------------------------------------------------------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| INTERFACE_NAME                | 指定 k8s 网络插件使用的网卡名称，如果 k8s 宿主机有多个网卡，请自行指定网卡名称                                                      | 使用 ip route 获取上网的网卡名称                                    | export CALICO_MIRRORS_CALICO_NODE=ens33                                                                                 |
+| KUBERNETES_VERSION            | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母）                                                            | 使用最新版 k8s                                                | export KUBERNETES_VERSION=1.26.0                                                                                        |
+| CALICO_VERSION                | 指定 calico 版本（版本号不带字母）                                                                             | 使用 3.25                                                  | export CALICO_VERSION=3.25                                                                                              |
+| INSTALL_ONLY                  | 仅安装、不初始化                                                                                          | 默认为空，默认初始化                                               | export INSTALL_ONLY=true                                                                                                |
+| INSTALL_MODE                  | 集群模式                                                                                              | 默认值：standalone，合法值：standalone（单机）、master（主节点）、node（工作节点） | export INSTALL_MODE=master                                                                                              |
+| IMAGES_PULL                   | 初始化前，先拉取镜像                                                                                        | 默认为空，默认在初始化时拉取镜像                                         | export IMAGES_PULL=true                                                                                                 |
+| AVAILABILITY_VIP              | 高可用中 VIP（Virtual IP Address，虚拟 IP 地址），需要与 AVAILABILITY_INTERFACE_NAME 同时使用，创建 VIP 时必填，使用 -v、-m 激活 | 默认为空，默认不创建 VIP                                           | export AVAILABILITY_VIP=192.168.80.100                                                                                  |
+| AVAILABILITY_VIP_NO           | 高可用中 VIP 的编号，整数数字类型，大于 0，其中 1 代表主，其余为备用，不可重复，创建 VIP 时必填，使用 -v 激活，VIP 节点中必须存在一个 1                  | 默认为空                                                     | export AVAILABILITY_VIP_NO=1                                                                                            |
+| AVAILABILITY_INTERFACE_NAME   | 高可用中 VIP 使用的网卡，需要与 AVAILABILITY_VIP 同时使用，创建 VIP 时必填，使用 -v 激活                                      | 默认为空，默认不创建 VIP                                           | export AVAILABILITY_INTERFACE_NAME=ens33                                                                                |
+| AVAILABILITY_HAPROXY_USERNAME | 高可用中 haproxy 用户名，推荐修改                                                                             | 默认为 admin                                                | export AVAILABILITY_HAPROXY_USERNAME=admin                                                                              |
+| AVAILABILITY_HAPROXY_PASSWORD | 高可用中 haproxy 密码，推荐修改                                                                              | 默认为 password                                             | export AVAILABILITY_HAPROXY_USERNAME=password                                                                           |
+| AVAILABILITY_MASTER           | 高可用中 主节点信息，包含主节点名称（仅在VIP管理时使用）、主节点IP、主节点端口，创建 VIP 时必填，使用 -v 激活。格式：名称@IP:端口，多个值用英文逗号隔开             | 默认为空                                                     | export AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443 |
 
 ## 使用前说明
 
-1. k8s 各节点主机名唯一，不能存在相同的
-2. k8s 主机名只能包含：字母、数字、小数点、英文横杠
-3. 由于某些软件基于主机名才能正常运行，为了避免风险，脚本不支持修改主机名，请自行修改
-4. 命令 hostname 为临时修改主机名，配置文件 /etc/hostname 为配置文件中的主机名，服务器重启后，会 hostname 配置的主机名会消失，恢复成
+1. <strong><font color="red">请务必使用独立系统执行脚本。</font></strong>
+2. <strong><font color="red">请务必使用独立系统执行脚本。</font></strong>
+3. <strong><font color="red">请务必使用独立系统执行脚本。</font></strong>
+4. k8s 各节点主机名唯一，不能存在相同的。推荐主节点使用 k8s-xx 或者 control-plane-xx，工作节点 node-xx
+5. k8s 主机名只能包含：字母、数字、小数点、英文横杠
+6. 由于某些软件基于主机名才能正常运行，为了避免风险，脚本不支持修改主机名，请自行修改
+7. 命令 hostname 为临时修改主机名，配置文件 /etc/hostname 为配置文件中的主机名，服务器重启后，会 hostname 配置的主机名会消失，恢复成
    /etc/hostname 中的主机名
-5. 集群主节点初始化错误、集群工作节点加入集群错误，请使用 `kubeadm reset`
+8. 集群主节点初始化错误、集群工作节点加入集群错误，请使用 `kubeadm reset`
    重置节点的配置，并根据提示手动删除 `$HOME/.kube/config`、`/etc/cni/net.d` 文件（夹）等
-6. 安装配置过程将关闭防火墙，推荐使用独立机器部署 k8s
-7. 如果 k8s 宿主机有多个网卡，请自行指定网卡名称
+9. 安装配置过程将关闭防火墙，推荐使用独立机器部署 k8s
+10. 如果 k8s 宿主机有多个网卡，请自行指定网卡名称
+11. 安装时，会卸载 `老版 Docker`（非 `旧版 Docker`），安装最新版 Docker、Containerd，修改 Docker、Containerd 配置文件，重启
+    Docker、Containerd
+    1. 卸载软件如下
+        1. docker
+        2. docker-client
+        3. docker-client-latest
+        4. docker-common
+        5. docker-latest
+        6. docker-latest-logrotate
+        7. docker-logrotate
+        8. docker-engine
+    2. 安装软件如下
+        1. docker-ce
+        2. docker-ce-cli
+        3. containerd.io
+        4. docker-buildx-plugin
+        5. docker-compose-plugin
+    3. 修改配置如下
+        1. /etc/docker/daemon.json
+        2. /etc/containerd/config.toml
 
 ## 使用说明
 
@@ -212,8 +241,8 @@
     ./install.sh
     ```
 
-7. k8s 集群（一主多从）
-    1. 主节点：安装软件、初始化
+7. k8s 集群（一主多从，无高可用，仅用于学习、测试）
+    1. 主节点：安装软件、初始化集群
         ```shell
         # 下载脚本，下载后的文件名为 install.sh
         curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
@@ -247,6 +276,56 @@
         
         
         ```
+
+8. k8s 集群（三主多从，高可用，生产就绪）
+
+    1. VIP（Virtual IP Address，虚拟 IP 地址）
+
+       VIP 至少需要部署**3**台机器，可与主节点使用相同的机器
+
+        ```shell
+        # 下载脚本，下载后的文件名为 install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+        # 授权
+        chmod +x install.sh
+        
+        # 第 1 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 AVAILABILITY_VIP_NO 不同，必须存在一个值为 1）
+        export AVAILABILITY_VIP=192.168.80.100 \
+          AVAILABILITY_INTERFACE_NAME=ens33 \
+          AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443 \
+          AVAILABILITY_VIP_NO=1 \
+          && ./install.sh -v
+        
+        # 第 2 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 AVAILABILITY_VIP_NO 不同，必须存在一个值为 1）
+        export AVAILABILITY_VIP=192.168.80.100 \
+          AVAILABILITY_INTERFACE_NAME=ens33 \
+          AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443 \
+          AVAILABILITY_VIP_NO=2 \
+          && ./install.sh -v
+        
+        # 第 3 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 AVAILABILITY_VIP_NO 不同，必须存在一个值为 1）
+        export AVAILABILITY_VIP=192.168.80.100 \
+          AVAILABILITY_INTERFACE_NAME=ens33 \
+          AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443 \
+          AVAILABILITY_VIP_NO=3 \
+          && ./install.sh -v
+        ```
+
+    2. 主节点：第一台机器：安装软件、初始化集群
+
+        ```shell
+
+        ```
+
+    3. 主节点：其余机器：安装软件、使用主节点角色加入集群
+
+    4. 工作节点：安装软件、使用工作节点角色加入集群
+
+       工作节点 至少需要部署**2**台机器（请保证单个工作节点的资源可以负载所有任务，否则请增加工作节点）
+
+         ```shell
+         
+         ```
 
 ## 常见问题
 
