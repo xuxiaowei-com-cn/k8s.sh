@@ -2,7 +2,7 @@ stages:
   - images-list
   - images-sync
 
-images-list:latest:
+images-list:1.24.16-0:
   stage: images-list
   image: openanolis/anolisos:7.9-x86_64
   before_script:
@@ -21,13 +21,13 @@ images-list:latest:
 
       EOF
   script:
-    - yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
-    - kubeadm config images list
-    - kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g'
-    - kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g'
+    - yum install -y kubelet-1.24.16-0 kubeadm-1.24.16-0 kubectl-1.24.16-0 --disableexcludes=kubernetes --nogpgcheck
+    - kubeadm config images list --kubernetes-version=v1.24.16
+    - kubeadm config images list --kubernetes-version=v1.24.16 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g'
+    - kubeadm config images list --kubernetes-version=v1.24.16 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g'
     - |
       echo "" >images.sh
-      images=$(kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g')
+      images=$(kubeadm config images list --kubernetes-version=v1.24.16 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g')
       for image in $images; do
         echo "docker pull $image" >>images.sh
         if echo "$image" | grep -q "coredns"; then
@@ -45,16 +45,16 @@ images-list:latest:
     paths:
       - images.sh
   only:
-    - images-mirrors/latest
+    - images-mirrors/1.24.16-0
   tags:
     - jihulab
 
-images-sync:latest:
+images-sync:1.24.16-0:
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   stage: images-sync
   needs:
-    - job: images-list:latest
+    - job: images-list:1.24.16-0
       artifacts: true
   image: docker:20.10.16
   services:
@@ -66,6 +66,6 @@ images-sync:latest:
     - cat images.sh
     - cat images.sh | sh
   only:
-    - images-mirrors/latest
+    - images-mirrors/1.24.16-0
   tags:
     - jihulab
