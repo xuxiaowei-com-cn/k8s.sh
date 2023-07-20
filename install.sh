@@ -43,6 +43,7 @@ function osName() {
 
 # VIP 网卡选择
 function availabilityInterfaceName() {
+  sudo yum install iproute
   if ip link show "$AVAILABILITY_INTERFACE_NAME" >/dev/null 2>&1; then
     echo "VIP 网卡 $AVAILABILITY_INTERFACE_NAME 存在"
   else
