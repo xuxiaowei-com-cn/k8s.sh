@@ -344,6 +344,9 @@ function hostName() {
 
 # 网卡选择
 function interfaceName() {
+
+  sudo yum install iproute
+
   if [ "$INTERFACE_NAME" ]; then
     echo "选择的上网网卡是：$INTERFACE_NAME"
 
