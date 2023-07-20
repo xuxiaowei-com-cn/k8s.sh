@@ -10,6 +10,7 @@ install:
   image: openanolis/anolisos:7.9-x86_64
   script:
     - chmod +x install.sh
+    - sed -i 's/sudo //g' install.sh
     - ./install.sh
   only:
     changes:
