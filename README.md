@@ -351,6 +351,9 @@
         echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >>/etc/profile
         # 刷新环境变量
         source /etc/profile
+        # 命令自动补充
+        source <(kubectl completion bash)
+        echo "source <(kubectl completion bash)" >>~/.bashrc
         
         # 等待 pod 就绪
         kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
