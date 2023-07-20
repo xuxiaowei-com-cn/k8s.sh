@@ -1,6 +1,22 @@
 stages:
+  # 安装
+  - install
   # 代码同步
   - sync
+
+# 安装
+install:
+  stage: install
+  image: openanolis/anolisos:7.9-x86_64
+  script:
+    - chmod +x install.sh
+    - ./install.sh
+  only:
+    changes:
+      - .gitlab-ci.yml
+      - install.sh
+  tags:
+    - jihulab
 
 # 嵌入
 include:
