@@ -187,7 +187,7 @@ EOF
     --net=host \
     --restart=always \
     -v /etc/kubernetes/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro \
-    haproxytech/haproxy-debian:2.3
+    haproxytech/haproxy-debian:2.8
 
 }
 
