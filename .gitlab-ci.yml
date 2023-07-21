@@ -1,5 +1,7 @@
 stages:
   - yum
+  # 代码同步
+  - sync
 
 yum:anolisos:7.7:1.24.0-0:
   stage: yum
@@ -846,3 +848,8 @@ yum:centos:8.4:1.24.0-0:
     - yum/1.24.0-0
   tags:
     - jihulab
+
+# 嵌入
+include:
+  # 同步代码
+  - /sync.yml
