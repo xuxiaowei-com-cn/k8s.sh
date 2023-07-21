@@ -428,14 +428,16 @@
 ## 各分支的作用
 
 - main
-    1. 主分支，以此分支为准
+    1. 主分支，安装脚本以此分支为准
+- images-mirrors/\*.\*.\*-0
+    1. docker 镜像加速计划，镜像地址：https://jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/container_registry
+    2. docker 镜像离线安装计划：可在流水线产物中，下载所需 Docker 镜像文件
+    3. 可自行 fork 本项目，修改配置，生成自己所需 Docker 镜像文件
+- yum/\*.\*.\*-0
+    1. yum 离线安装计划：可在流水线产物中，下载所需安装 k8s、docker 等相关软件的 yum 离线安装包
+    2. 有效期默认 30 天，可重试流水线重新生成
+    3. 可自行 fork 本项目，修改配置，生成自己所需安装 k8s、docker 等相关软件的 yum 离线安装包
 - xuxiaowei*
     1. 个人分支
 - \*.\*.\*
-    1. 测试分支
-    2. 测试固定版本
-- images-mirrors/\*.\*.\*-0
-    1. docker 镜像加速计划，镜像地址：https://jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/container_registry
-    2. docker 镜像离线安装计划
-- yum/\*.\*.\*-0
-    1. yum 离线安装计划
+    1. 测试固定版本
