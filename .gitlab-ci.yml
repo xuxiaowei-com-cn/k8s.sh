@@ -1,6 +1,8 @@
 stages:
   - images-list
   - images-sync
+  # 代码同步
+  - sync
 
 images-list:1.27.0-0:
   stage: images-list
@@ -69,3 +71,8 @@ images-sync:1.27.0-0:
     - images-mirrors/1.27.0-0
   tags:
     - jihulab
+
+# 嵌入
+include:
+  # 同步代码
+  - /sync.yml
