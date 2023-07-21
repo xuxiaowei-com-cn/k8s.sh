@@ -17,15 +17,31 @@ images-sync:
     - CALICO_VERSIONS="v3.26.0 v3.25.0 v3.24.0 v3.23.0 v3.22.0 v3.21.0 v3.20.0 v3.19.0 v3.18.0 v3.17.0 v3.16.0 v3.15.0 v3.14.0 v3.13.0 v3.12.0"
     - |
       for version in $CALICO_VERSIONS; do
-        docker pull calico/cni:"$version"
-        docker pull calico/node:"$version"
-        docker pull calico/kube-controllers:"$version"
-        docker tag calico/cni:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/cni:"$version"
-        docker tag calico/node:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/node:"$version"
-        docker tag calico/kube-controllers:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/kube-controllers:"$version"
-        docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/cni:"$version"
-        docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/node:"$version"
-        docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/kube-controllers:"$version"
+
+        if docker manifest inspect registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/cni:"$version" >/dev/null 2>&1; then
+          echo "跳过 calico/cni:$version"
+        else
+          docker pull calico/cni:"$version"
+          docker tag calico/cni:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/cni:"$version"
+          docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/cni:"$version"
+        fi
+
+        if docker manifest inspect registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/node:"$version" >/dev/null 2>&1; then
+          echo "跳过 calico/node:$version"
+        else
+          docker pull calico/node:"$version"
+          docker tag calico/node:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/node:"$version"
+          docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/node:"$version"
+        fi
+
+        if docker manifest inspect registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/kube-controllers:"$version" >/dev/null 2>&1; then
+          echo "跳过 calico/kube-controllers:$version"
+        else
+          docker pull calico/kube-controllers:"$version"
+          docker tag calico/kube-controllers:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/kube-controllers:"$version"
+          docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/kube-controllers:"$version"
+        fi
+
       done
   only:
     - images-mirrors/calico
