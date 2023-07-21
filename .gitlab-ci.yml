@@ -88,12 +88,12 @@ yum:anolisos:8:1.24.0-0:
 
       EOF
     - cat /etc/yum.conf
-    - sed -i 's/keepcache=0/keepcache=1/' /etc/yum.conf
+    - echo "keepcache=1" >> /etc/yum.conf
     - cat /etc/yum.conf
   script:
     - yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
-    - find /var/cache/yum/ -name *.rpm
-    - find /var/cache/yum/ -name *.rpm -exec cp {} ./ \;
+    - find /var/cache/dnf/ -name *.rpm
+    - find /var/cache/dnf/ -name *.rpm -exec cp {} ./ \;
   artifacts:
     name: "${CI_JOB_NAME}"
     paths:
@@ -122,12 +122,12 @@ yum:anolisos:8.2:1.24.0-0:
 
       EOF
     - cat /etc/yum.conf
-    - sed -i 's/keepcache=0/keepcache=1/' /etc/yum.conf
+    - echo "keepcache=1" >> /etc/yum.conf
     - cat /etc/yum.conf
   script:
     - yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
-    - find /var/cache/yum/ -name *.rpm
-    - find /var/cache/yum/ -name *.rpm -exec cp {} ./ \;
+    - find /var/cache/dnf/ -name *.rpm
+    - find /var/cache/dnf/ -name *.rpm -exec cp {} ./ \;
   artifacts:
     name: "${CI_JOB_NAME}"
     paths:
@@ -156,12 +156,12 @@ yum:anolisos:8.4:1.24.0-0:
 
       EOF
     - cat /etc/yum.conf
-    - sed -i 's/keepcache=0/keepcache=1/' /etc/yum.conf
+    - echo "keepcache=1" >> /etc/yum.conf
     - cat /etc/yum.conf
   script:
     - yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
-    - find /var/cache/yum/ -name *.rpm
-    - find /var/cache/yum/ -name *.rpm -exec cp {} ./ \;
+    - find /var/cache/dnf/ -name *.rpm
+    - find /var/cache/dnf/ -name *.rpm -exec cp {} ./ \;
   artifacts:
     name: "${CI_JOB_NAME}"
     paths:
@@ -190,12 +190,12 @@ yum:anolisos:8.6:1.24.0-0:
 
       EOF
     - cat /etc/yum.conf
-    - sed -i 's/keepcache=0/keepcache=1/' /etc/yum.conf
+    - echo "keepcache=1" >> /etc/yum.conf
     - cat /etc/yum.conf
   script:
     - yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
-    - find /var/cache/yum/ -name *.rpm
-    - find /var/cache/yum/ -name *.rpm -exec cp {} ./ \;
+    - find /var/cache/dnf/ -name *.rpm
+    - find /var/cache/dnf/ -name *.rpm -exec cp {} ./ \;
   artifacts:
     name: "${CI_JOB_NAME}"
     paths:
@@ -224,12 +224,12 @@ yum:anolisos:8.8:1.24.0-0:
 
       EOF
     - cat /etc/yum.conf
-    - sed -i 's/keepcache=0/keepcache=1/' /etc/yum.conf
+    - echo "keepcache=1" >> /etc/yum.conf
     - cat /etc/yum.conf
   script:
     - yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
-    - find /var/cache/yum/ -name *.rpm
-    - find /var/cache/yum/ -name *.rpm -exec cp {} ./ \;
+    - find /var/cache/dnf/ -name *.rpm
+    - find /var/cache/dnf/ -name *.rpm -exec cp {} ./ \;
   artifacts:
     name: "${CI_JOB_NAME}"
     paths:
