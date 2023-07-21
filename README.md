@@ -435,7 +435,7 @@
     1. 测试分支
     2. 测试固定版本
 - images-mirrors/\*.\*.\*-0
-    1. docker 镜像加速计划
-    2. 镜像地址：https://jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/container_registry
+    1. docker 镜像加速计划，镜像地址：https://jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/container_registry
+    2. docker 镜像离线安装计划
 - yum/\*.\*.\*-0
     1. yum 离线安装计划
