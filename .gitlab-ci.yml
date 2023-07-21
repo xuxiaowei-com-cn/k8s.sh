@@ -302,6 +302,7 @@ yum:centos:7.0:1.24.0-0:
     - yum -y install ntpdate
     - yum -y install bash-completion
     - yum -y install yum-utils
+    - yum -y install ca-certificates
     - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
     - yum -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     - find /var/cache/yum/ -name *.rpm
@@ -342,6 +343,7 @@ yum:centos:7.1:1.24.0-0:
     - yum -y install ntpdate
     - yum -y install bash-completion
     - yum -y install yum-utils
+    - yum -y install ca-certificates
     - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
     - yum -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     - find /var/cache/yum/ -name *.rpm
