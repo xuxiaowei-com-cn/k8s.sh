@@ -259,7 +259,7 @@ EOF
     --cap-add=NET_RAW \
     -v /etc/kubernetes/keepalived.conf:/container/service/keepalived/assets/keepalived.conf \
     -v /etc/kubernetes/check-haproxy.sh:/usr/bin/check-haproxy.sh \
-    osixia/keepalived:2.0.20 \
+    lettore/keepalived:3.16-2.2.7 \
     --copy-service
 
 }
