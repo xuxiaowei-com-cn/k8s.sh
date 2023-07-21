@@ -424,3 +424,18 @@
             2. 在新机器上创建 VIP（增加主节点后的配置）
             3. 新增的主节点 使用 VIP 和 主节点角色 加入到集群中
             4. 新增的工作节点 使用 VIP 和 工作节点角色 加入到集群中
+
+## 各分支的作用
+
+- main
+    1. 主分支，以此分支为准
+- xuxiaowei*
+    1. 个人分支
+- \*.\*.\*
+    1. 测试分支
+    2. 测试固定版本
+- images-mirrors/\*.\*.\*-0
+    1. docker 镜像加速计划
+    2. 镜像地址：https://jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/container_registry
+- yum/\*.\*.\*-0
+    1. yum 离线安装计划
