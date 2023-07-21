@@ -99,7 +99,7 @@ yum:anolisos:8:1.24.0-0:
   script:
     - yum -y install kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - yum -y install iproute
-    - yum -y install ntpdate
+    - yum -y install chrony
     - yum -y install bash-completion
     - yum -y install yum-utils
     - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -139,7 +139,7 @@ yum:anolisos:8.2:1.24.0-0:
   script:
     - yum -y install kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - yum -y install iproute
-    - yum -y install ntpdate
+    - yum -y install chrony
     - yum -y install bash-completion
     - yum -y install yum-utils
     - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -179,7 +179,7 @@ yum:anolisos:8.4:1.24.0-0:
   script:
     - yum -y install kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - yum -y install iproute
-    - yum -y install ntpdate
+    - yum -y install chrony
     - yum -y install bash-completion
     - yum -y install yum-utils
     - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -219,7 +219,7 @@ yum:anolisos:8.6:1.24.0-0:
   script:
     - yum -y install kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - yum -y install iproute
-    - yum -y install ntpdate
+    - yum -y install chrony
     - yum -y install bash-completion
     - yum -y install yum-utils
     - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -259,7 +259,7 @@ yum:anolisos:8.8:1.24.0-0:
   script:
     - yum -y install kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - yum -y install iproute
-    - yum -y install ntpdate
+    - yum -y install chrony
     - yum -y install bash-completion
     - yum -y install yum-utils
     - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -705,7 +705,7 @@ yum:centos:8.1:1.24.0-0:
   script:
     - yum -y install kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - yum -y install iproute
-    - yum -y install ntpdate
+    - yum -y install chrony
     - yum -y install bash-completion
     - yum -y install yum-utils
     - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -751,7 +751,7 @@ yum:centos:8.2:1.24.0-0:
   script:
     - yum -y install kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - yum -y install iproute
-    - yum -y install ntpdate
+    - yum -y install chrony
     - yum -y install bash-completion
     - yum -y install yum-utils
     - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -797,7 +797,7 @@ yum:centos:8.3:1.24.0-0:
   script:
     - yum -y install kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - yum -y install iproute
-    - yum -y install ntpdate
+    - yum -y install chrony
     - yum -y install bash-completion
     - yum -y install yum-utils
     - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -844,7 +844,7 @@ yum:centos:8.4:1.24.0-0:
   script:
     - yum -y install kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - yum -y install iproute
-    - yum -y install ntpdate
+    - yum -y install chrony
     - yum -y install bash-completion
     - yum -y install yum-utils
     - yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
