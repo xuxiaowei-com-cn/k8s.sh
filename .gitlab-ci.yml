@@ -25,13 +25,13 @@ images-list:1.24.9-0:
   script:
     - yum install -y kubelet-1.24.9-0 kubeadm-1.24.9-0 kubectl-1.24.9-0 --disableexcludes=kubernetes --nogpgcheck
     - kubeadm config images list --kubernetes-version=v1.24.9
-    - kubeadm config images list --kubernetes-version=v1.24.9 | sed 's|k8s.gcr.io|registry.aliyuncs.com/google_containers|g'
-    - kubeadm config images list --kubernetes-version=v1.24.9 | sed 's|k8s.gcr.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g'
+    - kubeadm config images list --kubernetes-version=v1.24.9 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g'
+    - kubeadm config images list --kubernetes-version=v1.24.9 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g'
     - |
       echo "" >images.sh
       images=$(kubeadm config images list --kubernetes-version=v1.24.9)
       for image in $images; do
-        aliyuncs_image=$(echo $image | sed 's|k8s.gcr.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g')
+        aliyuncs_image=$(echo $image | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g')
         echo "docker pull $aliyuncs_image" >>images.sh
         if echo "$aliyuncs_image" | grep -q "coredns"; then
           new_image="registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/coredns/$(basename $aliyuncs_image)"
