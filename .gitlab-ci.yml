@@ -1,0 +1,38 @@
+stages:
+  - images-sync
+  # 代码同步
+  - sync
+
+images-sync:
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  stage: images-sync
+  image: docker:20.10.16
+  services:
+    - docker:20.10.16-dind
+  before_script:
+    - docker info
+    - docker login -u $CI_REGISTRY_USER -p $DOCKER_PRIVATE_TOKEN $CI_REGISTRY
+  script:
+    - CALICO_VERSIONS="v3.26.0 v3.25.0 v3.24.0 v3.23.0 v3.22.0 v3.21.0 v3.20.0 v3.19.0 v3.18.0 v3.17.0 v3.16.0 v3.15.0 v3.14.0 v3.13.0 v3.12.0"
+    - |
+      for version in $CALICO_VERSIONS; do
+        docker pull calico/cni:"$version"
+        docker pull calico/node:"$version"
+        docker pull calico/kube-controllers:"$version"
+        docker tag calico/cni:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/cni:"$version"
+        docker tag calico/node:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/node:"$version"
+        docker tag calico/kube-controllers:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/kube-controllers:"$version"
+        docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/cni:"$version"
+        docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/node:"$version"
+        docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/kube-controllers:"$version"
+      done
+  only:
+    - images-mirrors/calico
+  tags:
+    - jihulab
+
+# 嵌入
+include:
+  # 同步代码
+  - /sync.yml
