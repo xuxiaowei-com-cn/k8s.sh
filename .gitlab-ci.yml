@@ -600,6 +600,12 @@ yum:centos:8.1:1.24.0-0:
     - cat /etc/yum.conf
     - echo "keepcache=1" >> /etc/yum.conf
     - cat /etc/yum.conf
+    - ls /etc/yum.repos.d/
+    - mv /etc/yum.repos.d/CentOS-AppStream.repo /etc/yum.repos.d/CentOS-AppStream.repo.bak
+    - mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+    - ls /etc/yum.repos.d/
+    - curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo
+    - ls /etc/yum.repos.d/
   script:
     - yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - find /var/cache/dnf/ -name *.rpm
@@ -634,6 +640,12 @@ yum:centos:8.2:1.24.0-0:
     - cat /etc/yum.conf
     - echo "keepcache=1" >> /etc/yum.conf
     - cat /etc/yum.conf
+    - ls /etc/yum.repos.d/
+    - mv /etc/yum.repos.d/CentOS-AppStream.repo /etc/yum.repos.d/CentOS-AppStream.repo.bak
+    - mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.bak
+    - ls /etc/yum.repos.d/
+    - curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo
+    - ls /etc/yum.repos.d/
   script:
     - yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - find /var/cache/dnf/ -name *.rpm
@@ -668,6 +680,12 @@ yum:centos:8.3:1.24.0-0:
     - cat /etc/yum.conf
     - echo "keepcache=1" >> /etc/yum.conf
     - cat /etc/yum.conf
+    - ls /etc/yum.repos.d/
+    - mv /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-AppStream.repo.bak
+    - mv /etc/yum.repos.d/CentOS-Linux-Base.repo /etc/yum.repos.d/CentOS-Linux-Base.repo.bak
+    - ls /etc/yum.repos.d/
+    - curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo
+    - ls /etc/yum.repos.d/
   script:
     - yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - find /var/cache/dnf/ -name *.rpm
@@ -702,6 +720,13 @@ yum:centos:8.4:1.24.0-0:
     - cat /etc/yum.conf
     - echo "keepcache=1" >> /etc/yum.conf
     - cat /etc/yum.conf
+    - cat /etc/yum.conf
+    - ls /etc/yum.repos.d/
+    - mv /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-AppStream.repo.bak
+    - mv /etc/yum.repos.d/CentOS-Linux-Base.repo /etc/yum.repos.d/CentOS-Linux-Base.repo.bak
+    - ls /etc/yum.repos.d/
+    - curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo
+    - ls /etc/yum.repos.d/
   script:
     - yum install -y kubelet-1.24.0-0 kubeadm-1.24.0-0 kubectl-1.24.0-0 --disableexcludes=kubernetes --nogpgcheck
     - find /var/cache/dnf/ -name *.rpm
