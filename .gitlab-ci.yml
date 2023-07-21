@@ -682,7 +682,7 @@ yum:centos:8.3:1.24.0-0:
     - cat /etc/yum.conf
     - ls /etc/yum.repos.d/
     - mv /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-AppStream.repo.bak
-    - mv /etc/yum.repos.d/CentOS-Linux-Base.repo /etc/yum.repos.d/CentOS-Linux-Base.repo.bak
+    - mv /etc/yum.repos.d/CentOS-Linux-BaseOS.repo /etc/yum.repos.d/CentOS-Linux-BaseOS.repo.bak
     - ls /etc/yum.repos.d/
     - curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo
     - ls /etc/yum.repos.d/
@@ -723,7 +723,7 @@ yum:centos:8.4:1.24.0-0:
     - cat /etc/yum.conf
     - ls /etc/yum.repos.d/
     - mv /etc/yum.repos.d/CentOS-Linux-AppStream.repo /etc/yum.repos.d/CentOS-Linux-AppStream.repo.bak
-    - mv /etc/yum.repos.d/CentOS-Linux-Base.repo /etc/yum.repos.d/CentOS-Linux-Base.repo.bak
+    - mv /etc/yum.repos.d/CentOS-Linux-BaseOS.repo /etc/yum.repos.d/CentOS-Linux-BaseOS.repo.bak
     - ls /etc/yum.repos.d/
     - curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-vault-8.5.2111.repo
     - ls /etc/yum.repos.d/
