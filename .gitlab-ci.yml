@@ -29,16 +29,23 @@ images-list:1.25.12-0:
     - kubeadm config images list --kubernetes-version=v1.25.12 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g'
     - |
       echo "" >images.sh
-      images=$(kubeadm config images list --kubernetes-version=v1.25.12 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g')
+      images=$(kubeadm config images list --kubernetes-version=v1.25.12)
       for image in $images; do
-        echo "docker pull $image" >>images.sh
-        if echo "$image" | grep -q "coredns"; then
-          new_image="registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/coredns/$(basename $image)"
-          echo "docker tag $image $new_image" >>images.sh
+        aliyuncs_image=$(echo $image | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g')
+        echo "docker pull $aliyuncs_image" >>images.sh
+        if echo "$aliyuncs_image" | grep -q "coredns"; then
+          new_image="registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/coredns/$(basename $aliyuncs_image)"
+          echo "docker tag $aliyuncs_image $new_image" >>images.sh
+          echo "docker tag $aliyuncs_image $image" >>images.sh
           echo "docker push $new_image" >>images.sh
         fi
-        new_image="registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/$(basename $image)"
-        echo "docker tag $image $new_image" >>images.sh
+        new_image="registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/$(basename $aliyuncs_image)"
+        echo "docker tag $aliyuncs_image $new_image" >>images.sh
+        echo "docker tag $aliyuncs_image $image" >>images.sh
+      
+        [[ $image =~ (.+)/(.+):(.+) ]]
+        echo "docker save -o ${BASH_REMATCH[2]}-${BASH_REMATCH[3]}.tar $image" >>images.sh
+      
         echo "docker push $new_image" >>images.sh
       done
     - cat images.sh
@@ -67,6 +74,11 @@ images-sync:1.25.12-0:
   script:
     - cat images.sh
     - cat images.sh | sh
+    - ls
+  artifacts:
+    name: "${CI_JOB_NAME}"
+    paths:
+      - "*.tar"
   only:
     - images-mirrors/1.25.12-0
   tags:
