@@ -23,6 +23,7 @@ images-sync:
         else
           docker pull calico/cni:"$version"
           docker tag calico/cni:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/cni:"$version"
+          docker save -o calico-cni-"$version".tar calico/cni:"$version"
           docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/cni:"$version"
         fi
 
@@ -31,6 +32,7 @@ images-sync:
         else
           docker pull calico/node:"$version"
           docker tag calico/node:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/node:"$version"
+          docker save -o calico-node-"$version".tar calico/node:"$version"
           docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/node:"$version"
         fi
 
@@ -39,10 +41,15 @@ images-sync:
         else
           docker pull calico/kube-controllers:"$version"
           docker tag calico/kube-controllers:"$version" registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/kube-controllers:"$version"
+          docker save -o calico-kube-controllers-"$version".tar calico/kube-controllers:"$version"
           docker push registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/calico/kube-controllers:"$version"
         fi
 
       done
+  artifacts:
+    name: "${CI_JOB_NAME}"
+    paths:
+      - "*.tar"
   only:
     - images-mirrors/calico
   tags:
