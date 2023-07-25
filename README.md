@@ -254,28 +254,28 @@
     # 授权
     chmod +x install.sh
     # 执行安装命令
-    export METRICS_SERVER_INSTALL=true \ 
+    export METRICS_SERVER_INSTALL=true \
       && ./install.sh
     
     # 执行安装命令：自定义版本
-    #export METRICS_SERVER_INSTALL=true \ 
-    #  METRICS_SERVER_VERSION=0.6.2 \ 
+    #export METRICS_SERVER_INSTALL=true \
+    #  METRICS_SERVER_VERSION=0.6.2 \
     #  && ./install.sh
     
     # 执行安装命令：使用高可用
-    #export METRICS_SERVER_INSTALL=true \ 
-    #  METRICS_SERVER_AVAILABILITY=true \ 
+    #export METRICS_SERVER_INSTALL=true \
+    #  METRICS_SERVER_AVAILABILITY=true \
     #  && ./install.sh
     
     # 执行安装命令：自定义版本、使用高可用
-    #export METRICS_SERVER_INSTALL=true \ 
+    #export METRICS_SERVER_INSTALL=true \
     #  METRICS_SERVER_VERSION=0.6.2 \
-    #  METRICS_SERVER_AVAILABILITY=true \ 
+    #  METRICS_SERVER_AVAILABILITY=true \
     #  && ./install.sh
     
     # 执行安装命令：自定义镜像（优先级高于 METRICS_SERVER_VERSION、METRICS_SERVER_AVAILABILITY，可指定高可用镜像）
-    #export METRICS_SERVER_INSTALL=true \ 
-    #  METRICS_SERVER_MIRROR=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml \ 
+    #export METRICS_SERVER_INSTALL=true \
+    #  METRICS_SERVER_MIRROR=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml \
     #  && ./install.sh
     ```
 
@@ -362,8 +362,8 @@
         export AVAILABILITY_VIP=192.168.80.100 && ./install.sh -m
         
         # 安装 Metrics Server 插件（仅第一个主节点执行即可）
-        # export AVAILABILITY_VIP=192.168.80.100 \ 
-        #   METRICS_SERVER_INSTALL=true \ 
+        # export AVAILABILITY_VIP=192.168.80.100 \
+        #   METRICS_SERVER_INSTALL=true \
         #   METRICS_SERVER_MIRROR=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/high-availability-1.21+.yaml \
         #   && ./install.sh -m
         ```
