@@ -33,10 +33,29 @@ done
 function osName() {
   if grep -q "CentOS" /etc/os-release; then
     echo "当前系统是 CentOS"
+    osVersion
   elif grep -q "Anolis" /etc/os-release; then
     echo "系统是 Anolis"
+    osVersion
   else
     echo "系统不是 CentOS 或 Anolis，不支持，停止安装"
+    exit 1
+  fi
+}
+
+# 系统版本判断
+function osVersion() {
+  # 导入操作系统信息
+  . /etc/os-release
+
+  if [[ $VERSION_ID == 7* ]]; then
+    echo "$VERSION_ID"
+    OS_VERSION=7
+  elif [[ $VERSION_ID == 8* ]]; then
+    echo "$VERSION_ID"
+    OS_VERSION=8
+  else
+    echo "$VERSION_ID：不支持的操作系统版本，停止安装"
     exit 1
   fi
 }
@@ -369,12 +388,20 @@ function interfaceName() {
 
 # 安装、配置 NTP（网络时间协议）
 function ntpdateInstall() {
-  sudo yum -y install ntpdate
-  sudo ntpdate ntp1.aliyun.com
-  sudo systemctl status ntpdate
-  sudo systemctl start ntpdate
-  sudo systemctl status ntpdate
-  sudo systemctl enable ntpdate
+  if [ $OS_VERSION == 7 ]; then
+    sudo yum -y install ntpdate
+    sudo ntpdate ntp1.aliyun.com
+    sudo systemctl status ntpdate
+    sudo systemctl start ntpdate
+    sudo systemctl status ntpdate
+    sudo systemctl enable ntpdate
+  elif [ $OS_VERSION == 8 ]; then
+    sudo yum -y install chrony
+    sudo systemctl status chronyd
+    sudo systemctl start chronyd
+    sudo systemctl status chronyd
+    sudo systemctl enable chronyd
+  fi
 }
 
 # bash-completion 安装、配置
