@@ -442,8 +442,8 @@ function dockerInstall() {
   sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
 
   # 安装 docker 仓库
-  sudo yum install -y yum-utils
-  sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+  sudo yum install -y curl
+  sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
 
   # 搜索 docker 版本
   # yum --showduplicates list docker-ce
