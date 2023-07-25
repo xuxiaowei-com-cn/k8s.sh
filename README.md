@@ -121,20 +121,24 @@
 | CALICO_MIRRORS_KUBE_CONTROLLERS | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/kube-controllers                                                           | export CALICO_MIRRORS_KUBE_CONTROLLERS=hub-mirror.c.163.com | export CALICO_MIRRORS_KUBE_CONTROLLERS=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud |
 | CALICO_MIRRORS_CALICO_NODE      | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/node                                                                       | export CALICO_MIRRORS_CALICO_NODE=hub-mirror.c.163.com      | export CALICO_MIRRORS_CALICO_NODE=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud      |
 
-| 安装/配置环境变量                     | 说明                                                                                                | 默认值                                                      | 使用示例                                                                                                                    |
-|-------------------------------|---------------------------------------------------------------------------------------------------|----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
-| INTERFACE_NAME                | 指定 k8s 网络插件使用的网卡名称，如果 k8s 宿主机有多个网卡，请自行指定网卡名称                                                      | 使用 ip route 获取上网的网卡名称                                    | export INTERFACE_NAME=ens33                                                                                             |
-| KUBERNETES_VERSION            | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母）                                                            | 使用最新版 k8s                                                | export KUBERNETES_VERSION=1.26.0                                                                                        |
-| CALICO_VERSION                | 指定 calico 版本（版本号不带字母）                                                                             | 使用 3.25                                                  | export CALICO_VERSION=3.25                                                                                              |
-| INSTALL_ONLY                  | 仅安装、不初始化                                                                                          | 默认为空，默认初始化                                               | export INSTALL_ONLY=true                                                                                                |
-| INSTALL_MODE                  | 集群模式                                                                                              | 默认值：standalone，合法值：standalone（单机）、master（主节点）、node（工作节点） | export INSTALL_MODE=master                                                                                              |
-| IMAGES_PULL                   | 初始化前，先拉取镜像                                                                                        | 默认为空，默认在初始化时拉取镜像                                         | export IMAGES_PULL=true                                                                                                 |
-| AVAILABILITY_VIP              | 高可用中 VIP（Virtual IP Address，虚拟 IP 地址），需要与 AVAILABILITY_INTERFACE_NAME 同时使用，创建 VIP 时必填，使用 -v、-m 激活 | 默认为空，默认不创建 VIP                                           | export AVAILABILITY_VIP=192.168.80.100                                                                                  |
-| AVAILABILITY_VIP_NO           | 高可用中 VIP 的编号，整数数字类型，大于 0，其中 1 代表主，其余为备用，不可重复，创建 VIP 时必填，使用 -v 激活，VIP 节点中必须存在一个 1                  | 默认为空                                                     | export AVAILABILITY_VIP_NO=1                                                                                            |
-| AVAILABILITY_INTERFACE_NAME   | 高可用中 VIP 使用的网卡，需要与 AVAILABILITY_VIP 同时使用，创建 VIP 时必填，使用 -v 激活                                      | 默认为空，默认不创建 VIP                                           | export AVAILABILITY_INTERFACE_NAME=ens33                                                                                |
-| AVAILABILITY_HAPROXY_USERNAME | 高可用中 haproxy 用户名，推荐修改                                                                             | 默认为 admin                                                | export AVAILABILITY_HAPROXY_USERNAME=admin                                                                              |
-| AVAILABILITY_HAPROXY_PASSWORD | 高可用中 haproxy 密码，推荐修改                                                                              | 默认为 password                                             | export AVAILABILITY_HAPROXY_PASSWORD=password                                                                           |
-| AVAILABILITY_MASTER           | 高可用中 主节点信息，包含主节点名称（仅在VIP管理时使用）、主节点IP、主节点端口，创建 VIP 时必填，使用 -v 激活。格式：名称@IP:端口，多个值用英文逗号隔开             | 默认为空                                                     | export AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443 |
+| 安装/配置环境变量                     | 说明                                                                                                | 默认值                                                      | 使用示例                                                                                                                                              |
+|-------------------------------|---------------------------------------------------------------------------------------------------|----------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| INTERFACE_NAME                | 指定 k8s 网络插件使用的网卡名称，如果 k8s 宿主机有多个网卡，请自行指定网卡名称                                                      | 使用 ip route 获取上网的网卡名称                                    | export INTERFACE_NAME=ens33                                                                                                                       |
+| KUBERNETES_VERSION            | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母）                                                            | 使用最新版 k8s                                                | export KUBERNETES_VERSION=1.26.0                                                                                                                  |
+| CALICO_VERSION                | 指定 calico 版本（版本号不带字母）                                                                             | 使用 3.25                                                  | export CALICO_VERSION=3.25                                                                                                                        |
+| INSTALL_ONLY                  | 仅安装、不初始化                                                                                          | 默认为空，默认初始化                                               | export INSTALL_ONLY=true                                                                                                                          |
+| INSTALL_MODE                  | 集群模式                                                                                              | 默认值：standalone，合法值：standalone（单机）、master（主节点）、node（工作节点） | export INSTALL_MODE=master                                                                                                                        |
+| IMAGES_PULL                   | 初始化前，先拉取镜像                                                                                        | 默认为空，默认在初始化时拉取镜像                                         | export IMAGES_PULL=true                                                                                                                           |
+| METRICS_SERVER_INSTALL        | Metrics Server 是否安装，用于支持 kubectl top 命令                                                           | 默认为空，默认不安装                                               | export METRICS_SERVER_INSTALL=true                                                                                                                |
+| METRICS_SERVER_VERSION        | Metrics Server 版本（版本号不带字母）                                                                        | 默认为 0.6.3                                                | export METRICS_SERVER_VERSION=0.6.3                                                                                                               |
+| METRICS_SERVER_AVAILABILITY   | Metrics Server 是否配置高可用（需要 k8s 为高可用），仅 Metrics Server 配置文件不同，安装过程不变                                | 默认为空，不使用高可用                                              | export METRICS_SERVER_AVAILABILITY=true                                                                                                           |
+| METRICS_SERVER_MIRROR         | Metrics Server 镜像地址，优先级高于 METRICS_SERVER_VERSION、METRICS_SERVER_AVAILABILITY                      | 默认为空，默认使用 GitHub 官方仓库地址                                  | export METRICS_SERVER_MIRROR=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml |
+| AVAILABILITY_VIP              | 高可用中 VIP（Virtual IP Address，虚拟 IP 地址），需要与 AVAILABILITY_INTERFACE_NAME 同时使用，创建 VIP 时必填，使用 -v、-m 激活 | 默认为空，默认不创建 VIP                                           | export AVAILABILITY_VIP=192.168.80.100                                                                                                            |
+| AVAILABILITY_VIP_NO           | 高可用中 VIP 的编号，整数数字类型，大于 0，其中 1 代表主，其余为备用，不可重复，创建 VIP 时必填，使用 -v 激活，VIP 节点中必须存在一个 1                  | 默认为空                                                     | export AVAILABILITY_VIP_NO=1                                                                                                                      |
+| AVAILABILITY_INTERFACE_NAME   | 高可用中 VIP 使用的网卡，需要与 AVAILABILITY_VIP 同时使用，创建 VIP 时必填，使用 -v 激活                                      | 默认为空，默认不创建 VIP                                           | export AVAILABILITY_INTERFACE_NAME=ens33                                                                                                          |
+| AVAILABILITY_HAPROXY_USERNAME | 高可用中 haproxy 用户名，推荐修改                                                                             | 默认为 admin                                                | export AVAILABILITY_HAPROXY_USERNAME=admin                                                                                                        |
+| AVAILABILITY_HAPROXY_PASSWORD | 高可用中 haproxy 密码，推荐修改                                                                              | 默认为 password                                             | export AVAILABILITY_HAPROXY_PASSWORD=password                                                                                                     |
+| AVAILABILITY_MASTER           | 高可用中 主节点信息，包含主节点名称（仅在VIP管理时使用）、主节点IP、主节点端口，创建 VIP 时必填，使用 -v 激活。格式：名称@IP:端口，多个值用英文逗号隔开             | 默认为空                                                     | export AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443                           |
 
 ## 使用前说明
 
@@ -243,7 +247,39 @@
     ./install.sh
     ```
 
-7. k8s 集群（一主多从，无高可用，仅用于学习、测试）
+7. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），安装 Metrics Server 插件
+    ```shell
+    # 下载脚本，下载后的文件名为 install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/install.sh
+    # 授权
+    chmod +x install.sh
+    # 执行安装命令
+    export METRICS_SERVER_INSTALL=true \ 
+      && ./install.sh
+    
+    # 执行安装命令：自定义版本
+    #export METRICS_SERVER_INSTALL=true \ 
+    #  METRICS_SERVER_VERSION=0.6.2 \ 
+    #  && ./install.sh
+    
+    # 执行安装命令：使用高可用
+    #export METRICS_SERVER_INSTALL=true \ 
+    #  METRICS_SERVER_AVAILABILITY=true \ 
+    #  && ./install.sh
+    
+    # 执行安装命令：自定义版本、使用高可用
+    #export METRICS_SERVER_INSTALL=true \ 
+    #  METRICS_SERVER_VERSION=0.6.2 \
+    #  METRICS_SERVER_AVAILABILITY=true \ 
+    #  && ./install.sh
+    
+    # 执行安装命令：自定义镜像（优先级高于 METRICS_SERVER_VERSION、METRICS_SERVER_AVAILABILITY，可指定高可用镜像）
+    #export METRICS_SERVER_INSTALL=true \ 
+    #  METRICS_SERVER_MIRROR=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml \ 
+    #  && ./install.sh
+    ```
+
+8. k8s 集群（一主多从，无高可用，仅用于学习、测试）
     1. 主节点：安装软件、初始化集群
         ```shell
         # 下载脚本，下载后的文件名为 install.sh
@@ -280,7 +316,7 @@
         
         ```
 
-8. k8s 集群（三主多从，高可用，生产就绪）
+9. k8s 集群（三主多从，高可用，生产就绪）
 
     1. VIP（Virtual IP Address，虚拟 IP 地址）
 
@@ -314,7 +350,7 @@
           && ./install.sh -v
         ```
 
-    2. 主节点：第一台机器：安装软件、初始化集群
+    2. 主节点：***第一台机器***：安装软件、初始化集群
 
         ```shell
         # 下载脚本，下载后的文件名为 install.sh
@@ -325,9 +361,14 @@
         # 指定 VIP 进行 k8s 集群 第一个主节点 初始化
         export AVAILABILITY_VIP=192.168.80.100 && ./install.sh -m
         
+        # 安装 Metrics Server 插件（仅第一个主节点执行即可）
+        # export AVAILABILITY_VIP=192.168.80.100 \ 
+        #   METRICS_SERVER_INSTALL=true \ 
+        #   METRICS_SERVER_MIRROR=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/high-availability-1.21+.yaml \
+        #   && ./install.sh -m
         ```
 
-    3. 主节点：其余机器：安装软件、使用主节点角色加入集群
+    3. 主节点：***其余机器***：安装软件、使用主节点角色加入集群
 
         ```shell
         # 下载脚本，下载后的文件名为 install.sh

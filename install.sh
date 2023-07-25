@@ -602,6 +602,48 @@ function calicoInstall() {
   kubectl get pod,svc --all-namespaces -o wide
 }
 
+# Metrics Server 插件
+function metricsServerInstall() {
+  if [ "$METRICS_SERVER_INSTALL" == true ]; then
+    echo "启用 Metrics Server 插件 安装"
+
+    # 自定义镜像：优先级高于 METRICS_SERVER_VERSION、METRICS_SERVER_AVAILABILITY
+    if [ "$METRICS_SERVER_MIRROR" ]; then
+      curl -o components.yaml "$METRICS_SERVER_MIRROR"
+    else
+
+      # 自定义版本
+      if ! [ "$METRICS_SERVER_VERSION" ]; then
+        METRICS_SERVER_VERSION=0.6.3
+      fi
+
+      # 自定义高可用
+      if [ "$METRICS_SERVER_AVAILABILITY" == true ]; then
+        curl -o components.yaml "https://github.com/kubernetes-sigs/metrics-server/releases/download/v$METRICS_SERVER_VERSION/high-availability-1.21+.yaml"
+      else
+        curl -o components.yaml "https://github.com/kubernetes-sigs/metrics-server/releases/download/v$METRICS_SERVER_VERSION/components.yaml"
+      fi
+
+    fi
+
+    # 不验证证书
+    sed -i '/- args:/a \ \ \ \ \ \ \ \ - --kubelet-insecure-tls' components.yaml
+
+    # 使用 docker hub 镜像
+    sed -i 's|registry\.k8s\.io/metrics-server/metrics-server|docker.io/xuxiaoweicomcn/metrics-server|g' components.yaml
+
+    # 应用
+    kubectl apply -f components.yaml
+
+    # 查看 所有 pod
+    kubectl get pod,svc --all-namespaces -o wide
+
+  else
+
+    echo "未启用 Metrics Server 插件 安装"
+  fi
+}
+
 # 全部去污
 function taintNodesAll() {
   kubectl get no -o yaml | grep taint -A 10
@@ -675,6 +717,9 @@ else
     # calico 网络插件
     calicoInstall
 
+    # Metrics Server 插件
+    metricsServerInstall
+
     # 使用 VIP 创建主节点时，不去污
     if ! [ "$AVAILABILITY_MASTER" ]; then
       # 全部去污
@@ -692,6 +737,9 @@ else
 
     # calico 网络插件
     calicoInstall
+
+    # Metrics Server 插件
+    metricsServerInstall
 
     # 等待 pod 就绪
     kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
