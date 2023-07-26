@@ -397,9 +397,9 @@ function ntpdateInstall() {
     sudo systemctl enable ntpdate
   elif [ $OS_VERSION == 8 ]; then
     sudo yum -y install chrony
-    sudo systemctl status chronyd
+    sudo systemctl status chronyd -n 0
     sudo systemctl start chronyd
-    sudo systemctl status chronyd
+    sudo systemctl status chronyd -n 0
     sudo systemctl enable chronyd
   fi
 }
