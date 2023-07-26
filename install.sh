@@ -472,9 +472,9 @@ function dockerInstall() {
   sudo systemctl enable --now containerd.service
   # sudo systemctl status containerd.service
 
-  # sudo systemctl status docker.service
+  # sudo systemctl status docker.service -n 0
   sudo systemctl start docker.service
-  # sudo systemctl status docker.service
+  # sudo systemctl status docker.service -n 0
   sudo systemctl enable docker.service
   sudo systemctl enable docker.socket
   sudo systemctl list-unit-files | grep docker
@@ -492,7 +492,7 @@ EOF
   sudo systemctl restart docker
   sudo docker info
 
-  sudo systemctl status docker.service
+  sudo systemctl status docker.service -n 0
   sudo systemctl status containerd.service
 }
 
