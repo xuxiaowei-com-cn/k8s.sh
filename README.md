@@ -101,7 +101,7 @@
 
 <p></p>
 
-1. 支持 CentOS/Anolis 7/8 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/12
+1. 支持 CentOS 7/8、Anolis 7/8/23 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/12
 2. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
 3. 一键支持 单机集群
 4. 一键支持 一主多从
