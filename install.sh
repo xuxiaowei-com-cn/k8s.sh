@@ -54,6 +54,10 @@ function osVersion() {
   elif [[ $VERSION_ID == 8* ]]; then
     echo "$VERSION_ID"
     OS_VERSION=8
+  elif [[ $VERSION_ID == 23* ]]; then
+    # 兼容 Anolis 23
+    echo "$VERSION_ID"
+    OS_VERSION=23
   else
     echo "$VERSION_ID：不支持的操作系统版本，停止安装"
     exit 1
@@ -395,7 +399,8 @@ function ntpdateInstall() {
     sudo systemctl start ntpdate
     sudo systemctl status ntpdate
     sudo systemctl enable ntpdate
-  elif [ $OS_VERSION == 8 ]; then
+  elif [ $OS_VERSION == 8 ] || [ $OS_VERSION == 23 ]; then
+    # 兼容 Anolis 23
     sudo yum -y install chrony
     sudo systemctl status chronyd -n 0
     sudo systemctl start chronyd
@@ -444,6 +449,11 @@ function dockerInstall() {
   # 安装 docker 仓库
   sudo yum install -y curl
   sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
+
+  # 兼容 Anolis 23
+  if [ "$OS_VERSION" == 23 ]; then
+    sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
+  fi
 
   # 搜索 docker 版本
   # yum --showduplicates list docker-ce
