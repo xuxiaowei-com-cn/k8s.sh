@@ -50,7 +50,7 @@ sync-gitcode:
     - if [ "$CI_COMMIT_BRANCH" ]; then
       git checkout -b $CI_COMMIT_BRANCH;
       git pull --progress -v --no-rebase gitcode $CI_COMMIT_BRANCH || echo 远端不存在$CI_COMMIT_BRANCH分支;
-      git push -u gitcode $CI_COMMIT_BRANCH
+      git push -u gitcode $CI_COMMIT_BRANCH;
       fi
     - if [ "$CI_COMMIT_TAG" ]; then
       git push -u gitcode $CI_COMMIT_TAG;
@@ -92,7 +92,7 @@ sync-gitlink:
     - if [ "$CI_COMMIT_BRANCH" ]; then
       git checkout -b $CI_COMMIT_BRANCH;
       git pull --progress -v --no-rebase gitlink $CI_COMMIT_BRANCH || echo 远端不存在$CI_COMMIT_BRANCH分支;
-      git push -u gitlink $CI_COMMIT_BRANCH
+      git push -u gitlink $CI_COMMIT_BRANCH;
       fi
     - if [ "$CI_COMMIT_TAG" ]; then
       git push -u gitlink $CI_COMMIT_TAG;
@@ -124,7 +124,7 @@ sync-gitlab:
     - if [ "$CI_COMMIT_BRANCH" ]; then
       git checkout -b $CI_COMMIT_BRANCH;
       git pull --progress -v --no-rebase gitlab $CI_COMMIT_BRANCH || echo 远端不存在$CI_COMMIT_BRANCH分支;
-      git push -u gitlab $CI_COMMIT_BRANCH
+      git push -u gitlab $CI_COMMIT_BRANCH;
       fi
     - if [ "$CI_COMMIT_TAG" ]; then
       git push -u gitlab $CI_COMMIT_TAG;
@@ -156,7 +156,7 @@ sync-github:
     - if [ "$CI_COMMIT_BRANCH" ]; then
       git checkout -b $CI_COMMIT_BRANCH;
       git pull --progress -v --no-rebase github $CI_COMMIT_BRANCH || echo 远端不存在$CI_COMMIT_BRANCH分支;
-      git push -u github $CI_COMMIT_BRANCH
+      git push -u github $CI_COMMIT_BRANCH;
       fi
     - if [ "$CI_COMMIT_TAG" ]; then
       git push -u github $CI_COMMIT_TAG;
