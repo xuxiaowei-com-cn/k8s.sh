@@ -348,7 +348,9 @@ function hostName() {
   ETC_HOSTNAME=$(cat /etc/hostname)
   CMD_HOSTNAME=$(hostname)
   if [[ $CMD_HOSTNAME =~ ^[A-Za-z0-9\.\-]+$ ]]; then
-    if [ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]; then
+    if ! [ "$ETC_HOSTNAME" ]; then
+      echo "主机名符合要求"
+    elif [ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]; then
       echo "主机名符合要求"
     else
       echo "临时主机名：$CMD_HOSTNAME"
