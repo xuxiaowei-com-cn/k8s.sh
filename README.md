@@ -390,12 +390,14 @@
         # kubeadm init phase upload-certs --upload-certs
 
         # 添加环境变量
-        echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >>/etc/profile
+        sudo bash -c "echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >> /etc/profile"
         # 刷新环境变量
         source /etc/profile
+        
         # 命令自动补充
-        source <(kubectl completion bash)
-        echo "source <(kubectl completion bash)" >>~/.bashrc
+        kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl >/dev/null
+        sudo chmod a+r /etc/bash_completion.d/kubectl
+        source ~/.bashrc
         
         # 等待 pod 就绪
         kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
