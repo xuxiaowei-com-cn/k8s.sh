@@ -102,15 +102,16 @@
 <p></p>
 
 1. 支持 CentOS 7/8、Anolis 7/8/23 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/12
-2. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
-3. 一键支持 单机集群
-4. 一键支持 一主多从
-5. 一键支持 高可用
-6. 自动安装、配置 Docker、Containerd
-7. 自动安装、配置 Kubernetes（k8s）
-8. 自动安装、配置 Calico 网络插件
-9. 自动安装、配置 kubectl 命令自动补充
-10. 自动安装、配置 VIP（Virtual IP Address，虚拟 IP 地址）
+2. 支持 Ubuntu 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/21
+3. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
+4. 一键支持 单机集群
+5. 一键支持 一主多从
+6. 一键支持 高可用
+7. 自动安装、配置 Docker、Containerd
+8. 自动安装、配置 Kubernetes（k8s）
+9. 自动安装、配置 Calico 网络插件
+10. 自动安装、配置 kubectl 命令自动补充
+11. 自动安装、配置 VIP（Virtual IP Address，虚拟 IP 地址）
 
 ## 环境变量说明
 
@@ -184,7 +185,7 @@
     # 授权
     chmod +x install.sh
     # 执行安装命令
-    ./install.sh
+    sudo ./install.sh
     ```
 
 2. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 k8s 指定版本
@@ -197,7 +198,7 @@
     # 指定 k8s 版本号（版本号不带字母）
     # 在 GitHub 查看 k8s 发布的版本：https://github.com/kubernetes/kubernetes/tags
     # 在 GitCode 查看 k8s 发布的版本：https://gitcode.net/mirrors/kubernetes/kubernetes/-/tags
-    export KUBERNETES_VERSION=1.26.0 && ./install.sh
+    export KUBERNETES_VERSION=1.26.0 && sudo ./install.sh
     ```
 
 3. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装，不进行初始化
@@ -207,7 +208,7 @@
     # 授权
     chmod +x install.sh
     # 执行安装命令，仅安装，不进行初始化
-    export INSTALL_ONLY=true && ./install.sh
+    export INSTALL_ONLY=true && sudo ./install.sh
     ```
 
 4. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装、拉取镜像，不进行初始化
@@ -217,7 +218,7 @@
     # 授权
     chmod +x install.sh
     # 执行安装命令，仅安装、拉取镜像，不进行初始化
-    export INSTALL_ONLY=true IMAGES_PULL=true && ./install.sh
+    export INSTALL_ONLY=true IMAGES_PULL=true && sudo ./install.sh
     ```
 
 5. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 指定版本
@@ -229,7 +230,7 @@
     # 执行安装命令
     # 指定 calico 版本号（版本号不带字母）
     # 查看 calico 发布的版本：https://docs.tigera.io/archive/
-    export CALICO_VERSION=3.24 && ./install.sh
+    export CALICO_VERSION=3.24 && sudo ./install.sh
     ```
 
 6. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 网络组件的加速镜像
@@ -244,7 +245,7 @@
     # 授权
     chmod +x install.sh
     # 执行安装命令
-    ./install.sh
+    sudo ./install.sh
     ```
 
 7. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），安装 Metrics Server 插件
@@ -255,28 +256,28 @@
     chmod +x install.sh
     # 执行安装命令
     export METRICS_SERVER_INSTALL=true \
-      && ./install.sh
+      && sudo ./install.sh
     
     # 执行安装命令：自定义版本
     #export METRICS_SERVER_INSTALL=true \
     #  METRICS_SERVER_VERSION=0.6.2 \
-    #  && ./install.sh
+    #  && sudo ./install.sh
     
     # 执行安装命令：使用高可用
     #export METRICS_SERVER_INSTALL=true \
     #  METRICS_SERVER_AVAILABILITY=true \
-    #  && ./install.sh
+    #  && sudo ./install.sh
     
     # 执行安装命令：自定义版本、使用高可用
     #export METRICS_SERVER_INSTALL=true \
     #  METRICS_SERVER_VERSION=0.6.2 \
     #  METRICS_SERVER_AVAILABILITY=true \
-    #  && ./install.sh
+    #  && sudo ./install.sh
     
     # 执行安装命令：自定义镜像（优先级高于 METRICS_SERVER_VERSION、METRICS_SERVER_AVAILABILITY，可指定高可用镜像）
     #export METRICS_SERVER_INSTALL=true \
     #  METRICS_SERVER_MIRROR=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml \
-    #  && ./install.sh
+    #  && sudo ./install.sh
     ```
 
 8. k8s 集群（一主多从，无高可用，仅用于学习、测试）
@@ -287,7 +288,7 @@
         # 授权
         chmod +x install.sh
         # 执行安装命令
-        export INSTALL_MODE=master && ./install.sh
+        export INSTALL_MODE=master && sudo ./install.sh
         
         
         # 暂存初始化完成后控制台打印的工作节点加入集群的命令，例如：
@@ -306,7 +307,7 @@
         # 授权
         chmod +x install.sh
         # 执行安装命令
-        export INSTALL_MODE=node && ./install.sh
+        export INSTALL_MODE=node && sudo ./install.sh
         
         
         # 执行在主节点得到的工作加入集群的命令，例如：
@@ -333,21 +334,21 @@
           AVAILABILITY_INTERFACE_NAME=ens33 \
           AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443 \
           AVAILABILITY_VIP_NO=1 \
-          && ./install.sh -v
+          && sudo ./install.sh -v
         
         # 第 2 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 AVAILABILITY_VIP_NO 不同，必须存在一个值为 1）
         export AVAILABILITY_VIP=192.168.80.100 \
           AVAILABILITY_INTERFACE_NAME=ens33 \
           AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443 \
           AVAILABILITY_VIP_NO=2 \
-          && ./install.sh -v
+          && sudo ./install.sh -v
         
         # 第 3 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 AVAILABILITY_VIP_NO 不同，必须存在一个值为 1）
         export AVAILABILITY_VIP=192.168.80.100 \
           AVAILABILITY_INTERFACE_NAME=ens33 \
           AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443 \
           AVAILABILITY_VIP_NO=3 \
-          && ./install.sh -v
+          && sudo ./install.sh -v
         ```
 
     2. 主节点：***第一台机器***：安装软件、初始化集群
@@ -359,13 +360,13 @@
         chmod +x install.sh
         
         # 指定 VIP 进行 k8s 集群 第一个主节点 初始化
-        export AVAILABILITY_VIP=192.168.80.100 && ./install.sh -m
+        export AVAILABILITY_VIP=192.168.80.100 && sudo ./install.sh -m
         
         # 安装 Metrics Server 插件（仅第一个主节点执行即可）
         # export AVAILABILITY_VIP=192.168.80.100 \
         #   METRICS_SERVER_INSTALL=true \
         #   METRICS_SERVER_MIRROR=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/high-availability-1.21+.yaml \
-        #   && ./install.sh -m
+        #   && sudo ./install.sh -m
         ```
 
     3. 主节点：***其余机器***：安装软件、使用主节点角色加入集群
@@ -377,7 +378,7 @@
         chmod +x install.sh
         
         # 执行安装命令，仅安装，不进行初始化
-        export INSTALL_ONLY=true && ./install.sh
+        export INSTALL_ONLY=true && sudo ./install.sh
         
         # 运行 k8s 集群 第一个主节点 初始化完成后 使用主节点角色加入集群的命令，例如：
         # kubeadm join 192.168.80.100:9443 --token ykrnfh.i4qwth17fopc0gtx \
@@ -414,7 +415,7 @@
         chmod +x install.sh
         
         # 执行安装命令，仅安装，不进行初始化
-        export INSTALL_ONLY=true && ./install.sh
+        export INSTALL_ONLY=true && sudo ./install.sh
         
         # 执行在主节点得到的工作加入集群的命令，例如：
         # kubeadm join 192.168.80.100:9443 --token ykrnfh.i4qwth17fopc0gtx --discovery-token-ca-cert-hash sha256:9e81fa0b04a57517feb1c9e34edc0aa6563b64db54887fc072a08d7d1235861d

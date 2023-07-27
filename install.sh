@@ -33,12 +33,18 @@ done
 function osName() {
   if grep -q "CentOS" /etc/os-release; then
     echo "当前系统是 CentOS"
+    OS_NAME=CentOS
     osVersion
   elif grep -q "Anolis" /etc/os-release; then
     echo "系统是 Anolis"
+    OS_NAME=Anolis
+    osVersion
+  elif grep -q "Ubuntu" /etc/os-release; then
+    echo "当前系统是 Ubuntu"
+    OS_NAME=Ubuntu
     osVersion
   else
-    echo "系统不是 CentOS 或 Anolis，不支持，停止安装"
+    echo "系统不是 CentOS、Anolis 或 Ubuntu，不支持，停止安装"
     exit 1
   fi
 }
@@ -48,25 +54,38 @@ function osVersion() {
   # 导入操作系统信息
   . /etc/os-release
 
-  if [[ $VERSION_ID == 7* ]]; then
-    echo "$VERSION_ID"
-    OS_VERSION=7
-  elif [[ $VERSION_ID == 8* ]]; then
-    echo "$VERSION_ID"
-    OS_VERSION=8
-  elif [[ $VERSION_ID == 23* ]]; then
-    # 兼容 Anolis 23
-    echo "$VERSION_ID"
-    OS_VERSION=23
-  else
-    echo "$VERSION_ID：不支持的操作系统版本，停止安装"
-    exit 1
+  if [[ $OS_NAME == CentOS ]] || [[ $OS_NAME == Anolis ]]; then
+    if [[ $VERSION_ID == 7* ]]; then
+      echo "$VERSION_ID"
+      OS_VERSION=7
+    elif [[ $VERSION_ID == 8* ]]; then
+      echo "$VERSION_ID"
+      OS_VERSION=8
+    elif [[ $VERSION_ID == 23* ]]; then
+      # 兼容 Anolis 23
+      echo "$VERSION_ID"
+      OS_VERSION=23
+    else
+      echo "$VERSION_ID：不支持的操作系统版本，停止安装"
+      exit 1
+    fi
+  elif [[ $OS_NAME == Ubuntu ]]; then
+    if [[ $VERSION_ID == 20* ]]; then
+      echo "$VERSION_ID"
+      OS_VERSION=20
+    else
+      echo "$VERSION_ID：未完成测试"
+    fi
   fi
 }
 
 # VIP 网卡选择
 function availabilityInterfaceName() {
-  sudo yum -y install iproute
+  if [[ $OS_NAME == CentOS ]] || [[ $OS_NAME == Anolis ]]; then
+    sudo yum -y install iproute
+  elif [[ $OS_NAME == Ubuntu ]]; then
+    sudo apt-get -y install iproute2
+  fi
   if ip link show "$AVAILABILITY_INTERFACE_NAME" >/dev/null 2>&1; then
     echo "VIP 网卡 $AVAILABILITY_INTERFACE_NAME 存在"
   else
@@ -370,7 +389,11 @@ function hostName() {
 # 网卡选择
 function interfaceName() {
 
-  sudo yum -y install iproute
+  if [[ $OS_NAME == CentOS ]] || [[ $OS_NAME == Anolis ]]; then
+    sudo yum -y install iproute
+  elif [[ $OS_NAME == Ubuntu ]]; then
+    sudo apt-get -y install iproute2
+  fi
 
   if [ "$INTERFACE_NAME" ]; then
     echo "选择的上网网卡是：$INTERFACE_NAME"
@@ -394,33 +417,53 @@ function interfaceName() {
 
 # 安装、配置 NTP（网络时间协议）
 function ntpdateInstall() {
-  if [ $OS_VERSION == 7 ]; then
-    sudo yum -y install ntpdate
-    sudo ntpdate ntp1.aliyun.com
-    sudo systemctl status ntpdate
-    sudo systemctl start ntpdate
-    sudo systemctl status ntpdate
-    sudo systemctl enable ntpdate
-  elif [ $OS_VERSION == 8 ] || [ $OS_VERSION == 23 ]; then
-    # 兼容 Anolis 23
-    sudo yum -y install chrony
-    sudo systemctl status chronyd -n 0
-    sudo systemctl start chronyd
-    sudo systemctl status chronyd -n 0
-    sudo systemctl enable chronyd
+  if [[ $OS_NAME == CentOS ]] || [[ $OS_NAME == Anolis ]]; then
+    if [ $OS_VERSION == 7 ]; then
+      sudo yum -y install ntpdate
+      sudo ntpdate ntp1.aliyun.com
+      sudo systemctl status ntpdate
+      sudo systemctl start ntpdate
+      sudo systemctl status ntpdate
+      sudo systemctl enable ntpdate
+    elif [ $OS_VERSION == 8 ] || [ $OS_VERSION == 23 ]; then
+      # 兼容 Anolis 23
+      sudo yum -y install chrony
+      sudo systemctl status chronyd -n 0
+      sudo systemctl start chronyd
+      sudo systemctl status chronyd -n 0
+      sudo systemctl enable chronyd
+    fi
+  elif [[ $OS_NAME == Ubuntu ]]; then
+    sudo apt-get update
+    sudo apt-get -y install ntp
+
+    date
+    timedatectl
+    timedatectl list-timezones | grep Asia/Shanghai
+    sudo timedatectl set-timezone Asia/Shanghai
+    date
+    timedatectl
+
+    sudo systemctl status ntp
+    sudo systemctl start ntp
+    sudo systemctl enable ntp
   fi
 }
 
 # bash-completion 安装、配置
 function bashCompletionInstall() {
-  sudo yum -y install bash-completion
-  source /etc/profile
+  if [[ $OS_NAME == CentOS ]] || [[ $OS_NAME == Anolis ]]; then
+    sudo yum -y install bash-completion
+    source /etc/profile
+  fi
 }
 
 # 停止防火墙
 function stopFirewalld() {
-  sudo systemctl stop firewalld.service
-  sudo systemctl disable firewalld.service
+  if [[ $OS_NAME == CentOS ]] || [[ $OS_NAME == Anolis ]]; then
+    sudo systemctl stop firewalld.service
+    sudo systemctl disable firewalld.service
+  fi
 }
 
 # 关闭交换空间
@@ -433,35 +476,66 @@ function swapOff() {
 
 # 关闭 selinux
 function selinuxPermissive() {
-  getenforce
-  cat /etc/selinux/config
-  sudo setenforce 0
-  sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
-  cat /etc/selinux/config
+  if [[ $OS_NAME == CentOS ]] || [[ $OS_NAME == Anolis ]]; then
+    getenforce
+    cat /etc/selinux/config
+    sudo setenforce 0
+    sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+    cat /etc/selinux/config
+  fi
 }
 
 # 安装、配置 Docker、containerd
 function dockerInstall() {
-  # https://docs.docker.com/engine/install/centos/
-  # 经过测试，可不安装 docker 也可使 k8s 正常运行：只需要不安装 docker-ce、docker-ce-cli、docker-compose-plugin 即可
+  if [[ $OS_NAME == CentOS ]] || [[ $OS_NAME == Anolis ]]; then
+    # https://docs.docker.com/engine/install/centos/
+    # 经过测试，可不安装 docker 也可使 k8s 正常运行：只需要不安装 docker-ce、docker-ce-cli、docker-compose-plugin 即可
 
-  # 卸载旧 docker
-  sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+    # 卸载旧 docker
+    sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
 
-  # 安装 docker 仓库
-  sudo yum install -y curl
-  sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
+    # 安装 docker 仓库
+    sudo yum install -y curl
+    sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
 
-  # 兼容 Anolis 23
-  if [ "$OS_VERSION" == 23 ]; then
-    sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
+    # 兼容 Anolis 23
+    if [ "$OS_VERSION" == 23 ]; then
+      sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
+    fi
+
+    # 搜索 docker 版本
+    # yum --showduplicates list docker-ce
+
+    # 安装 docker
+    sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  elif [[ $OS_NAME == Ubuntu ]]; then
+    # https://docs.docker.com/engine/install/ubuntu/
+
+    # 卸载旧 docker
+    for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+
+    # 安装 docker 仓库
+    sudo apt-get update
+    sudo apt-get install -y ca-certificates curl gnupg
+
+    sudo install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+    echo \
+      "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+      "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" |
+      sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+
+    cat /etc/apt/sources.list.d/docker.list
+
+    # 搜索 docker 版本
+    # sudo apt-cache madison docker-ce
+
+    # 安装 docker
+    sudo apt-get update
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
   fi
-
-  # 搜索 docker 版本
-  # yum --showduplicates list docker-ce
-
-  # 安装 docker
-  sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
   # 启动 docker 时，会启动 containerd
   # sudo systemctl status containerd.service -n 0
@@ -510,7 +584,10 @@ EOF
 
 # 阿里云 kubernetes 仓库
 function aliyunKubernetesRepo() {
-  cat <<EOF >/etc/yum.repos.d/kubernetes.repo
+  # https://developer.aliyun.com/mirror/kubernetes
+
+  if [[ $OS_NAME == CentOS ]] || [[ $OS_NAME == Anolis ]]; then
+    cat <<EOF >/etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
 baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
@@ -523,6 +600,12 @@ repo_gpgcheck=0
 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 
 EOF
+  elif [[ $OS_NAME == Ubuntu ]]; then
+    sudo apt-get update
+    sudo apt-get install -y apt-transport-https
+    curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
+    echo "deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+  fi
 }
 
 # k8s 配置
@@ -558,10 +641,19 @@ EOF
 
 # k8s 安装
 function k8sInstall() {
-  if [ "$KUBERNETES_VERSION" ]; then
-    sudo yum install -y kubelet-"$KUBERNETES_VERSION"-0 kubeadm-"$KUBERNETES_VERSION"-0 kubectl-"$KUBERNETES_VERSION"-0 --disableexcludes=kubernetes --nogpgcheck
-  else
-    sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
+  if [[ $OS_NAME == CentOS ]] || [[ $OS_NAME == Anolis ]]; then
+    if [ "$KUBERNETES_VERSION" ]; then
+      sudo yum install -y kubelet-"$KUBERNETES_VERSION"-0 kubeadm-"$KUBERNETES_VERSION"-0 kubectl-"$KUBERNETES_VERSION"-0 --disableexcludes=kubernetes --nogpgcheck
+    else
+      sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
+    fi
+  elif [[ $OS_NAME == Ubuntu ]]; then
+    sudo apt-get update
+    if [ "$KUBERNETES_VERSION" ]; then
+      sudo apt-get install -y kubelet="$KUBERNETES_VERSION"-00 kubeadm="$KUBERNETES_VERSION"-00 kubectl="$KUBERNETES_VERSION"-00
+    else
+      sudo apt-get install -y kubelet kubeadm kubectl
+    fi
   fi
   sudo systemctl daemon-reload
   sudo systemctl restart kubelet
@@ -596,10 +688,14 @@ function k8sInit() {
     fi
   fi
 
-  echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >>/etc/profile
+  sudo bash -c "echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >> /etc/profile"
+  sudo chmod a+r /etc/kubernetes/admin.conf
   source /etc/profile
-  source <(kubectl completion bash)
-  echo "source <(kubectl completion bash)" >>~/.bashrc
+
+  kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl >/dev/null
+  sudo chmod a+r /etc/bash_completion.d/kubectl
+  source ~/.bashrc
+
   kubectl cluster-info
   kubectl get nodes
   kubectl get pod,svc --all-namespaces -o wide
