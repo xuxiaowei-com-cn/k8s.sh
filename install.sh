@@ -3,6 +3,7 @@
 # 作者：徐晓伟 xuxiaowei@xuxiaowei.com.cn
 # 使用：chmod +x install.sh && sudo ./install.sh
 # 仓库：https://jihulab.com/xuxiaowei-com-cn/k8s.sh
+# 版本：v0.1.0-alpha.1
 #
 
 while getopts "vm" opt; do
