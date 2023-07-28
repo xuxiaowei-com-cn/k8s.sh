@@ -229,6 +229,17 @@ _bash_completion_install() {
   fi
 }
 
+# 关闭 selinux
+_selinux_permissive() {
+  if [[ $ID == anolis || $ID == centos ]]; then
+    echo -e "${COLOR_BLUE}selinux 当前状态${COLOR_RESET}" && getenforce
+    echo -e "${COLOR_BLUE}selinux 配置文件${COLOR_RESET}" && cat /etc/selinux/config
+    echo -e "${COLOR_BLUE}selinux 当前禁用${COLOR_RESET}" && sudo setenforce 0
+    echo -e "${COLOR_BLUE}selinux 永久禁用${COLOR_RESET}" && sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+    echo -e "${COLOR_BLUE}selinux 配置文件${COLOR_RESET}" && cat /etc/selinux/config
+  fi
+}
+
 # 高可用 haproxy 安装
 _availability_haproxy_install() {
 
@@ -403,6 +414,9 @@ _ntp_install
 
 # bash-completion 安装
 _bash_completion_install
+
+# 关闭 selinux
+_selinux_permissive
 
 # 高可用 VIP 安装
 if [[ $availability_vip_install == true ]]; then
