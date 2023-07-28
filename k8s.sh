@@ -21,6 +21,9 @@ readonly lower_minor=24
 readonly upper_major=1
 readonly upper_minor=27
 
+# 一旦有命令返回非零值，立即退出脚本
+set -e
+
 # 高可用主节点地址
 availability_master_array=()
 
