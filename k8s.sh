@@ -147,6 +147,7 @@ _ntp_install() {
     echo -e "${COLOR_BLUE}查看当前时区/时间${COLOR_RESET}" && timedatectl
 
     local ntp_conf="/etc/ntp.conf"
+    local backup_file="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
 
     if [[ $ID == anolis || $ID == centos ]]; then
 
@@ -154,7 +155,6 @@ _ntp_install() {
         sudo yum -y install ntpdate && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
 
         if [ -f "$ntp_conf" ]; then
-          local backup_file="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
           cp "$ntp_conf" "$backup_file"
           echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 已备份为 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
         fi
@@ -171,11 +171,11 @@ _ntp_install() {
       elif [[ $VERSION == 8* || $VERSION == 23* ]]; then
 
         local ntp_conf="/etc/chrony.conf"
+        local backup_file="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
 
         sudo yum -y install chrony && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
 
         if [ -f "$ntp_conf" ]; then
-          local backup_file="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
           cp "$ntp_conf" "$backup_file"
           echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 已备份为 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
         fi
@@ -195,7 +195,6 @@ _ntp_install() {
       sudo apt-get -y install ntp && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
 
       if [ -f "$ntp_conf" ]; then
-        local backup_file="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
         sudo cp "$ntp_conf" "$backup_file"
         echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 已备份为 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
       else
