@@ -362,11 +362,11 @@ _docker_ce_install() {
   echo -e "${COLOR_BLUE}docker-ce 创建 配置文件的文件夹${COLOR_RESET}" && sudo mkdir -p /etc/docker
   echo -e "${COLOR_BLUE}docker-ce 创建 配置文件${COLOR_RESET}"
   sudo tee /etc/docker/daemon.json <<-'EOF'
-{
-  "registry-mirrors": ["https://hnkfbj7x.mirror.aliyuncs.com"],
-  "exec-opts": ["native.cgroupdriver=systemd"]
-}
-EOF
+    {
+      "registry-mirrors": ["https://hnkfbj7x.mirror.aliyuncs.com"],
+      "exec-opts": ["native.cgroupdriver=systemd"]
+    }
+  EOF
   echo -e "${COLOR_BLUE}docker-ce 配置文件${COLOR_RESET}" && cat /etc/docker/daemon.json
   echo -e "${COLOR_BLUE}docker-ce 重启${COLOR_RESET}" && sudo systemctl restart docker.service
   echo -e "${COLOR_BLUE}docker-ce 状态${COLOR_RESET}" && sudo systemctl status docker.service -n 0
@@ -463,6 +463,9 @@ EOF
 
 # 高可用 VIP keepalived 安装
 _availability_keepalived_install() {
+
+  # 网卡
+  _interface_name
 
   mkdir -p /etc/kubernetes/
 
@@ -564,12 +567,12 @@ fi
 while [[ $# -gt 0 ]]; do
   case "$1" in
 
-  docker-install|-docker-install|--docker-install)
+  docker-install | -docker-install | --docker-install)
     docker_install=true
     echo -e "${COLOR_BLUE}启用 docker-ce 安装${COLOR_RESET}${COLOR_RESET}"
     ;;
 
-  kubernetes-version=*|-kubernetes-version=*|--kubernetes-version=*)
+  kubernetes-version=* | -kubernetes-version=* | --kubernetes-version=*)
     kubernetes_version="${1#*=}"
 
     echo -e "${COLOR_BLUE}支持安装的 kubernetes 版本号：${COLOR_RESET}${COLOR_GREEN}${lower_major}.${lower_minor}~${upper_major}.${upper_minor}${COLOR_RESET}"
@@ -578,49 +581,49 @@ while [[ $# -gt 0 ]]; do
     _check_kubernetes_version_range "$kubernetes_version"
     ;;
 
-  ntp-disabled|-ntp-disabled|--ntp-disabled)
+  ntp-disabled | -ntp-disabled | --ntp-disabled)
     ntp_disabled=true
     ;;
 
-  interface-name=*|-interface-name=*|--interface-name=*)
+  interface-name=* | -interface-name=* | --interface-name=*)
     interface_name="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 指定网卡名：${COLOR_RESET}${COLOR_GREEN}${interface_name}${COLOR_RESET}"
 
     _check_interface_name "$interface_name"
     ;;
 
-  availability-vip=*|-availability-vip=*|--availability-vip=*)
+  availability-vip=* | -availability-vip=* | --availability-vip=*)
     availability_vip="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用 VIP：${COLOR_RESET}${COLOR_GREEN}${availability_vip}${COLOR_RESET}"
 
     _check_availability_vip "$availability_vip"
     ;;
 
-  availability-vip-install|-availability-vip-install|--availability-vip-install)
+  availability-vip-install | -availability-vip-install | --availability-vip-install)
     availability_vip_install=true
     ;;
 
-  availability-vip-no=*|-availability-vip-no=*|--availability-vip-no=*)
+  availability-vip-no=* | -availability-vip-no=* | --availability-vip-no=*)
     availability_vip_no="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用 VIP 编号：${COLOR_RESET}${COLOR_GREEN}${availability_vip_no}${COLOR_RESET}"
 
     _check_availability_vip_no "$availability_vip_no"
     ;;
 
-  availability-master=*|-availability-master=*|--availability-master=*)
+  availability-master=* | -availability-master=* | --availability-master=*)
     availability_master="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用主节点地址$((${#availability_master_array[@]} + 1))：${COLOR_RESET}${COLOR_GREEN}${availability_master}${COLOR_RESET}"
 
     _check_availability_master "$availability_master"
     ;;
 
-  availability-haproxy-username=*|-availability-haproxy-username=*|--availability-haproxy-username=*)
+  availability-haproxy-username=* | -availability-haproxy-username=* | --availability-haproxy-username=*)
     availability_haproxy_username="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用 haproxy 指定用户名：${COLOR_RESET}${COLOR_GREEN}${availability_haproxy_username}${COLOR_RESET}"
 
     ;;
 
-  availability-haproxy-password=*|-availability-haproxy-password=*|--availability-haproxy-password=*)
+  availability-haproxy-password=* | -availability-haproxy-password=* | --availability-haproxy-password=*)
     availability_haproxy_password="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用 haproxy 指定密码：${COLOR_RESET}${COLOR_GREEN}${availability_haproxy_password}${COLOR_RESET}"
 
@@ -681,9 +684,6 @@ if [[ $availability_vip_install == true ]]; then
 
   # 高可用 VIP haproxy 安装
   _availability_haproxy_install
-
-  # 网卡
-  _interface_name
 
   # 高可用 VIP keepalived 安装
   _availability_keepalived_install
