@@ -443,6 +443,11 @@ if [[ $availability_vip_install == true ]]; then
     exit 1
   fi
 
+  if [ ${#availability_master_array[@]} -lt 1 ]; then
+    echo -e "${COLOR_RED}kubernetes 高可用主节点地址不能为空，退出程序${COLOR_RESET}"
+    exit 1
+  fi
+
   # 遍历数组
   for master in "${availability_master_array[@]}"; do
     echo "$master"
