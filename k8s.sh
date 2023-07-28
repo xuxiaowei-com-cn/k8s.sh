@@ -362,11 +362,11 @@ _docker_ce_install() {
   echo -e "${COLOR_BLUE}docker-ce 创建 配置文件的文件夹${COLOR_RESET}" && sudo mkdir -p /etc/docker
   echo -e "${COLOR_BLUE}docker-ce 创建 配置文件${COLOR_RESET}"
   sudo tee /etc/docker/daemon.json <<-'EOF'
-    {
-      "registry-mirrors": ["https://hnkfbj7x.mirror.aliyuncs.com"],
-      "exec-opts": ["native.cgroupdriver=systemd"]
-    }
-  EOF
+  {
+    "registry-mirrors": ["https://hnkfbj7x.mirror.aliyuncs.com"],
+    "exec-opts": ["native.cgroupdriver=systemd"]
+  }
+EOF
   echo -e "${COLOR_BLUE}docker-ce 配置文件${COLOR_RESET}" && cat /etc/docker/daemon.json
   echo -e "${COLOR_BLUE}docker-ce 重启${COLOR_RESET}" && sudo systemctl restart docker.service
   echo -e "${COLOR_BLUE}docker-ce 状态${COLOR_RESET}" && sudo systemctl status docker.service -n 0
