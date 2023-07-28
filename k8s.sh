@@ -180,9 +180,9 @@ _ntp_install() {
           echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 已备份为 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
         fi
         echo -e "${COLOR_BLUE}NTP 开始创建配置文件 ${ntp_conf}${COLOR_RESET}"
-        sudo sed -i '/^server/s/^/#/' $ntp_conf
-        echo "server ntp.aliyun.com" >>$ntp_conf
-        echo "server ntp1.aliyun.com" >>$ntp_conf
+        sudo sed -i '/^pool/s/^/#/' $ntp_conf
+        echo "pool ntp.aliyun.com iburst" | sudo tee -a $ntp_conf
+        echo "pool ntp1.aliyun.com iburst" | sudo tee -a $ntp_conf
         echo -e "${COLOR_BLUE}NTP 完成创建配置文件 ${ntp_conf}${COLOR_RESET}"
         echo -e "${COLOR_BLUE}NTP 查看配置文件 ${ntp_conf} 内容${COLOR_RESET}" && cat $ntp_conf
 
