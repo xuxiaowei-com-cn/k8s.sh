@@ -240,6 +240,14 @@ _selinux_permissive() {
   fi
 }
 
+# 停止 防火墙
+_firewalld_stop() {
+  if [[ $ID == anolis || $ID == centos ]]; then
+    echo -e "${COLOR_BLUE}firewalld 关闭${COLOR_RESET}" && sudo systemctl stop firewalld.service
+    echo -e "${COLOR_BLUE}firewalld 关闭开机自启${COLOR_RESET}" && sudo systemctl disable firewalld.service
+  fi
+}
+
 # 高可用 haproxy 安装
 _availability_haproxy_install() {
 
@@ -417,6 +425,9 @@ _bash_completion_install
 
 # 关闭 selinux
 _selinux_permissive
+
+# 停止 防火墙
+_firewalld_stop
 
 # 高可用 VIP 安装
 if [[ $availability_vip_install == true ]]; then
