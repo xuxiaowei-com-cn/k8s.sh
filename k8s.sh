@@ -174,8 +174,23 @@ _ntp_install() {
     elif [[ $ID == ubuntu ]]; then
       sudo apt-get -y install ntp && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
 
+      local ntp_conf="/etc/ntp.conf"
+      if [ -f "$ntp_conf" ]; then
+        local backup_file="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
+        sudo cp "$ntp_conf" "$backup_file"
+        echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 已备份为 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
+      else
+        echo "" | sudo tee -a $ntp_conf
+      fi
+      echo -e "${COLOR_BLUE}NTP 开始修改配置文件 ${ntp_conf}${COLOR_RESET}"
+      sudo sed -i '/^pool/s/^/#/' $ntp_conf
+      echo "server ntp.aliyun.com" | sudo tee -a $ntp_conf
+      echo "server ntp1.aliyun.com" | sudo tee -a $ntp_conf
+      echo -e "${COLOR_BLUE}NTP 完成修改配置文件 ${ntp_conf}${COLOR_RESET}"
+      echo -e "${COLOR_BLUE}NTP 查看配置文件 ${ntp_conf} 内容${COLOR_RESET}" && cat $ntp_conf
+
       echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntp
-      echo -e "${COLOR_BLUE}NTP 启动${COLOR_RESET}" && sudo systemctl start ntp
+      echo -e "${COLOR_BLUE}NTP 重启${COLOR_RESET}" && sudo systemctl restart ntp
       echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntp
       echo -e "${COLOR_BLUE}NTP 设置开机启动${COLOR_RESET}" && sudo systemctl enable ntp
     fi
