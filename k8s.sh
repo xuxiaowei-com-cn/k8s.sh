@@ -146,8 +146,9 @@ _ntp_install() {
     echo -e "${COLOR_BLUE}时区设置为亚洲/上海${COLOR_RESET}" && sudo timedatectl set-timezone Asia/Shanghai
     echo -e "${COLOR_BLUE}查看当前时区/时间${COLOR_RESET}" && timedatectl
 
+    local ntp_conf="/etc/ntp.conf"
+
     if [[ $ID == anolis || $ID == centos ]]; then
-      local ntp_conf="/etc/ntp.conf"
 
       if [[ $VERSION == 7* ]]; then
         sudo yum -y install ntpdate && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
@@ -202,8 +203,8 @@ _ntp_install() {
       fi
       echo -e "${COLOR_BLUE}NTP 开始修改配置文件 ${ntp_conf}${COLOR_RESET}"
       sudo sed -i '/^pool/s/^/#/' $ntp_conf
-      echo "server ntp.aliyun.com" | sudo tee -a $ntp_conf
-      echo "server ntp1.aliyun.com" | sudo tee -a $ntp_conf
+      echo "pool ntp.aliyun.com iburst" | sudo tee -a $ntp_conf
+      echo "pool ntp1.aliyun.com iburst" | sudo tee -a $ntp_conf
       echo -e "${COLOR_BLUE}NTP 完成修改配置文件 ${ntp_conf}${COLOR_RESET}"
       echo -e "${COLOR_BLUE}NTP 查看配置文件 ${ntp_conf} 内容${COLOR_RESET}" && cat $ntp_conf
 
