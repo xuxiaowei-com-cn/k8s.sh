@@ -280,6 +280,15 @@ _docker_install() {
     echo -e "${COLOR_BLUE}安装 ca-certificates curl gnupg${COLOR_RESET}" && sudo apt-get install -y ca-certificates curl gnupg
 
     echo -e "${COLOR_BLUE}修改仓库 gpg 秘钥文件夹权限${COLOR_RESET}" && sudo install -m 0755 -d /etc/apt/keyrings
+
+    local docker_gpg_conf=/etc/apt/keyrings/docker.gpg
+    local backup_file="${docker_gpg_conf}.$(date +%Y%m%d%H%M%S)"
+    if [ -f "$docker_gpg_conf" ]; then
+      echo -e "${COLOR_BLUE}docker 仓库 gpg 秘钥 ${docker_gpg_conf} 备份开始${COLOR_RESET}"
+      sudo mv "$docker_gpg_conf" "$backup_file"
+      echo -e "${COLOR_BLUE}docker 仓库 gpg 秘钥 ${containerd_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
+    fi
+
     echo -e "${COLOR_BLUE}添加 docker 仓库 gpg 秘钥${COLOR_RESET}"
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     echo -e "${COLOR_BLUE}修改 docker 仓库 gpg 秘钥文件权限${COLOR_RESET}" && sudo chmod a+r /etc/apt/keyrings/docker.gpg
