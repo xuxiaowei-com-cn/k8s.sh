@@ -27,9 +27,9 @@ set -e
 # 高可用主节点地址
 availability_master_array=()
 
-# 高可用 haproxy 用户名
+# 高可用 haproxy 默认用户名
 availability_haproxy_username=admin
-# 高可用 haproxy 密码
+# 高可用 haproxy 默认密码
 availability_haproxy_password=password
 
 # 检查 kubernetes 版本号
@@ -515,7 +515,11 @@ while [[ $# -gt 0 ]]; do
     availability_vip_install=true
     ;;
 
-  availability_vip_no=*|-availability_vip_no=*|--availability_vip_no=*)
+  availability-vip-use-docker|-availability-vip-use-docker|--availability-vip-use-docker)
+    availability_vip_use_docker=true
+    ;;
+
+  availability-vip-no=*|-availability-vip-no=*|--availability-vip-no=*)
     availability_vip_no="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用 VIP 编号：${COLOR_RESET}${COLOR_GREEN}${availability_vip_no}${COLOR_RESET}"
 
