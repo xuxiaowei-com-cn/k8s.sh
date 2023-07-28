@@ -375,9 +375,21 @@ EOF
   echo -e "${COLOR_BLUE}docker-ce 安装结束${COLOR_RESET}"
 }
 
-# 高可用 haproxy 安装
-_availability_haproxy_install() {
+# 网卡
+_interface_name() {
+  if ! [[ $interface_name ]]; then
+    interface_name=$(ip route get 223.5.5.5 | grep -oP '(?<=dev\s)\w+' | head -n 1)
+    if [ "$interface_name" ]; then
+      echo -e "${COLOR_BLUE}上网网卡是 ${COLOR_RESET}${COLOR_GREEN}${interface_name}${COLOR_RESET}"
+    else
+      echo -e "${COLOR_RED}未找到上网网卡，停止安装${COLOR_RESET}"
+      exit 1
+    fi
+  fi
+}
 
+# 高可用 VIP haproxy 安装
+_availability_haproxy_install() {
   mkdir -p /etc/kubernetes/
 
   cat >/etc/kubernetes/haproxy.cfg <<EOF
@@ -446,7 +458,80 @@ EOF
     --net=host \
     --restart=always \
     -v /etc/kubernetes/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro \
-    haproxytech/haproxy-debian:2.8
+    haproxytech/haproxy-debian:2.8 || echo -e "${COLOR_YELLOW}haproxy 容器已存在，不会重复创建${COLOR_RESET}"
+}
+
+# 高可用 VIP keepalived 安装
+_availability_keepalived_install() {
+
+  mkdir -p /etc/kubernetes/
+
+  cat >/etc/kubernetes/keepalived.conf <<EOF
+! Configuration File for keepalived
+
+global_defs {
+   router_id LVS_$availability_vip_no
+}
+
+vrrp_script checkhaproxy
+{
+    script "/usr/bin/check-haproxy.sh"
+    interval 2
+    weight -30
+}
+
+vrrp_instance VI_1 {
+    state $availability_vip_state
+    interface $interface_name
+    virtual_router_id 51
+    priority 100
+    advert_int 1
+
+    virtual_ipaddress {
+        $availability_vip/24 dev $interface_name
+    }
+
+    authentication {
+        auth_type PASS
+        auth_pass password
+    }
+
+    track_script {
+        checkhaproxy
+    }
+}
+
+EOF
+
+  cat >/etc/kubernetes/check-haproxy.sh <<EOF
+#!/bin/bash
+
+count=\`netstat -apn | grep 9443 | wc -l\`
+
+if [ $count -gt 0 ]; then
+    exit 0
+else
+    exit 1
+fi
+
+EOF
+
+  cat /etc/kubernetes/keepalived.conf
+  cat /etc/kubernetes/check-haproxy.sh
+
+  docker run \
+    -d \
+    --name k8s-keepalived \
+    --restart=always \
+    --net=host \
+    --cap-add=NET_ADMIN \
+    --cap-add=NET_BROADCAST \
+    --cap-add=NET_RAW \
+    -v /etc/kubernetes/keepalived.conf:/container/service/keepalived/assets/keepalived.conf \
+    -v /etc/kubernetes/check-haproxy.sh:/usr/bin/check-haproxy.sh \
+    lettore/keepalived:3.16-2.2.7 \
+    --copy-service
+
 }
 
 . /etc/os-release
@@ -513,10 +598,6 @@ while [[ $# -gt 0 ]]; do
 
   availability-vip-install|-availability-vip-install|--availability-vip-install)
     availability_vip_install=true
-    ;;
-
-  availability-vip-use-docker|-availability-vip-use-docker|--availability-vip-use-docker)
-    availability_vip_use_docker=true
     ;;
 
   availability-vip-no=*|-availability-vip-no=*|--availability-vip-no=*)
@@ -595,10 +676,17 @@ if [[ $availability_vip_install == true ]]; then
     exit 1
   fi
 
-  # 遍历数组
-  for master in "${availability_master_array[@]}"; do
-    echo "$master"
-  done
+  # docker-ce 安装
+  _docker_ce_install
+
+  # 高可用 VIP haproxy 安装
+  _availability_haproxy_install
+
+  # 网卡
+  _interface_name
+
+  # 高可用 VIP keepalived 安装
+  _availability_keepalived_install
 
   echo -e "${COLOR_BLUE}kubernetes 高可用 VIP 安装结束${COLOR_RESET}"
   exit 0
