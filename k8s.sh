@@ -135,7 +135,7 @@ _check_availability_master() {
   availability_master_array+=("$name $address")
 }
 
-# NTP 安装
+# NTP（网络时间协议） 安装
 _ntp_install() {
   if [[ $ntp_disabled == true ]]; then
     echo -e "${COLOR_YELLOW}NTP 安装已被禁用${COLOR_RESET}"
@@ -216,6 +216,16 @@ _ntp_install() {
     echo -e "${COLOR_BLUE}查看当前时区/时间${COLOR_RESET}" && timedatectl
 
     echo -e "${COLOR_BLUE}NTP 结束安装${COLOR_RESET}"
+  fi
+}
+
+# bash-completion 安装
+_bash_completion_install() {
+  if [[ $ID == anolis || $ID == centos ]]; then
+    echo -e "${COLOR_BLUE}bash-completion 开始安装${COLOR_RESET}"
+    sudo yum -y install bash-completion
+    source /etc/profile
+    echo -e "${COLOR_BLUE}bash-completion 安装完成${COLOR_RESET}"
   fi
 }
 
@@ -388,8 +398,11 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-# NTP 安装
+# NTP（网络时间协议） 安装
 _ntp_install
+
+# bash-completion 安装
+_bash_completion_install
 
 # 高可用 VIP 安装
 if [[ $availability_vip_install == true ]]; then
