@@ -147,10 +147,11 @@ _ntp_install() {
     echo -e "${COLOR_BLUE}查看当前时区/时间${COLOR_RESET}" && timedatectl
 
     if [[ $ID == anolis || $ID == centos ]]; then
+      local ntp_conf="/etc/ntp.conf"
+
       if [[ $VERSION == 7* ]]; then
         sudo yum -y install ntpdate && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
 
-        local ntp_conf="/etc/ntp.conf"
         if [ -f "$ntp_conf" ]; then
           local backup_file="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
           cp "$ntp_conf" "$backup_file"
@@ -167,7 +168,22 @@ _ntp_install() {
         echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntpdate
         echo -e "${COLOR_BLUE}NTP 设置开机启动${COLOR_RESET}" && sudo systemctl enable ntpdate
       elif [[ $VERSION == 8* || $VERSION == 23* ]]; then
+
+        local ntp_conf="/etc/chrony.conf"
+
         sudo yum -y install chrony && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
+
+        if [ -f "$ntp_conf" ]; then
+          local backup_file="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
+          cp "$ntp_conf" "$backup_file"
+          echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 已备份为 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
+        fi
+        echo -e "${COLOR_BLUE}NTP 开始创建配置文件 ${ntp_conf}${COLOR_RESET}"
+        sudo sed -i '/^server/s/^/#/' $ntp_conf
+        echo "server ntp.aliyun.com" >>$ntp_conf
+        echo "server ntp1.aliyun.com" >>$ntp_conf
+        echo -e "${COLOR_BLUE}NTP 完成创建配置文件 ${ntp_conf}${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}NTP 查看配置文件 ${ntp_conf} 内容${COLOR_RESET}" && cat $ntp_conf
 
         echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status chronyd -n 0 || echo -e "${COLOR_YELLOW}NTP 未正常运行${COLOR_RESET}"
         echo -e "${COLOR_BLUE}NTP 重启${COLOR_RESET}" && sudo systemctl restart chronyd
@@ -177,7 +193,6 @@ _ntp_install() {
     elif [[ $ID == ubuntu ]]; then
       sudo apt-get -y install ntp && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
 
-      local ntp_conf="/etc/ntp.conf"
       if [ -f "$ntp_conf" ]; then
         local backup_file="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
         sudo cp "$ntp_conf" "$backup_file"
