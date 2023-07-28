@@ -147,7 +147,7 @@ _ntp_install() {
     echo -e "${COLOR_BLUE}查看当前时区/时间${COLOR_RESET}" && timedatectl
 
     local ntp_conf="/etc/ntp.conf"
-    local backup_file="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
+    local ntp_conf_backup="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
 
     if [[ $ID == anolis || $ID == centos ]]; then
 
@@ -155,8 +155,8 @@ _ntp_install() {
         sudo yum -y install ntpdate && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
 
         if [ -f "$ntp_conf" ]; then
-          cp "$ntp_conf" "$backup_file"
-          echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 已备份为 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
+          cp "$ntp_conf" "$ntp_conf_backup"
+          echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 已备份为 ${COLOR_RESET}${COLOR_GREEN}${ntp_conf_backup}${COLOR_RESET}"
         fi
         echo -e "${COLOR_BLUE}NTP 开始创建配置文件 ${ntp_conf}${COLOR_RESET}"
         echo "server ntp.aliyun.com" >$ntp_conf
@@ -171,14 +171,14 @@ _ntp_install() {
       elif [[ $VERSION == 8* || $VERSION == 23* ]]; then
 
         local ntp_conf="/etc/chrony.conf"
-        local backup_file="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
+        local ntp_conf_backup="${ntp_conf}.$(date +%Y%m%d%H%M%S)"
 
         sudo yum -y install chrony && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
 
         if [ -f "$ntp_conf" ]; then
           echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 备份开始${COLOR_RESET}"
-          sudo cp "$ntp_conf" "$backup_file"
-          echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
+          sudo cp "$ntp_conf" "$ntp_conf_backup"
+          echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${ntp_conf_backup}${COLOR_RESET}"
         fi
         echo -e "${COLOR_BLUE}NTP 开始创建配置文件 ${ntp_conf}${COLOR_RESET}"
         sudo sed -i '/^pool/s/^/#/' $ntp_conf
@@ -197,8 +197,8 @@ _ntp_install() {
 
       if [ -f "$ntp_conf" ]; then
         echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 备份开始${COLOR_RESET}"
-        sudo cp "$ntp_conf" "$backup_file"
-        echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
+        sudo cp "$ntp_conf" "$ntp_conf_backup"
+        echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${ntp_conf_backup}${COLOR_RESET}"
       else
         echo "" | sudo tee -a $ntp_conf
       fi
@@ -250,15 +250,10 @@ _firewalld_stop() {
   fi
 }
 
-# 安装 docker
-_docker_install() {
-  echo -e "${COLOR_BLUE}docker、containerd 安装开始${COLOR_RESET}"
+# docker 仓库
+_docker_repo() {
+  echo -e "${COLOR_BLUE}docker 仓库 添加开始${COLOR_RESET}"
   if [[ $ID == anolis || $ID == centos ]]; then
-    # https://docs.docker.com/engine/install/centos/
-
-    echo -e "${COLOR_BLUE}卸载旧 docker${COLOR_RESET}"
-    sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine || echo -e "${COLOR_BLUE}卸载旧 docker 完成${COLOR_RESET}"
-
     echo -e "${COLOR_BLUE}安装 curl${COLOR_RESET}" && sudo yum install -y curl
     echo -e "${COLOR_BLUE}增加 docker 仓库${COLOR_RESET}"
     sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -267,26 +262,18 @@ _docker_install() {
       echo -e "${COLOR_BLUE}兼容 anolis 23${COLOR_RESET}" && sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
     fi
 
-    echo -e "${COLOR_BLUE}安装 docker、containerd${COLOR_RESET}"
-    sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
+    echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/yum.repos.d/docker-ce.repo
   elif [[ $ID == ubuntu ]]; then
-    # https://docs.docker.com/engine/install/ubuntu/
-
-    # 卸载旧 docker
-    echo -e "${COLOR_BLUE}卸载旧 docker${COLOR_RESET}"
-    sudo apt-get remove docker.io docker-doc docker-compose podman-docker containerd runc || echo -e "${COLOR_BLUE}卸载旧 docker 完成${COLOR_RESET}"
-
     echo -e "${COLOR_BLUE}安装 ca-certificates curl gnupg${COLOR_RESET}" && sudo apt-get install -y ca-certificates curl gnupg
 
     echo -e "${COLOR_BLUE}修改仓库 gpg 秘钥文件夹权限${COLOR_RESET}" && sudo install -m 0755 -d /etc/apt/keyrings
 
     local docker_gpg_conf=/etc/apt/keyrings/docker.gpg
-    local backup_file="${docker_gpg_conf}.$(date +%Y%m%d%H%M%S)"
+    local docker_gpg_conf_backup="${docker_gpg_conf}.$(date +%Y%m%d%H%M%S)"
     if [ -f "$docker_gpg_conf" ]; then
       echo -e "${COLOR_BLUE}docker 仓库 gpg 秘钥 ${docker_gpg_conf} 备份开始${COLOR_RESET}"
-      sudo mv "$docker_gpg_conf" "$backup_file"
-      echo -e "${COLOR_BLUE}docker 仓库 gpg 秘钥 ${containerd_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
+      sudo mv "$docker_gpg_conf" "$docker_gpg_conf_backup"
+      echo -e "${COLOR_BLUE}docker 仓库 gpg 秘钥 ${containerd_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${docker_gpg_conf_backup}${COLOR_RESET}"
     fi
 
     echo -e "${COLOR_BLUE}添加 docker 仓库 gpg 秘钥${COLOR_RESET}"
@@ -303,20 +290,39 @@ _docker_install() {
 
     # 安装 docker
     echo -e "${COLOR_BLUE}更新 docker 仓库源${COLOR_RESET}" && sudo apt-get update
-    echo -e "${COLOR_BLUE}安装 docker、containerd${COLOR_RESET}"
-    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  fi
 
+  echo -e "${COLOR_BLUE}docker 仓库 添加结束${COLOR_RESET}"
+}
+
+# containerd 安装
+_containerd_install() {
+  echo -e "${COLOR_BLUE}containerd 安装开始${COLOR_RESET}"
+
+  if [[ $ID == anolis || $ID == centos ]]; then
+    # https://docs.docker.com/engine/install/centos/
+
+    echo -e "${COLOR_BLUE}卸载旧 docker（不是 docker-ce，目前都是使用的 docker-ce）${COLOR_RESET}"
+    sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+
+    echo -e "${COLOR_BLUE}containerd 安装${COLOR_RESET}" && sudo yum install -y containerd.io
+  elif [[ $ID == ubuntu ]]; then
+    # https://docs.docker.com/engine/install/ubuntu/
+
+    echo -e "${COLOR_BLUE}卸载旧 docker（不是 docker-ce，目前都是使用的 docker-ce）${COLOR_RESET}"
+    sudo apt-get remove docker.io docker-doc docker-compose podman-docker containerd runc || echo ""
+
+    echo -e "${COLOR_BLUE}containerd 安装${COLOR_RESET}" && sudo apt-get install -y containerd.io
   fi
 
   echo -e "${COLOR_BLUE}停止 containerd${COLOR_RESET}" && sudo systemctl stop containerd.service
-  echo -e "${COLOR_BLUE}停止 docker${COLOR_RESET}" && sudo systemctl stop docker.service
 
   local containerd_conf=/etc/containerd/config.toml
-  local backup_file="${containerd_conf}.$(date +%Y%m%d%H%M%S)"
+  local containerd_conf_backup="${containerd_conf}.$(date +%Y%m%d%H%M%S)"
   if [ -f "$containerd_conf" ]; then
     echo -e "${COLOR_BLUE}containerd 旧配置文件 ${containerd_conf} 备份开始${COLOR_RESET}"
-    sudo cp "$containerd_conf" "$backup_file"
-    echo -e "${COLOR_BLUE}containerd 旧配置文件 ${containerd_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${backup_file}${COLOR_RESET}"
+    sudo cp "$containerd_conf" "$containerd_conf_backup"
+    echo -e "${COLOR_BLUE}containerd 旧配置文件 ${containerd_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${containerd_conf_backup}${COLOR_RESET}"
   fi
 
   echo -e "${COLOR_BLUE}containerd 生成配置文件 ${containerd_conf}${COLOR_RESET}"
@@ -331,26 +337,42 @@ _docker_install() {
 
   echo -e "${COLOR_BLUE}containerd 配置文件${COLOR_RESET}" && cat $containerd_conf
 
-  echo -e "${COLOR_BLUE}创建 docker 配置文件的文件夹${COLOR_RESET}" && sudo mkdir -p /etc/docker
-  echo -e "${COLOR_BLUE}创建 docker 配置文件${COLOR_RESET}"
+  echo -e "${COLOR_BLUE}containerd 重启${COLOR_RESET}" && sudo systemctl restart containerd.service
+  echo -e "${COLOR_BLUE}containerd 状态${COLOR_RESET}" && sudo systemctl status containerd.service -n 0
+  echo -e "${COLOR_BLUE}containerd 设置开机自启${COLOR_RESET}" && sudo systemctl enable containerd.service
+
+  echo -e "${COLOR_BLUE}containerd 安装结束${COLOR_RESET}"
+}
+
+# docker-ce 安装
+_docker_ce_install() {
+  echo -e "${COLOR_BLUE}docker-ce 安装开始${COLOR_RESET}"
+
+  if [[ $ID == anolis || $ID == centos ]]; then
+    # https://docs.docker.com/engine/install/centos/
+
+    sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  elif [[ $ID == ubuntu ]]; then
+    # https://docs.docker.com/engine/install/ubuntu/
+
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  fi
+
+  echo -e "${COLOR_BLUE}docker-ce 停止${COLOR_RESET}" && sudo systemctl stop docker.service
+  echo -e "${COLOR_BLUE}docker-ce 创建 配置文件的文件夹${COLOR_RESET}" && sudo mkdir -p /etc/docker
+  echo -e "${COLOR_BLUE}docker-ce 创建 配置文件${COLOR_RESET}"
   sudo tee /etc/docker/daemon.json <<-'EOF'
 {
   "registry-mirrors": ["https://hnkfbj7x.mirror.aliyuncs.com"],
   "exec-opts": ["native.cgroupdriver=systemd"]
 }
 EOF
-  echo -e "${COLOR_BLUE}查看 docker 配置文件${COLOR_RESET}" && cat /etc/docker/daemon.json
+  echo -e "${COLOR_BLUE}docker-ce 配置文件${COLOR_RESET}" && cat /etc/docker/daemon.json
+  echo -e "${COLOR_BLUE}docker-ce 重启${COLOR_RESET}" && sudo systemctl restart docker.service
+  echo -e "${COLOR_BLUE}docker-ce 状态${COLOR_RESET}" && sudo systemctl status docker.service -n 0
+  echo -e "${COLOR_BLUE}docker-ce 设置开机自启${COLOR_RESET}" && sudo systemctl enable docker.service
 
-  echo -e "${COLOR_BLUE}containerd 重启${COLOR_RESET}" && sudo systemctl restart containerd.service
-  echo -e "${COLOR_BLUE}docker 重启${COLOR_RESET}" && sudo systemctl restart docker.service
-
-  echo -e "${COLOR_BLUE}containerd 状态${COLOR_RESET}" && sudo systemctl status containerd.service -n 0
-  echo -e "${COLOR_BLUE}docker 状态${COLOR_RESET}" && sudo systemctl status docker.service -n 0
-
-  echo -e "${COLOR_BLUE}containerd 设置开机自启${COLOR_RESET}" && sudo systemctl enable containerd.service
-  echo -e "${COLOR_BLUE}docker 设置开机自启${COLOR_RESET}" && sudo systemctl enable docker.service
-
-  echo -e "${COLOR_BLUE}docker、containerd 安装结束${COLOR_RESET}"
+  echo -e "${COLOR_BLUE}docker-ce 安装结束${COLOR_RESET}"
 }
 
 # 高可用 haproxy 安装
@@ -457,7 +479,12 @@ fi
 while [[ $# -gt 0 ]]; do
   case "$1" in
 
-  kubernetes_version=*)
+  docker-install|-docker-install|--docker-install)
+    docker_install=true
+    echo -e "${COLOR_BLUE}启用 docker-ce 安装${COLOR_RESET}${COLOR_RESET}"
+    ;;
+
+  kubernetes-version=*|-kubernetes-version=*|--kubernetes-version=*)
     kubernetes_version="${1#*=}"
 
     echo -e "${COLOR_BLUE}支持安装的 kubernetes 版本号：${COLOR_RESET}${COLOR_GREEN}${lower_major}.${lower_minor}~${upper_major}.${upper_minor}${COLOR_RESET}"
@@ -466,49 +493,49 @@ while [[ $# -gt 0 ]]; do
     _check_kubernetes_version_range "$kubernetes_version"
     ;;
 
-  ntp_disabled)
+  ntp-disabled|-ntp-disabled|--ntp-disabled)
     ntp_disabled=true
     ;;
 
-  interface_name=*)
+  interface-name=*|-interface-name=*|--interface-name=*)
     interface_name="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 指定网卡名：${COLOR_RESET}${COLOR_GREEN}${interface_name}${COLOR_RESET}"
 
     _check_interface_name "$interface_name"
     ;;
 
-  availability_vip=*)
+  availability-vip=*|-availability-vip=*|--availability-vip=*)
     availability_vip="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用 VIP：${COLOR_RESET}${COLOR_GREEN}${availability_vip}${COLOR_RESET}"
 
     _check_availability_vip "$availability_vip"
     ;;
 
-  availability_vip_install)
+  availability-vip-install|-availability-vip-install|--availability-vip-install)
     availability_vip_install=true
     ;;
 
-  availability_vip_no=*)
+  availability_vip_no=*|-availability_vip_no=*|--availability_vip_no=*)
     availability_vip_no="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用 VIP 编号：${COLOR_RESET}${COLOR_GREEN}${availability_vip_no}${COLOR_RESET}"
 
     _check_availability_vip_no "$availability_vip_no"
     ;;
 
-  availability_master=*)
+  availability-master=*|-availability-master=*|--availability-master=*)
     availability_master="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用主节点地址$((${#availability_master_array[@]} + 1))：${COLOR_RESET}${COLOR_GREEN}${availability_master}${COLOR_RESET}"
 
     _check_availability_master "$availability_master"
     ;;
 
-  availability_haproxy_username=*)
+  availability-haproxy-username=*|-availability-haproxy-username=*|--availability-haproxy-username=*)
     availability_haproxy_username="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用 haproxy 指定用户名：${COLOR_RESET}${COLOR_GREEN}${availability_haproxy_username}${COLOR_RESET}"
 
     ;;
 
-  availability_haproxy_password=*)
+  availability-haproxy-password=*|-availability-haproxy-password=*|--availability-haproxy-password=*)
     availability_haproxy_password="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用 haproxy 指定密码：${COLOR_RESET}${COLOR_GREEN}${availability_haproxy_password}${COLOR_RESET}"
 
@@ -534,8 +561,16 @@ _selinux_permissive
 # 停止 防火墙
 _firewalld_stop
 
-# 安装 docker
-_docker_install
+# docker 仓库
+_docker_repo
+
+# containerd 安装
+_containerd_install
+
+if [[ $docker_install == true ]]; then
+  # docker-ce 安装
+  _docker_ce_install
+fi
 
 # 高可用 VIP 安装
 if [[ $availability_vip_install == true ]]; then
