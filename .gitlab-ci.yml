@@ -7,7 +7,7 @@ install:
   stage: install
   script:
     - chmod +x install.sh
-    - ./install.sh
+    - sudo ./install.sh
   tags:
     - ssh-centos-7.0
 
