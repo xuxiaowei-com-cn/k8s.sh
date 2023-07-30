@@ -181,7 +181,7 @@
 1. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试）
     ```shell
     # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
     # 授权
     chmod +x install.sh
     # 执行安装命令
@@ -191,7 +191,7 @@
 2. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 k8s 指定版本
     ```shell
     # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
     # 授权
     chmod +x install.sh
     # 执行安装命令
@@ -204,7 +204,7 @@
 3. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装，不进行初始化
     ```shell
     # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
     # 授权
     chmod +x install.sh
     # 执行安装命令，仅安装，不进行初始化
@@ -214,7 +214,7 @@
 4. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装、拉取镜像，不进行初始化
     ```shell
     # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
     # 授权
     chmod +x install.sh
     # 执行安装命令，仅安装、拉取镜像，不进行初始化
@@ -224,7 +224,7 @@
 5. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 指定版本
     ```shell
     # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
     # 授权
     chmod +x install.sh
     # 执行安装命令
@@ -241,7 +241,7 @@
     export CALICO_MIRRORS=hub-mirror.c.163.com
     
     # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
     # 授权
     chmod +x install.sh
     # 执行安装命令
@@ -251,7 +251,7 @@
 7. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），安装 Metrics Server 插件
     ```shell
     # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
     # 授权
     chmod +x install.sh
     # 执行安装命令
@@ -284,7 +284,7 @@
     1. 主节点：安装软件、初始化集群
         ```shell
         # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
         # 授权
         chmod +x install.sh
         # 执行安装命令
@@ -303,7 +303,7 @@
     2. 工作节点：安装软件、加入集群
         ```shell
         # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
         # 授权
         chmod +x install.sh
         # 执行安装命令
@@ -325,7 +325,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
         # 授权
         chmod +x install.sh
         
@@ -355,7 +355,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
         # 授权
         chmod +x install.sh
         
@@ -373,7 +373,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
         # 授权
         chmod +x install.sh
         
@@ -412,7 +412,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/v0.1.0-alpha.1/install.sh
+        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.1.1/install.sh
         # 授权
         chmod +x install.sh
         
