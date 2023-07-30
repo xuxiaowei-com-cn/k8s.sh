@@ -6,6 +6,9 @@
 # 版本：SNAPSHOT/0.1.1
 #
 
+# 一旦有命令返回非零值，立即退出脚本
+set -e
+
 while getopts "vm" opt; do
   case $opt in
   v)
