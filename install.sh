@@ -74,6 +74,9 @@ function osVersion() {
     if [[ $VERSION_ID == 20* ]]; then
       echo "$VERSION_ID"
       OS_VERSION=20
+    elif [[ $VERSION_ID == 22* ]]; then
+      echo "$VERSION_ID"
+      OS_VERSION=22
     else
       echo "$VERSION_ID：未完成测试"
     fi
