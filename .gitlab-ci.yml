@@ -9,7 +9,7 @@ install:
     - chmod +x install.sh
     - ./install.sh
   tags:
-    - shell-centos-7.0
+    - ssh-centos-7.0
 
 # 嵌入
 include:
