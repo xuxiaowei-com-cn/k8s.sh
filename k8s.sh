@@ -1,6 +1,4 @@
 #!/bin/bash
-
-#!/bin/bash
 #
 # 作者：徐晓伟 xuxiaowei@xuxiaowei.com.cn
 # 使用：chmod +x install.sh && sudo ./install.sh
@@ -193,26 +191,30 @@ _ntp_install() {
         echo -e "${COLOR_BLUE}NTP 设置开机启动${COLOR_RESET}" && sudo systemctl enable chronyd
       fi
     elif [[ $ID == ubuntu ]]; then
-      sudo apt-get -y install ntp && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
+      if [[ $VERSION == 20* ]]; then
+        sudo apt-get -y install ntp && echo -e "${COLOR_BLUE}NTP 安装成功${COLOR_RESET}"
 
-      if [ -f "$ntp_conf" ]; then
-        echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 备份开始${COLOR_RESET}"
-        sudo cp "$ntp_conf" "$ntp_conf_backup"
-        echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${ntp_conf_backup}${COLOR_RESET}"
-      else
-        echo "" | sudo tee -a $ntp_conf
+        if [ -f "$ntp_conf" ]; then
+          echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 备份开始${COLOR_RESET}"
+          sudo cp "$ntp_conf" "$ntp_conf_backup"
+          echo -e "${COLOR_BLUE}NTP 旧配置文件 ${ntp_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${ntp_conf_backup}${COLOR_RESET}"
+        else
+          echo "" | sudo tee -a $ntp_conf
+        fi
+        echo -e "${COLOR_BLUE}NTP 开始修改配置文件 ${ntp_conf}${COLOR_RESET}"
+        sudo sed -i '/^pool/s/^/#/' $ntp_conf
+        echo "pool ntp.aliyun.com iburst" | sudo tee -a $ntp_conf
+        echo "pool ntp1.aliyun.com iburst" | sudo tee -a $ntp_conf
+        echo -e "${COLOR_BLUE}NTP 完成修改配置文件 ${ntp_conf}${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}NTP 查看配置文件 ${ntp_conf} 内容${COLOR_RESET}" && cat $ntp_conf
+
+        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntp || echo -e "${COLOR_YELLOW}NTP 未正常运行${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}NTP 重启${COLOR_RESET}" && sudo systemctl restart ntp
+        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntp
+        echo -e "${COLOR_BLUE}NTP 设置开机启动${COLOR_RESET}" && sudo systemctl enable ntp
+      elif [[ $VERSION == 22* ]]; then
+        echo -e "${COLOR_YELLOW}Ubuntu 22 NTP 安装已忽略${COLOR_RESET}"
       fi
-      echo -e "${COLOR_BLUE}NTP 开始修改配置文件 ${ntp_conf}${COLOR_RESET}"
-      sudo sed -i '/^pool/s/^/#/' $ntp_conf
-      echo "pool ntp.aliyun.com iburst" | sudo tee -a $ntp_conf
-      echo "pool ntp1.aliyun.com iburst" | sudo tee -a $ntp_conf
-      echo -e "${COLOR_BLUE}NTP 完成修改配置文件 ${ntp_conf}${COLOR_RESET}"
-      echo -e "${COLOR_BLUE}NTP 查看配置文件 ${ntp_conf} 内容${COLOR_RESET}" && cat $ntp_conf
-
-      echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntp || echo -e "${COLOR_YELLOW}NTP 未正常运行${COLOR_RESET}"
-      echo -e "${COLOR_BLUE}NTP 重启${COLOR_RESET}" && sudo systemctl restart ntp
-      echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntp
-      echo -e "${COLOR_BLUE}NTP 设置开机启动${COLOR_RESET}" && sudo systemctl enable ntp
     fi
 
     echo -e "${COLOR_BLUE}查看当前时区/时间${COLOR_RESET}" && timedatectl
@@ -250,11 +252,19 @@ _firewalld_stop() {
   fi
 }
 
+# 关闭 交换空间
+_swap_off() {
+  echo -e "${COLOR_BLUE}查看当前交换空间${COLOR_RESET}" && free -h
+  echo -e "${COLOR_BLUE}关闭交换空间（临时）${COLOR_RESET}" && sudo swapoff -a
+  echo -e "${COLOR_BLUE}关闭交换空间（永久）${COLOR_RESET}" && sudo sed -i 's/.*swap.*/#&/' /etc/fstab
+  echo -e "${COLOR_BLUE}查看当前交换空间${COLOR_RESET}" && free -h
+}
+
 # docker 仓库
 _docker_repo() {
   echo -e "${COLOR_BLUE}docker 仓库 添加开始${COLOR_RESET}"
   if [[ $ID == anolis || $ID == centos ]]; then
-    echo -e "${COLOR_BLUE}安装 curl${COLOR_RESET}" && sudo yum install -y curl
+    echo -e "${COLOR_BLUE}安装/更新 curl${COLOR_RESET}" && sudo yum install -y curl
     echo -e "${COLOR_BLUE}增加 docker 仓库${COLOR_RESET}"
     sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
 
@@ -288,7 +298,6 @@ _docker_repo() {
 
     echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/apt/sources.list.d/docker.list
 
-    # 安装 docker
     echo -e "${COLOR_BLUE}更新 docker 仓库源${COLOR_RESET}" && sudo apt-get update
   fi
 
@@ -373,6 +382,110 @@ EOF
   echo -e "${COLOR_BLUE}docker-ce 设置开机自启${COLOR_RESET}" && sudo systemctl enable docker.service
 
   echo -e "${COLOR_BLUE}docker-ce 安装结束${COLOR_RESET}"
+}
+
+# kubernetes 仓库
+_kubernetes_repo() {
+  # https://developer.aliyun.com/mirror/kubernetes/
+
+  echo -e "${COLOR_BLUE}kubernetes 仓库 添加开始${COLOR_RESET}"
+
+  if [[ $ID == anolis || $ID == centos ]]; then
+
+    cat <<EOF >/etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+# 是否开启本仓库
+enabled=1
+# 是否检查 gpg 签名文件
+gpgcheck=0
+# 是否检查 gpg 签名文件
+repo_gpgcheck=0
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
+
+EOF
+
+    echo -e "${COLOR_BLUE}kubernetes 仓库 内容：${COLOR_RESET}${COLOR_GREEN}/etc/yum.repos.d/kubernetes.repo${COLOR_RESET}" && cat /etc/yum.repos.d/kubernetes.repo
+
+  elif [[ $ID == ubuntu ]]; then
+
+    sudo apt-get install -y apt-transport-https
+    curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
+    echo "deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+    echo -e "${COLOR_BLUE}kubernetes 仓库 内容：${COLOR_RESET}${COLOR_GREEN}/etc/apt/sources.list.d/kubernetes.list${COLOR_RESET}" && cat /etc/apt/sources.list.d/kubernetes.list
+
+    echo -e "${COLOR_BLUE}更新 kubernetes 仓库源${COLOR_RESET}" && sudo apt-get update
+  fi
+
+  echo -e "${COLOR_BLUE}kubernetes 仓库 添加结束${COLOR_RESET}"
+}
+
+# kubernetes 配置
+_kubernetes_conf() {
+  # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
+
+  echo -e "${COLOR_BLUE}kubernetes 配置开始${COLOR_RESET}"
+
+  echo -e "${COLOR_BLUE}kubernetes 配置：${COLOR_RESET}${COLOR_GREEN}/etc/modules-load.d/k8s.conf${COLOR_RESET}"
+  cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+overlay
+br_netfilter
+EOF
+
+  echo -e "${COLOR_BLUE}kubernetes 配置：加载 br_netfilter${COLOR_RESET}" && sudo modprobe br_netfilter
+  echo -e "${COLOR_BLUE}kubernetes 配置：加载 overlay${COLOR_RESET}" && sudo modprobe overlay
+
+  # 设置所需的 sysctl 参数，参数在重新启动后保持不变
+
+  echo -e "${COLOR_BLUE}kubernetes 配置：${COLOR_RESET}${COLOR_GREEN}/etc/sysctl.d/k8s.conf${COLOR_RESET}"
+  cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-iptables  = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward                 = 1
+EOF
+
+  # 应用 sysctl 参数而不重新启动
+  echo -e "${COLOR_BLUE}kubernetes 配置：重新加载内核${COLOR_RESET}" && sudo sysctl --system
+
+  # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
+  # 通过运行以下指令确认 br_netfilter 和 overlay 模块被加载：
+  echo -e "${COLOR_BLUE}kubernetes 配置：确认加载 br_netfilter${COLOR_RESET}" && lsmod | grep br_netfilter
+  echo -e "${COLOR_BLUE}kubernetes 配置：确认加载 overlay${COLOR_RESET}" && lsmod | grep overlay
+
+  # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
+  # 通过运行以下指令确认 net.bridge.bridge-nf-call-iptables、net.bridge.bridge-nf-call-ip6tables 和 net.ipv4.ip_forward 系统变量在你的 sysctl 配置中被设置为 1：
+  echo -e "${COLOR_BLUE}kubernetes 配置：修改网络${COLOR_RESET}" && sudo sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
+
+  echo -e "${COLOR_BLUE}kubernetes 配置结束${COLOR_RESET}"
+}
+
+# kubernetes 安装
+_kubernetes_install() {
+  echo -e "${COLOR_BLUE}kubernetes 安装开始${COLOR_RESET}"
+  if [[ $ID == anolis || $ID == centos ]]; then
+    if [ "$kubernetes_version" ]; then
+      echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
+      sudo yum install -y kubelet-"$kubernetes_version"-0 kubeadm-"$kubernetes_version"-0 kubectl-"$kubernetes_version"-0 --disableexcludes=kubernetes --nogpgcheck
+    else
+      echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}最新版${COLOR_RESET}"
+      sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
+    fi
+  elif [[ $ID == ubuntu ]]; then
+
+    if [ "$kubernetes_version" ]; then
+      echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
+      sudo apt-get install -y kubelet="$kubernetes_version"-00 kubeadm="$kubernetes_version"-00 kubectl="$kubernetes_version"-00
+    else
+      echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}最新版${COLOR_RESET}"
+      sudo apt-get install -y kubelet kubeadm kubectl
+    fi
+  fi
+  echo -e "${COLOR_BLUE}线程守护${COLOR_RESET}" && sudo systemctl daemon-reload
+  echo -e "${COLOR_GREEN}kubelet${COLOR_RESET}${COLOR_BLUE} 重启${COLOR_RESET}" && sudo systemctl restart kubelet
+  echo -e "${COLOR_GREEN}kubelet${COLOR_RESET}${COLOR_BLUE} 设置开机自启${COLOR_RESET}" && sudo systemctl enable kubelet
+  echo -e "${COLOR_BLUE}kubernetes 安装结束${COLOR_RESET}"
 }
 
 # 网卡
@@ -553,12 +666,12 @@ elif [[ $ID == centos ]]; then
     exit 1
   fi
 elif [[ $ID == ubuntu ]]; then
-  if [[ $VERSION != 20* ]]; then
+  if ! [[ $VERSION == 20* || $VERSION == 22* ]]; then
     echo -e "${COLOR_RED}不支持 ${VERSION} 版本的 ${ID}${COLOR_RESET}"
     exit 1
   fi
 
-  sudo apt-get update
+  echo -e "${COLOR_BLUE}更新 ${ID} 仓库源${COLOR_RESET}" && sudo apt-get update
 else
   echo -e "${COLOR_RED}不支持 ${ID} 系统${COLOR_RESET}"
   exit 1
@@ -649,6 +762,9 @@ _selinux_permissive
 # 停止 防火墙
 _firewalld_stop
 
+# 关闭 交换空间
+_swap_off
+
 # docker 仓库
 _docker_repo
 
@@ -691,3 +807,12 @@ if [[ $availability_vip_install == true ]]; then
   echo -e "${COLOR_BLUE}kubernetes 高可用 VIP 安装结束${COLOR_RESET}"
   exit 0
 fi
+
+# kubernetes 仓库
+_kubernetes_repo
+
+# kubernetes 配置
+_kubernetes_conf
+
+# kubernetes 安装
+_kubernetes_install
