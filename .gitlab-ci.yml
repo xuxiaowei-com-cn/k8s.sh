@@ -1,6 +1,15 @@
 stages:
+  - install
   # 代码同步
   - sync
+
+install:
+  stage: install
+  script:
+    - chmod +x install.sh
+    - ./install.sh
+  tags:
+    - shell-centos-7.0
 
 # 嵌入
 include:
