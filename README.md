@@ -364,13 +364,13 @@
     2. 主节点：***第一台机器***：安装软件、初始化集群
 
         ```shell
-        # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+        # 下载脚本，下载后的文件名为 k8s.sh
+        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
-        chmod +x install.sh
+        chmod +x k8s.sh
         
         # 指定 VIP 进行 k8s 集群 第一个主节点 初始化
-        export AVAILABILITY_VIP=192.168.80.100 && sudo ./install.sh -m
+        ./k8s.sh availability-vip=192.168.80.100
         
         # 安装 Metrics Server 插件（仅第一个主节点执行即可）
         # export AVAILABILITY_VIP=192.168.80.100 \
@@ -382,13 +382,13 @@
     3. 主节点：***其余机器***：安装软件、使用主节点角色加入集群
 
         ```shell
-        # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+        # 下载脚本，下载后的文件名为 k8s.sh
+        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
-        chmod +x install.sh
+        chmod +x k8s.sh
         
         # 执行安装命令，仅安装，不进行初始化
-        export INSTALL_ONLY=true && sudo ./install.sh
+        ./k8s.sh kubernetes-init-skip calico-init-skip
         
         # 运行 k8s 集群 第一个主节点 初始化完成后 使用主节点角色加入集群的命令，例如：
         # kubeadm join 192.168.80.100:9443 --token ykrnfh.i4qwth17fopc0gtx \
@@ -421,13 +421,13 @@
        每个工作节点执行的命令相同
 
         ```shell
-        # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+        # 下载脚本，下载后的文件名为 k8s.sh
+        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
-        chmod +x install.sh
+        chmod +x k8s.sh
         
         # 执行安装命令，仅安装，不进行初始化
-        export INSTALL_ONLY=true && sudo ./install.sh
+        ./k8s.sh kubernetes-init-skip calico-init-skip
         
         # 执行在主节点得到的工作加入集群的命令，例如：
         # kubeadm join 192.168.80.100:9443 --token ykrnfh.i4qwth17fopc0gtx --discovery-token-ca-cert-hash sha256:9e81fa0b04a57517feb1c9e34edc0aa6563b64db54887fc072a08d7d1235861d

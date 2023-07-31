@@ -477,9 +477,38 @@ EOF
   echo -e "${COLOR_BLUE}kubernetes 配置结束${COLOR_RESET}"
 }
 
+# 主机名判断
+_hostname() {
+  ETC_HOSTNAME=$(cat /etc/hostname)
+  CMD_HOSTNAME=$(hostname)
+  if [[ $CMD_HOSTNAME =~ ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$ ]]; then
+    if ! [ "$ETC_HOSTNAME" ]; then
+      echo -e "${COLOR_BLUE}主机名符合要求${COLOR_RESET}"
+    elif [ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]; then
+      echo -e "${COLOR_BLUE}主机名符合要求${COLOR_RESET}"
+    else
+      echo -e "${COLOR_RED}临时主机名：$CMD_HOSTNAME${COLOR_RESET}"
+      echo -e "${COLOR_RED}配置文件主机名：$ETC_HOSTNAME${COLOR_RESET}"
+      echo -e "${COLOR_RED}临时主机名符合要求，但是配置文件与临时主机名不同，系统重启后，将使用配置文件主机名，可能造成 k8s 无法正常运行。${COLOR_RESET}"
+      echo -e "${COLOR_RED}由于某些软件基于主机名才能正常运行，为了避免风险，脚本不支持修改主机名，请将配置文件 /etc/hostname 中的主机名与命令 hostname 修改成一致的名称。${COLOR_RESET}"
+      echo -e "${COLOR_RED}hostname 是临时主机名，重启后使用 /etc/hostname 文件中的内容作为主机名。${COLOR_RESET}"
+      exit 1
+    fi
+  else
+    echo -e "${COLOR_RED}主机名不符合要求${COLOR_RESET}"
+    echo -e "${COLOR_RED}主机名必须符合小写的 RFC 1123 子域，必须由小写字母数字字符“-”或“.”组成，并且必须以字母数字字符开头和结尾${COLOR_RESET}"
+    echo -e "${COLOR_RED}由于某些软件基于主机名才能正常运行，为了避免风险，脚本不支持修改主机名，请自行修改。${COLOR_RESET}"
+    exit 1
+  fi
+}
+
 # kubernetes 安装
 _kubernetes_install() {
   echo -e "${COLOR_BLUE}kubernetes 安装开始${COLOR_RESET}"
+
+  # 主机名判断
+  _hostname
+
   if [[ $ID == anolis || $ID == centos ]]; then
     if [ "$kubernetes_version" ]; then
       echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
@@ -509,12 +538,22 @@ _kubernetes_init() {
   if [[ $kubernetes_init_skip != true ]]; then
     echo -e "${COLOR_BLUE}kubernetes 初始化开始${COLOR_RESET}"
 
-    if [ "$kubernetes_version" ]; then
-      echo -e "${COLOR_BLUE}kubernetes 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
-      kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
+    if [[ $availability_vip ]]; then
+      if [ "$kubernetes_version" ]; then
+        echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${availability_vip} 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
+        kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version" --control-plane-endpoint "$availability_vip:9443" --upload-certs
+      else
+        echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${availability_vip} 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
+        kubeadm init --image-repository=registry.aliyuncs.com/google_containers --control-plane-endpoint "$availability_vip:9443" --upload-certs
+      fi
     else
-      echo -e "${COLOR_BLUE}kubernetes 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
-      kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+      if [ "$kubernetes_version" ]; then
+        echo -e "${COLOR_BLUE}kubernetes 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
+        kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
+      else
+        echo -e "${COLOR_BLUE}kubernetes 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
+        kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+      fi
     fi
 
     echo -e "${COLOR_BLUE}在环境变量文件 ${COLOR_RESET}${COLOR_GREEN}/etc/profile${COLOR_RESET} 中配置 ${COLOR_GREEN}KUBECONFIG=/etc/kubernetes/admin.conf${COLOR_RESET}"
@@ -538,6 +577,13 @@ _kubernetes_init() {
     echo -e "${COLOR_BLUE}显示 svc 信息${COLOR_RESET}" && kubectl get svc --all-namespaces -o wide
 
     echo -e "${COLOR_BLUE}kubernetes 初始化结束${COLOR_RESET}"
+
+    echo ""
+
+    echo -e "${COLOR_BLUE}SSH 重新连接或者执行 source /etc/profile && source ~/.bashrc 命令，使配置文件生效，即可执行 kubectl 命令${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}kubectl get pod --all-namespaces -o wide${COLOR_RESET}"
+
+    echo ""
   fi
 }
 
@@ -555,25 +601,39 @@ _interface_name() {
 }
 
 # kubernetes 网络插件 calico 安装
-function _calico_install() {
-  echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 初始化开始${COLOR_RESET}"
+function _calico_init() {
+  if [[ $calico_init_skip != true ]]; then
+    echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 初始化开始${COLOR_RESET}"
 
-  echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用版本：${COLOR_RESET}${COLOR_GREEN}${calico_version}${COLOR_RESET}"
-  curl -o calico.yaml https://docs.tigera.io/archive/v"$calico_version"/manifests/calico.yaml
+    echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用版本：${COLOR_RESET}${COLOR_GREEN}${calico_version}${COLOR_RESET}"
+    curl -o calico.yaml https://docs.tigera.io/archive/v"$calico_version"/manifests/calico.yaml
 
-  # 网卡
-  _interface_name
+    # 网卡
+    _interface_name
 
-  echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用网卡：${COLOR_RESET}${COLOR_GREEN}${interface_name}${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用网卡：${COLOR_RESET}${COLOR_GREEN}${interface_name}${COLOR_RESET}"
 
-  sed -i '/k8s,bgp/a \            - name: IP_AUTODETECTION_METHOD\n              value: "interface=INTERFACE_NAME"' calico.yaml
-  sed -i "s#INTERFACE_NAME#$interface_name#g" calico.yaml
+    sed -i '/k8s,bgp/a \            - name: IP_AUTODETECTION_METHOD\n              value: "interface=INTERFACE_NAME"' calico.yaml
+    sed -i "s#INTERFACE_NAME#$interface_name#g" calico.yaml
 
-  kubectl apply -f calico.yaml
-  kubectl get nodes
-  kubectl get pod,svc --all-namespaces -o wide
+    if [ "$calico_mirrors" ]; then
+      echo "接收到参数 calico_mirrors：$calico_mirrors"
+      sed -i "s#docker\.io#$calico_mirrors#g" calico.yaml
+    fi
 
-  echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 初始化结束${COLOR_RESET}"
+    kubectl apply -f calico.yaml
+    kubectl get nodes
+    kubectl get pod,svc --all-namespaces -o wide
+
+    echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 初始化结束${COLOR_RESET}"
+
+    echo ""
+
+    echo -e "${COLOR_BLUE}SSH 重新连接或者执行 source /etc/profile && source ~/.bashrc 命令，使配置文件生效，即可执行 kubectl 命令${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}kubectl get pod --all-namespaces -o wide${COLOR_RESET}"
+
+    echo ""
+  fi
 }
 
 # 高可用 VIP haproxy 安装
@@ -789,6 +849,11 @@ while [[ $# -gt 0 ]]; do
     echo -e "${COLOR_BLUE}跳过 kubernetes 初始化${COLOR_RESET}"
     ;;
 
+  calico-init-skip | -calico-init-skip | --calico-init-skip)
+    calico_init_skip=true
+    echo -e "${COLOR_BLUE}跳过 calico 安装${COLOR_RESET}"
+    ;;
+
   calico-version=* | -calico-version=* | --calico-version=*)
     calico_version="${1#*=}"
 
@@ -822,6 +887,10 @@ while [[ $# -gt 0 ]]; do
     echo -e "${COLOR_BLUE}kubernetes 高可用 VIP 编号：${COLOR_RESET}${COLOR_GREEN}${availability_vip_no}${COLOR_RESET}"
 
     _check_availability_vip_no "$availability_vip_no"
+    ;;
+
+  calico-mirrors=* | -calico-mirrors=* | --calico-mirrors=*)
+    calico_mirrors="${1#*=}"
     ;;
 
   keepalived-mirror=* | -keepalived-mirror=* | --keepalived-mirror=*)
@@ -937,5 +1006,5 @@ _kubernetes_install
 # kubernetes 初始化
 _kubernetes_init
 
-# kubernetes 网络插件 calico 安装
-_calico_install
+# kubernetes 网络插件 calico 初始化
+_calico_init
