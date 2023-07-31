@@ -751,7 +751,7 @@ while [[ $# -gt 0 ]]; do
 
   docker-install | -docker-install | --docker-install)
     docker_install=true
-    echo -e "${COLOR_BLUE}启用 docker-ce 安装${COLOR_RESET}${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}启用 docker-ce 安装${COLOR_RESET}"
     ;;
 
   kubernetes-version=* | -kubernetes-version=* | --kubernetes-version=*)
