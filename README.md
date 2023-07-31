@@ -121,6 +121,8 @@
 | CALICO_MIRRORS_CALICO_CNI       | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/cni                                                                        | export CALICO_MIRRORS_CALICO_CNI=hub-mirror.c.163.com       | export CALICO_MIRRORS_CALICO_CNI=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud       |
 | CALICO_MIRRORS_KUBE_CONTROLLERS | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/kube-controllers                                                           | export CALICO_MIRRORS_KUBE_CONTROLLERS=hub-mirror.c.163.com | export CALICO_MIRRORS_KUBE_CONTROLLERS=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud |
 | CALICO_MIRRORS_CALICO_NODE      | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/node                                                                       | export CALICO_MIRRORS_CALICO_NODE=hub-mirror.c.163.com      | export CALICO_MIRRORS_CALICO_NODE=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud      |
+| keepalived_mirror               |                                      |                                                                                             |                                                             |                                                                                             |
+| haproxy_mirror                  |                                      |                                                                                             |                                                             |                                                                                             |
 
 | 安装/配置环境变量                     | 说明                                                                                                | 默认值                                                      | 使用示例                                                                                                                                              |
 |-------------------------------|---------------------------------------------------------------------------------------------------|----------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -140,6 +142,8 @@
 | AVAILABILITY_HAPROXY_USERNAME | 高可用中 haproxy 用户名，推荐修改                                                                             | 默认为 admin                                                | export AVAILABILITY_HAPROXY_USERNAME=admin                                                                                                        |
 | AVAILABILITY_HAPROXY_PASSWORD | 高可用中 haproxy 密码，推荐修改                                                                              | 默认为 password                                             | export AVAILABILITY_HAPROXY_PASSWORD=password                                                                                                     |
 | AVAILABILITY_MASTER           | 高可用中 主节点信息，包含主节点名称（仅在VIP管理时使用）、主节点IP、主节点端口，创建 VIP 时必填，使用 -v 激活。格式：名称@IP:端口，多个值用英文逗号隔开             | 默认为空                                                     | export AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443                           |
+| keepalived_version            |                                                                                                   |                                                          |                                                                                                                                                   |
+| haproxy_version               |                                                                                                   |                                                          |                                                                                                                                                   |
 
 ## 使用前说明
 
@@ -324,31 +328,37 @@
        VIP 至少需要部署**3**台机器，可与主节点使用相同的机器
 
         ```shell
-        # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+        # 下载脚本，下载后的文件名为 k8s.sh
+        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
-        chmod +x install.sh
+        chmod +x k8s.sh
         
-        # 第 1 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 AVAILABILITY_VIP_NO 不同，必须存在一个值为 1）
-        export AVAILABILITY_VIP=192.168.80.100 \
-          AVAILABILITY_INTERFACE_NAME=ens33 \
-          AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443 \
-          AVAILABILITY_VIP_NO=1 \
-          && sudo ./install.sh -v
+        # 第 1 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 availability-vip-no 不同，必须存在一个值为 1）
+        ./k8s.sh availability-vip-install \
+          availability-vip=192.168.80.100 \
+          interface_name=ens33 \
+          availability-master=k8s-master1@192.168.80.81:6443 \
+          availability-master=k8s-master2@192.168.80.82:6443 \
+          availability-master=k8s-master3@192.168.80.83:6443 \
+          availability-vip-no=1
         
-        # 第 2 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 AVAILABILITY_VIP_NO 不同，必须存在一个值为 1）
-        export AVAILABILITY_VIP=192.168.80.100 \
-          AVAILABILITY_INTERFACE_NAME=ens33 \
-          AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443 \
-          AVAILABILITY_VIP_NO=2 \
-          && sudo ./install.sh -v
+        # 第 2 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 availability-vip-no 不同，必须存在一个值为 1）
+        ./k8s.sh availability-vip-install \
+          availability-vip=192.168.80.100 \
+          interface_name=ens33 \
+          availability-master=k8s-master1@192.168.80.81:6443 \
+          availability-master=k8s-master2@192.168.80.82:6443 \
+          availability-master=k8s-master3@192.168.80.83:6443 \
+          availability-vip-no=2
         
-        # 第 3 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 AVAILABILITY_VIP_NO 不同，必须存在一个值为 1）
-        export AVAILABILITY_VIP=192.168.80.100 \
-          AVAILABILITY_INTERFACE_NAME=ens33 \
-          AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443 \
-          AVAILABILITY_VIP_NO=3 \
-          && sudo ./install.sh -v
+        # 第 3 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 availability-vip-no 不同，必须存在一个值为 1）
+        ./k8s.sh availability-vip-install \
+          availability-vip=192.168.80.100 \
+          interface_name=ens33 \
+          availability-master=k8s-master1@192.168.80.81:6443 \
+          availability-master=k8s-master2@192.168.80.82:6443 \
+          availability-master=k8s-master3@192.168.80.83:6443 \
+          availability-vip-no=3
         ```
 
     2. 主节点：***第一台机器***：安装软件、初始化集群

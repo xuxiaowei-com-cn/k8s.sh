@@ -34,6 +34,11 @@ availability_haproxy_password=password
 # kubernetes 网络插件 calico 版本
 calico_version=3.25
 
+keepalived_mirror=lettore/keepalived
+keepalived_version=3.16-2.2.7
+haproxy_mirror=haproxytech/haproxy-debian
+haproxy_version=2.8
+
 # 检查 kubernetes 版本号
 _check_kubernetes_version_range() {
   local version=$1
@@ -91,8 +96,6 @@ _check_availability_vip() {
 _check_availability_vip_no() {
   local no=$1
 
-  echo -e "${COLOR_BLUE}主节点地址：${COLOR_RESET}${COLOR_GREEN}${no}${COLOR_RESET}${COLOR_BLUE} 开始处理${COLOR_RESET}"
-
   # 验证 AVAILABILITY_VIP_NO 是否为整数
   if ! [[ $no =~ ^[0-9]+$ ]]; then
     echo -e "${COLOR_RED}VIP 编号 必须是整数，退出程序${COLOR_RESET}"
@@ -105,7 +108,6 @@ _check_availability_vip_no() {
     availability_vip_state=BACKUP
   fi
 
-  echo -e "${COLOR_BLUE}主节点地址：${COLOR_RESET}${COLOR_GREEN}${no}${COLOR_RESET}${COLOR_BLUE} 结束处理${COLOR_RESET}"
 }
 
 # 检查 主节点地址
@@ -507,35 +509,35 @@ _kubernetes_init() {
   if [[ $kubernetes_init_skip != true ]]; then
     echo -e "${COLOR_BLUE}kubernetes 初始化开始${COLOR_RESET}"
 
-      if [ "$kubernetes_version" ]; then
-        echo -e "${COLOR_BLUE}kubernetes 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
-        kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
-      else
-        echo -e "${COLOR_BLUE}kubernetes 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
-        kubeadm init --image-repository=registry.aliyuncs.com/google_containers
-      fi
+    if [ "$kubernetes_version" ]; then
+      echo -e "${COLOR_BLUE}kubernetes 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
+      kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
+    else
+      echo -e "${COLOR_BLUE}kubernetes 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
+      kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+    fi
 
-      echo -e "${COLOR_BLUE}在环境变量文件 ${COLOR_RESET}${COLOR_GREEN}/etc/profile${COLOR_RESET} 中配置 ${COLOR_GREEN}KUBECONFIG=/etc/kubernetes/admin.conf${COLOR_RESET}"
-      sudo bash -c "echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >> /etc/profile"
-      echo -e "${COLOR_BLUE}授权 ${COLOR_RESET}${COLOR_GREEN}/etc/kubernetes/admin.conf${COLOR_RESET} 文件其他人能访问${COLOR_RESET}"
-      sudo chmod a+r /etc/kubernetes/admin.conf
-      echo -e "${COLOR_BLUE}刷新环境变量${COLOR_RESET}"
-      source /etc/profile
+    echo -e "${COLOR_BLUE}在环境变量文件 ${COLOR_RESET}${COLOR_GREEN}/etc/profile${COLOR_RESET} 中配置 ${COLOR_GREEN}KUBECONFIG=/etc/kubernetes/admin.conf${COLOR_RESET}"
+    sudo bash -c "echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >> /etc/profile"
+    echo -e "${COLOR_BLUE}授权 ${COLOR_RESET}${COLOR_GREEN}/etc/kubernetes/admin.conf${COLOR_RESET} 文件其他人能访问${COLOR_RESET}"
+    sudo chmod a+r /etc/kubernetes/admin.conf
+    echo -e "${COLOR_BLUE}刷新环境变量${COLOR_RESET}"
+    source /etc/profile
 
-      # https://kubernetes.io/zh-cn/docs/tasks/tools/install-kubectl-linux/#optional-kubectl-configurations
+    # https://kubernetes.io/zh-cn/docs/tasks/tools/install-kubectl-linux/#optional-kubectl-configurations
 
-      echo -e "${COLOR_BLUE}启动 kubectl 自动补全功能${COLOR_RESET}"
-      kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl >/dev/null
-      sudo chmod a+r /etc/bash_completion.d/kubectl
-      echo -e "${COLOR_BLUE}源引 ~/.bashrc 文件${COLOR_RESET}"
-      source ~/.bashrc
+    echo -e "${COLOR_BLUE}启动 kubectl 自动补全功能${COLOR_RESET}"
+    kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl >/dev/null
+    sudo chmod a+r /etc/bash_completion.d/kubectl
+    echo -e "${COLOR_BLUE}源引 ~/.bashrc 文件${COLOR_RESET}"
+    source ~/.bashrc
 
-      echo -e "${COLOR_BLUE}显示群集信息${COLOR_RESET}" && kubectl cluster-info
-      echo -e "${COLOR_BLUE}显示 node 信息${COLOR_RESET}" && kubectl get nodes
-      echo -e "${COLOR_BLUE}显示 pod 信息${COLOR_RESET}" && kubectl get pod --all-namespaces -o wide
-      echo -e "${COLOR_BLUE}显示 svc 信息${COLOR_RESET}" && kubectl get svc --all-namespaces -o wide
+    echo -e "${COLOR_BLUE}显示群集信息${COLOR_RESET}" && kubectl cluster-info
+    echo -e "${COLOR_BLUE}显示 node 信息${COLOR_RESET}" && kubectl get nodes
+    echo -e "${COLOR_BLUE}显示 pod 信息${COLOR_RESET}" && kubectl get pod --all-namespaces -o wide
+    echo -e "${COLOR_BLUE}显示 svc 信息${COLOR_RESET}" && kubectl get svc --all-namespaces -o wide
 
-      echo -e "${COLOR_BLUE}kubernetes 初始化结束${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}kubernetes 初始化结束${COLOR_RESET}"
   fi
 }
 
@@ -576,9 +578,16 @@ function _calico_install() {
 
 # 高可用 VIP haproxy 安装
 _availability_haproxy_install() {
-  mkdir -p /etc/kubernetes/
 
-  cat >/etc/kubernetes/haproxy.cfg <<EOF
+  local container_name=k8s-haproxy
+
+  if docker ps -a --format "{{.Names}}" | grep -Eq "^$container_name$"; then
+    echo -e "${COLOR_YELLOW}$container_name 容器已存在，不会重复创建${COLOR_RESET}"
+  else
+
+    mkdir -p /etc/kubernetes/
+
+    cat >/etc/kubernetes/haproxy.cfg <<EOF
 global
     log         127.0.0.1 local2
     chroot      /var/lib/haproxy
@@ -627,35 +636,42 @@ backend kube-apiserver
     balance     roundrobin
 EOF
 
-  cat /etc/kubernetes/haproxy.cfg
+    cat /etc/kubernetes/haproxy.cfg
 
-  # 遍历数组
-  for master in "${availability_master_array[@]}"; do
-    echo "    server  $master check" >>/etc/kubernetes/haproxy.cfg
-  done
+    # 遍历数组
+    for master in "${availability_master_array[@]}"; do
+      echo "    server  $master check" >>/etc/kubernetes/haproxy.cfg
+    done
 
-  echo "" >>/etc/kubernetes/haproxy.cfg
+    echo "" >>/etc/kubernetes/haproxy.cfg
 
-  cat /etc/kubernetes/haproxy.cfg
+    cat /etc/kubernetes/haproxy.cfg
 
-  docker run \
-    -d \
-    --name k8s-haproxy \
-    --net=host \
-    --restart=always \
-    -v /etc/kubernetes/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro \
-    haproxytech/haproxy-debian:2.8 || echo -e "${COLOR_YELLOW}haproxy 容器已存在，不会重复创建${COLOR_RESET}"
+    docker run \
+      -d \
+      --name k8s-haproxy \
+      --net=host \
+      --restart=always \
+      -v /etc/kubernetes/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro \
+      "${haproxy_mirror}:${haproxy_version}"
+  fi
 }
 
 # 高可用 VIP keepalived 安装
 _availability_keepalived_install() {
 
-  # 网卡
-  _interface_name
+  local container_name=k8s-keepalived
 
-  mkdir -p /etc/kubernetes/
+  if docker ps -a --format "{{.Names}}" | grep -Eq "^$container_name$"; then
+    echo -e "${COLOR_YELLOW}$container_name 容器已存在，不会重复创建${COLOR_RESET}"
+  else
 
-  cat >/etc/kubernetes/keepalived.conf <<EOF
+    # 网卡
+    _interface_name
+
+    mkdir -p /etc/kubernetes/
+
+    cat >/etc/kubernetes/keepalived.conf <<EOF
 ! Configuration File for keepalived
 
 global_defs {
@@ -692,7 +708,7 @@ vrrp_instance VI_1 {
 
 EOF
 
-  cat >/etc/kubernetes/check-haproxy.sh <<EOF
+    cat >/etc/kubernetes/check-haproxy.sh <<EOF
 #!/bin/bash
 
 count=\`netstat -apn | grep 9443 | wc -l\`
@@ -705,21 +721,22 @@ fi
 
 EOF
 
-  cat /etc/kubernetes/keepalived.conf
-  cat /etc/kubernetes/check-haproxy.sh
+    cat /etc/kubernetes/keepalived.conf
+    cat /etc/kubernetes/check-haproxy.sh
 
-  docker run \
-    -d \
-    --name k8s-keepalived \
-    --restart=always \
-    --net=host \
-    --cap-add=NET_ADMIN \
-    --cap-add=NET_BROADCAST \
-    --cap-add=NET_RAW \
-    -v /etc/kubernetes/keepalived.conf:/container/service/keepalived/assets/keepalived.conf \
-    -v /etc/kubernetes/check-haproxy.sh:/usr/bin/check-haproxy.sh \
-    lettore/keepalived:3.16-2.2.7 \
-    --copy-service
+    docker run \
+      -d \
+      --name k8s-keepalived \
+      --restart=always \
+      --net=host \
+      --cap-add=NET_ADMIN \
+      --cap-add=NET_BROADCAST \
+      --cap-add=NET_RAW \
+      -v /etc/kubernetes/keepalived.conf:/container/service/keepalived/assets/keepalived.conf \
+      -v /etc/kubernetes/check-haproxy.sh:/usr/bin/check-haproxy.sh \
+      "${keepalived_mirror}:${keepalived_version}" \
+      --copy-service
+  fi
 
 }
 
@@ -805,6 +822,22 @@ while [[ $# -gt 0 ]]; do
     echo -e "${COLOR_BLUE}kubernetes 高可用 VIP 编号：${COLOR_RESET}${COLOR_GREEN}${availability_vip_no}${COLOR_RESET}"
 
     _check_availability_vip_no "$availability_vip_no"
+    ;;
+
+  keepalived-mirror=* | -keepalived-mirror=* | --keepalived-mirror=*)
+    keepalived_mirror="${1#*=}"
+    ;;
+
+  keepalived-version=* | -keepalived-version=* | --keepalived-version=*)
+    keepalived_version="${1#*=}"
+    ;;
+
+  haproxy-mirror=* | -haproxy-mirror=* | --haproxy-mirror=*)
+    haproxy_mirror="${1#*=}"
+    ;;
+
+  haproxy-version=* | -haproxy-version=* | --haproxy-version=*)
+    haproxy_version="${1#*=}"
     ;;
 
   availability-master=* | -availability-master=* | --availability-master=*)
