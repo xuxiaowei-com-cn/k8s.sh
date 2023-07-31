@@ -236,9 +236,13 @@ _bash_completion_install() {
 # 关闭 selinux
 _selinux_permissive() {
   if [[ $ID == anolis || $ID == centos ]]; then
-    echo -e "${COLOR_BLUE}selinux 当前状态${COLOR_RESET}" && getenforce
+    echo -e "${COLOR_BLUE}selinux 当前状态${COLOR_RESET}"
+    if [[ $(getenforce) == "Disabled" ]]; then
+      echo -e "${COLOR_BLUE}selinux 当前状态已禁用${COLOR_RESET}"
+    else
+      echo -e "${COLOR_BLUE}selinux 当前状态未禁用，开始禁用当前状态${COLOR_RESET}" && sudo setenforce 0
+    fi
     echo -e "${COLOR_BLUE}selinux 配置文件${COLOR_RESET}" && cat /etc/selinux/config
-    echo -e "${COLOR_BLUE}selinux 当前禁用${COLOR_RESET}" && sudo setenforce 0
     echo -e "${COLOR_BLUE}selinux 永久禁用${COLOR_RESET}" && sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
     echo -e "${COLOR_BLUE}selinux 配置文件${COLOR_RESET}" && cat /etc/selinux/config
   fi
