@@ -4,6 +4,7 @@
 # 使用：chmod +x install.sh && sudo ./install.sh
 # 仓库：https://jihulab.com/xuxiaowei-com-cn/k8s.sh
 # 版本：SNAPSHOT/0.2.0
+# 如果发现脚本不能正常运行，可尝试执行：sed -i 's/\r$//' install.sh
 #
 
 while getopts "vm" opt; do

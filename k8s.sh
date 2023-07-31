@@ -1,9 +1,10 @@
 #!/bin/bash
 #
 # 作者：徐晓伟 xuxiaowei@xuxiaowei.com.cn
-# 使用：chmod +x install.sh && sudo ./install.sh
+# 使用：chmod +x k8s.sh && sudo ./k8s.sh
 # 仓库：https://jihulab.com/xuxiaowei-com-cn/k8s.sh
 # 版本：SNAPSHOT/0.2.0
+# 如果发现脚本不能正常运行，可尝试执行：sed -i 's/\r$//' k8s.sh
 #
 
 # 颜色定义
