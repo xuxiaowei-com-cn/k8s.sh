@@ -492,6 +492,41 @@ _kubernetes_install() {
   echo -e "${COLOR_BLUE}kubernetes 安装结束${COLOR_RESET}"
 }
 
+# kubernetes 初始化
+_kubernetes_init() {
+  echo -e "${COLOR_BLUE}kubernetes 初始化开始${COLOR_RESET}"
+
+  if [ "$kubernetes_version" ]; then
+    echo -e "${COLOR_BLUE}kubernetes 初始化时使用的镜像版本 ${kubernetes_version}${COLOR_RESET}"
+    kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
+  else
+    echo -e "${COLOR_BLUE}kubernetes 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
+    kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+  fi
+
+  echo -e "${COLOR_BLUE}在环境变量文件 ${COLOR_RESET}${COLOR_GREEN}/etc/profile${COLOR_RESET} 中配置 ${COLOR_GREEN}KUBECONFIG=/etc/kubernetes/admin.conf${COLOR_RESET}"
+  sudo bash -c "echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >> /etc/profile"
+  echo -e "${COLOR_BLUE}授权 ${COLOR_RESET}${COLOR_GREEN}/etc/kubernetes/admin.conf${COLOR_RESET} 文件其他人能访问${COLOR_RESET}"
+  sudo chmod a+r /etc/kubernetes/admin.conf
+  echo -e "${COLOR_BLUE}刷新环境变量${COLOR_RESET}"
+  source /etc/profile
+
+  # https://kubernetes.io/zh-cn/docs/tasks/tools/install-kubectl-linux/#optional-kubectl-configurations
+
+  echo -e "${COLOR_BLUE}启动 kubectl 自动补全功能${COLOR_RESET}"
+  kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl >/dev/null
+  sudo chmod a+r /etc/bash_completion.d/kubectl
+  echo -e "${COLOR_BLUE}源引 ~/.bashrc 文件${COLOR_RESET}"
+  source ~/.bashrc
+
+  echo -e "${COLOR_BLUE}显示群集信息${COLOR_RESET}" && kubectl cluster-info
+  echo -e "${COLOR_BLUE}显示 node 信息${COLOR_RESET}" && kubectl get nodes
+  echo -e "${COLOR_BLUE}显示 pod 信息${COLOR_RESET}" && kubectl get pod --all-namespaces -o wide
+  echo -e "${COLOR_BLUE}显示 svc 信息${COLOR_RESET}" && kubectl get svc --all-namespaces -o wide
+
+  echo -e "${COLOR_BLUE}kubernetes 初始化结束${COLOR_RESET}"
+}
+
 # 网卡
 _interface_name() {
   if ! [[ $interface_name ]]; then
@@ -820,3 +855,6 @@ _kubernetes_conf
 
 # kubernetes 安装
 _kubernetes_install
+
+# kubernetes 初始化
+_kubernetes_init
