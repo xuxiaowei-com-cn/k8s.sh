@@ -30,6 +30,9 @@ availability_haproxy_username=admin
 # 高可用 haproxy 默认密码
 availability_haproxy_password=password
 
+# kubernetes 网络插件 calico 版本
+calico_version=3.25
+
 # 检查 kubernetes 版本号
 _check_kubernetes_version_range() {
   local version=$1
@@ -504,7 +507,7 @@ _kubernetes_init() {
     echo -e "${COLOR_BLUE}kubernetes 初始化开始${COLOR_RESET}"
 
       if [ "$kubernetes_version" ]; then
-        echo -e "${COLOR_BLUE}kubernetes 初始化时使用的镜像版本 ${kubernetes_version}${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}kubernetes 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
         kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
       else
         echo -e "${COLOR_BLUE}kubernetes 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
@@ -533,28 +536,6 @@ _kubernetes_init() {
 
       echo -e "${COLOR_BLUE}kubernetes 初始化结束${COLOR_RESET}"
   fi
-
-  echo -e "${COLOR_BLUE}在环境变量文件 ${COLOR_RESET}${COLOR_GREEN}/etc/profile${COLOR_RESET} 中配置 ${COLOR_GREEN}KUBECONFIG=/etc/kubernetes/admin.conf${COLOR_RESET}"
-  sudo bash -c "echo 'export KUBECONFIG=/etc/kubernetes/admin.conf' >> /etc/profile"
-  echo -e "${COLOR_BLUE}授权 ${COLOR_RESET}${COLOR_GREEN}/etc/kubernetes/admin.conf${COLOR_RESET} 文件其他人能访问${COLOR_RESET}"
-  sudo chmod a+r /etc/kubernetes/admin.conf
-  echo -e "${COLOR_BLUE}刷新环境变量${COLOR_RESET}"
-  source /etc/profile
-
-  # https://kubernetes.io/zh-cn/docs/tasks/tools/install-kubectl-linux/#optional-kubectl-configurations
-
-  echo -e "${COLOR_BLUE}启动 kubectl 自动补全功能${COLOR_RESET}"
-  kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl >/dev/null
-  sudo chmod a+r /etc/bash_completion.d/kubectl
-  echo -e "${COLOR_BLUE}源引 ~/.bashrc 文件${COLOR_RESET}"
-  source ~/.bashrc
-
-  echo -e "${COLOR_BLUE}显示群集信息${COLOR_RESET}" && kubectl cluster-info
-  echo -e "${COLOR_BLUE}显示 node 信息${COLOR_RESET}" && kubectl get nodes
-  echo -e "${COLOR_BLUE}显示 pod 信息${COLOR_RESET}" && kubectl get pod --all-namespaces -o wide
-  echo -e "${COLOR_BLUE}显示 svc 信息${COLOR_RESET}" && kubectl get svc --all-namespaces -o wide
-
-  echo -e "${COLOR_BLUE}kubernetes 初始化结束${COLOR_RESET}"
 }
 
 # 网卡
@@ -568,6 +549,28 @@ _interface_name() {
       exit 1
     fi
   fi
+}
+
+# kubernetes 网络插件 calico 安装
+function _calico_install() {
+  echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 初始化开始${COLOR_RESET}"
+
+  echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用版本：${COLOR_RESET}${COLOR_GREEN}${calico_version}${COLOR_RESET}"
+  curl -o calico.yaml https://docs.tigera.io/archive/v"$calico_version"/manifests/calico.yaml
+
+  # 网卡
+  _interface_name
+
+  echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用网卡：${COLOR_RESET}${COLOR_GREEN}${interface_name}${COLOR_RESET}"
+
+  sed -i '/k8s,bgp/a \            - name: IP_AUTODETECTION_METHOD\n              value: "interface=INTERFACE_NAME"' calico.yaml
+  sed -i "s#INTERFACE_NAME#$interface_name#g" calico.yaml
+
+  kubectl apply -f calico.yaml
+  kubectl get nodes
+  kubectl get pod,svc --all-namespaces -o wide
+
+  echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 初始化结束${COLOR_RESET}"
 }
 
 # 高可用 VIP haproxy 安装
@@ -768,6 +771,12 @@ while [[ $# -gt 0 ]]; do
     echo -e "${COLOR_BLUE}跳过 kubernetes 初始化${COLOR_RESET}"
     ;;
 
+  calico-version=* | -calico-version=* | --calico-version=*)
+    calico_version="${1#*=}"
+
+    echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 指定版本号：${COLOR_RESET}${COLOR_GREEN}${calico_version}${COLOR_RESET}"
+    ;;
+
   ntp-disabled | -ntp-disabled | --ntp-disabled)
     ntp_disabled=true
     ;;
@@ -893,3 +902,6 @@ _kubernetes_install
 
 # kubernetes 初始化
 _kubernetes_init
+
+# kubernetes 网络插件 calico 安装
+_calico_install
