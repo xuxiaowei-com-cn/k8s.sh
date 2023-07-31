@@ -60,8 +60,10 @@ _check_interface_name() {
 
   if ! command -v ip &>/dev/null; then
     if [[ $ID == anolis || $ID == centos ]]; then
+      echo -e "${COLOR_BLUE}当前系统无 ip 命令，开始安装 iproute${COLOR_RESET}"
       sudo yum -y install iproute
     elif [[ $ID == ubuntu ]]; then
+      echo -e "${COLOR_BLUE}当前系统无 ip 命令，开始安装 iproute2${COLOR_RESET}"
       sudo apt-get -y install iproute2
     fi
   fi
