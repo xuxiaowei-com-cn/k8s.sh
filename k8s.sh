@@ -87,6 +87,8 @@ _check_availability_vip() {
 _check_availability_vip_no() {
   local no=$1
 
+  echo -e "${COLOR_BLUE}主节点地址：${COLOR_RESET}${COLOR_GREEN}${no}${COLOR_RESET}${COLOR_BLUE} 开始处理${COLOR_RESET}"
+
   # 验证 AVAILABILITY_VIP_NO 是否为整数
   if ! [[ $no =~ ^[0-9]+$ ]]; then
     echo -e "${COLOR_RED}VIP 编号 必须是整数，退出程序${COLOR_RESET}"
@@ -98,6 +100,8 @@ _check_availability_vip_no() {
   else
     availability_vip_state=BACKUP
   fi
+
+  echo -e "${COLOR_BLUE}主节点地址：${COLOR_RESET}${COLOR_GREEN}${no}${COLOR_RESET}${COLOR_BLUE} 结束处理${COLOR_RESET}"
 }
 
 # 检查 主节点地址
