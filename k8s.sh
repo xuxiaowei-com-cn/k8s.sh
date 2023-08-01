@@ -728,6 +728,9 @@ function _calico_init() {
     kubectl get nodes
     kubectl get pod,svc --all-namespaces -o wide
 
+    echo -e "${COLOR_BLUE}等待 网络插件 calico 初始化完成${COLOR_RESET}"
+    kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+
     echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 初始化结束${COLOR_RESET}"
 
     echo ""
