@@ -10,7 +10,7 @@ centos-7.9:
     - cat /etc/os-release
     - uname -a
     - chmod +x k8s.sh
-    - echo "root" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=hub-mirror.c.163.com"
+    - echo "root" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud"
     - source /etc/profile && source ~/.bashrc
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
