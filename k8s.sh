@@ -74,16 +74,16 @@ _check_interface_name() {
 
   if ! command -v ip &>/dev/null; then
     if [[ $ID == anolis || $ID == centos ]]; then
-      echo -e "${COLOR_BLUE}当前系统无 ip 命令，开始安装 iproute${COLOR_RESET}"
+      echo -e "${COLOR_BLUE}当前系统 ${ID} 无 ip 命令，开始安装 iproute${COLOR_RESET}"
       sudo yum -y install iproute
     elif [[ $ID == ubuntu ]]; then
-      echo -e "${COLOR_BLUE}当前系统无 ip 命令，开始安装 iproute2${COLOR_RESET}"
+      echo -e "${COLOR_BLUE}当前系统 ${ID} 无 ip 命令，开始安装 iproute2${COLOR_RESET}"
       sudo apt-get -y install iproute2
     fi
   fi
 
   if ! ip link show "$name" >/dev/null 2>&1; then
-    echo -e "${COLOR_RED}当前系统不存在网卡: ${name}，退出程序${COLOR_RESET}"
+    echo -e "${COLOR_RED}当前系统 ${ID} 不存在网卡: ${name}，退出程序${COLOR_RESET}"
     exit 1
   fi
 }
