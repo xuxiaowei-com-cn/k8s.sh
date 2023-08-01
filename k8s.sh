@@ -156,8 +156,8 @@ _check_availability_master() {
 
 # NTP（网络时间协议） 安装
 _ntp_install() {
-  if [[ $ntp_disabled == true ]]; then
-    echo -e "${COLOR_YELLOW}NTP 安装已被禁用${COLOR_RESET}"
+  if [[ $ntp_install_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}NTP 安装已被跳过${COLOR_RESET}"
   else
     echo -e "${COLOR_BLUE}NTP 安装开始${COLOR_RESET}"
 
@@ -869,8 +869,8 @@ while [[ $# -gt 0 ]]; do
     echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 指定版本号：${COLOR_RESET}${COLOR_GREEN}${calico_version}${COLOR_RESET}"
     ;;
 
-  ntp-disabled | -ntp-disabled | --ntp-disabled)
-    ntp_disabled=true
+  ntp-install-skip | -ntp-install-skip | --ntp-install-skip)
+    ntp_install_skip=true
     ;;
 
   interface-name=* | -interface-name=* | --interface-name=*)
