@@ -348,7 +348,7 @@
         # 第 1 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 availability-vip-no 不同，必须存在一个值为 1）
         ./k8s.sh availability-vip-install \
           availability-vip=192.168.80.100 \
-          interface_name=ens33 \
+          interface-name=ens33 \
           availability-master=k8s-master1@192.168.80.81:6443 \
           availability-master=k8s-master2@192.168.80.82:6443 \
           availability-master=k8s-master3@192.168.80.83:6443 \
@@ -357,7 +357,7 @@
         # 第 2 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 availability-vip-no 不同，必须存在一个值为 1）
         ./k8s.sh availability-vip-install \
           availability-vip=192.168.80.100 \
-          interface_name=ens33 \
+          interface-name=ens33 \
           availability-master=k8s-master1@192.168.80.81:6443 \
           availability-master=k8s-master2@192.168.80.82:6443 \
           availability-master=k8s-master3@192.168.80.83:6443 \
@@ -366,7 +366,7 @@
         # 第 3 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 availability-vip-no 不同，必须存在一个值为 1）
         ./k8s.sh availability-vip-install \
           availability-vip=192.168.80.100 \
-          interface_name=ens33 \
+          interface-name=ens33 \
           availability-master=k8s-master1@192.168.80.81:6443 \
           availability-master=k8s-master2@192.168.80.82:6443 \
           availability-master=k8s-master3@192.168.80.83:6443 \
