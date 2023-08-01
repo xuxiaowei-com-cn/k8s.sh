@@ -5,6 +5,8 @@
 # 仓库：https://jihulab.com/xuxiaowei-com-cn/k8s.sh
 # 版本：SNAPSHOT/0.2.0
 # 如果发现脚本不能正常运行，可尝试执行：sed -i 's/\r$//' k8s.sh
+# 代码格式使用：https://github.com/mvdan/sh
+# 代码格式化命令：shfmt -l -w -i 2 .\k8s.sh
 #
 
 # 一旦有命令返回非零值，立即退出脚本
@@ -43,6 +45,11 @@ keepalived_version=3.16-2.2.7
 haproxy_mirror=haproxytech/haproxy-debian
 # 高可用 VIP haproxy 镜像 版本
 haproxy_version=2.8
+
+# Metrics Server 版本号
+metrics_server_version=0.6.3
+# Metrics Server 镜像
+metrics_server_mirror=registry.aliyuncs.com/google_containers/metrics-server
 
 # 检查 kubernetes 版本号
 _check_kubernetes_version_range() {
@@ -246,178 +253,210 @@ _ntp_install() {
 
 # bash-completion 安装
 _bash_completion_install() {
-  if [[ $ID == anolis || $ID == centos ]]; then
-    echo -e "${COLOR_BLUE}bash-completion 安装开始${COLOR_RESET}"
-    sudo yum -y install bash-completion
-    source /etc/profile
-    echo -e "${COLOR_BLUE}bash-completion 安装完成${COLOR_RESET}"
+  if [[ $bash_completion_install_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}bash-completion 安装 已被跳过${COLOR_RESET}"
+  else
+    if [[ $ID == anolis || $ID == centos ]]; then
+      echo -e "${COLOR_BLUE}bash-completion 安装开始${COLOR_RESET}"
+      sudo yum -y install bash-completion
+      source /etc/profile
+      echo -e "${COLOR_BLUE}bash-completion 安装完成${COLOR_RESET}"
+    fi
   fi
 }
 
 # 关闭 selinux
 _selinux_permissive() {
-  if [[ $ID == anolis || $ID == centos ]]; then
-    echo -e "${COLOR_BLUE}selinux 当前状态${COLOR_RESET}"
-    if [[ $(getenforce) == "Disabled" ]]; then
-      echo -e "${COLOR_BLUE}selinux 当前状态已禁用${COLOR_RESET}"
-    else
-      echo -e "${COLOR_BLUE}selinux 当前状态未禁用，开始禁用当前状态${COLOR_RESET}" && sudo setenforce 0
+  if [[ $selinux_permissive_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}关闭 selinux 已被跳过${COLOR_RESET}"
+  else
+    if [[ $ID == anolis || $ID == centos ]]; then
+      echo -e "${COLOR_BLUE}selinux 当前状态${COLOR_RESET}"
+      if [[ $(getenforce) == "Disabled" ]]; then
+        echo -e "${COLOR_BLUE}selinux 当前状态已禁用${COLOR_RESET}"
+      else
+        echo -e "${COLOR_BLUE}selinux 当前状态未禁用，开始禁用当前状态${COLOR_RESET}" && sudo setenforce 0
+      fi
+      echo -e "${COLOR_BLUE}selinux 配置文件${COLOR_RESET}" && cat /etc/selinux/config
+      echo -e "${COLOR_BLUE}selinux 永久禁用${COLOR_RESET}" && sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+      echo -e "${COLOR_BLUE}selinux 配置文件${COLOR_RESET}" && cat /etc/selinux/config
     fi
-    echo -e "${COLOR_BLUE}selinux 配置文件${COLOR_RESET}" && cat /etc/selinux/config
-    echo -e "${COLOR_BLUE}selinux 永久禁用${COLOR_RESET}" && sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
-    echo -e "${COLOR_BLUE}selinux 配置文件${COLOR_RESET}" && cat /etc/selinux/config
   fi
 }
 
 # 停止 防火墙
 _firewalld_stop() {
-  if [[ $ID == anolis || $ID == centos ]]; then
-    echo -e "${COLOR_BLUE}firewalld 关闭${COLOR_RESET}" && sudo systemctl stop firewalld.service
-    echo -e "${COLOR_BLUE}firewalld 关闭开机自启${COLOR_RESET}" && sudo systemctl disable firewalld.service
+  if [[ $firewalld_stop_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}停止 防火墙 firewall 已被跳过${COLOR_RESET}"
+  else
+    if [[ $ID == anolis || $ID == centos ]]; then
+      echo -e "${COLOR_BLUE}firewalld 关闭${COLOR_RESET}" && sudo systemctl stop firewalld.service
+      echo -e "${COLOR_BLUE}firewalld 关闭开机自启${COLOR_RESET}" && sudo systemctl disable firewalld.service
+    fi
   fi
 }
 
 # 关闭 交换空间
 _swap_off() {
-  echo -e "${COLOR_BLUE}查看当前交换空间${COLOR_RESET}" && free -h
-  echo -e "${COLOR_BLUE}关闭交换空间（临时）${COLOR_RESET}" && sudo swapoff -a
-  echo -e "${COLOR_BLUE}关闭交换空间（永久）${COLOR_RESET}" && sudo sed -i 's/.*swap.*/#&/' /etc/fstab
-  echo -e "${COLOR_BLUE}查看当前交换空间${COLOR_RESET}" && free -h
+  if [[ $swap_off_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}关闭 交换空间 swap 已被跳过${COLOR_RESET}"
+  else
+    echo -e "${COLOR_BLUE}查看当前交换空间${COLOR_RESET}" && free -h
+    echo -e "${COLOR_BLUE}关闭交换空间（临时）${COLOR_RESET}" && sudo swapoff -a
+    echo -e "${COLOR_BLUE}关闭交换空间（永久）${COLOR_RESET}" && sudo sed -i 's/.*swap.*/#&/' /etc/fstab
+    echo -e "${COLOR_BLUE}查看当前交换空间${COLOR_RESET}" && free -h
+  fi
 }
 
 # docker 仓库
 _docker_repo() {
-  echo -e "${COLOR_BLUE}docker 仓库 添加开始${COLOR_RESET}"
-  if [[ $ID == anolis || $ID == centos ]]; then
-    echo -e "${COLOR_BLUE}安装/更新 curl${COLOR_RESET}" && sudo yum install -y curl
-    echo -e "${COLOR_BLUE}增加 docker 仓库${COLOR_RESET}"
-    sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
+  if [[ $docker_repo_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}添加 docker 仓库 已被跳过${COLOR_RESET}"
+  else
+    echo -e "${COLOR_BLUE}docker 仓库 添加开始${COLOR_RESET}"
+    if [[ $ID == anolis || $ID == centos ]]; then
+      echo -e "${COLOR_BLUE}安装/更新 curl${COLOR_RESET}" && sudo yum install -y curl
+      echo -e "${COLOR_BLUE}增加 docker 仓库${COLOR_RESET}"
+      sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
 
-    if [[ $VERSION == 23* ]]; then
-      echo -e "${COLOR_BLUE}兼容 anolis 23${COLOR_RESET}" && sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
+      if [[ $VERSION == 23* ]]; then
+        echo -e "${COLOR_BLUE}兼容 anolis 23${COLOR_RESET}" && sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
+      fi
+
+      echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/yum.repos.d/docker-ce.repo
+    elif [[ $ID == ubuntu ]]; then
+      echo -e "${COLOR_BLUE}安装 ca-certificates curl gnupg${COLOR_RESET}" && sudo apt-get install -y ca-certificates curl gnupg
+
+      echo -e "${COLOR_BLUE}修改仓库 gpg 秘钥文件夹权限${COLOR_RESET}" && sudo install -m 0755 -d /etc/apt/keyrings
+
+      local docker_gpg_conf=/etc/apt/keyrings/docker.gpg
+      local docker_gpg_conf_backup="${docker_gpg_conf}.$(date +%Y%m%d%H%M%S)"
+      if [ -f "$docker_gpg_conf" ]; then
+        echo -e "${COLOR_BLUE}docker 仓库 gpg 秘钥 ${docker_gpg_conf} 备份开始${COLOR_RESET}"
+        sudo mv "$docker_gpg_conf" "$docker_gpg_conf_backup"
+        echo -e "${COLOR_BLUE}docker 仓库 gpg 秘钥 ${containerd_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${docker_gpg_conf_backup}${COLOR_RESET}"
+      fi
+
+      echo -e "${COLOR_BLUE}添加 docker 仓库 gpg 秘钥${COLOR_RESET}"
+      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      echo -e "${COLOR_BLUE}修改 docker 仓库 gpg 秘钥文件权限${COLOR_RESET}" && sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+      echo -e "${COLOR_BLUE}添加 docker 仓库${COLOR_RESET}"
+      echo \
+        "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+        "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" |
+        sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+
+      echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/apt/sources.list.d/docker.list
+
+      echo -e "${COLOR_BLUE}更新 docker 仓库源${COLOR_RESET}" && sudo apt-get update
     fi
 
-    echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/yum.repos.d/docker-ce.repo
-  elif [[ $ID == ubuntu ]]; then
-    echo -e "${COLOR_BLUE}安装 ca-certificates curl gnupg${COLOR_RESET}" && sudo apt-get install -y ca-certificates curl gnupg
-
-    echo -e "${COLOR_BLUE}修改仓库 gpg 秘钥文件夹权限${COLOR_RESET}" && sudo install -m 0755 -d /etc/apt/keyrings
-
-    local docker_gpg_conf=/etc/apt/keyrings/docker.gpg
-    local docker_gpg_conf_backup="${docker_gpg_conf}.$(date +%Y%m%d%H%M%S)"
-    if [ -f "$docker_gpg_conf" ]; then
-      echo -e "${COLOR_BLUE}docker 仓库 gpg 秘钥 ${docker_gpg_conf} 备份开始${COLOR_RESET}"
-      sudo mv "$docker_gpg_conf" "$docker_gpg_conf_backup"
-      echo -e "${COLOR_BLUE}docker 仓库 gpg 秘钥 ${containerd_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${docker_gpg_conf_backup}${COLOR_RESET}"
-    fi
-
-    echo -e "${COLOR_BLUE}添加 docker 仓库 gpg 秘钥${COLOR_RESET}"
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-    echo -e "${COLOR_BLUE}修改 docker 仓库 gpg 秘钥文件权限${COLOR_RESET}" && sudo chmod a+r /etc/apt/keyrings/docker.gpg
-
-    echo -e "${COLOR_BLUE}添加 docker 仓库${COLOR_RESET}"
-    echo \
-      "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" |
-      sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
-
-    echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/apt/sources.list.d/docker.list
-
-    echo -e "${COLOR_BLUE}更新 docker 仓库源${COLOR_RESET}" && sudo apt-get update
+    echo -e "${COLOR_BLUE}docker 仓库 添加结束${COLOR_RESET}"
   fi
-
-  echo -e "${COLOR_BLUE}docker 仓库 添加结束${COLOR_RESET}"
 }
 
 # containerd 安装
 _containerd_install() {
-  echo -e "${COLOR_BLUE}containerd 安装开始${COLOR_RESET}"
+  if [[ $containerd_install_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}安装 containerd 已被跳过${COLOR_RESET}"
+  else
+    echo -e "${COLOR_BLUE}containerd 安装开始${COLOR_RESET}"
 
-  if [[ $ID == anolis || $ID == centos ]]; then
-    # https://docs.docker.com/engine/install/centos/
+    if [[ $ID == anolis || $ID == centos ]]; then
+      # https://docs.docker.com/engine/install/centos/
 
-    echo -e "${COLOR_BLUE}卸载旧 docker（不是 docker-ce，目前都是使用的 docker-ce）${COLOR_RESET}"
-    sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
+      echo -e "${COLOR_BLUE}卸载旧 docker（不是 docker-ce，目前都是使用的 docker-ce）${COLOR_RESET}"
+      sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
 
-    echo -e "${COLOR_BLUE}containerd 安装${COLOR_RESET}" && sudo yum install -y containerd.io
-  elif [[ $ID == ubuntu ]]; then
-    # https://docs.docker.com/engine/install/ubuntu/
+      echo -e "${COLOR_BLUE}containerd 安装${COLOR_RESET}" && sudo yum install -y containerd.io
+    elif [[ $ID == ubuntu ]]; then
+      # https://docs.docker.com/engine/install/ubuntu/
 
-    echo -e "${COLOR_BLUE}卸载旧 docker（不是 docker-ce，目前都是使用的 docker-ce）${COLOR_RESET}"
-    sudo apt-get remove docker.io docker-doc docker-compose podman-docker containerd runc || echo ""
+      echo -e "${COLOR_BLUE}卸载旧 docker（不是 docker-ce，目前都是使用的 docker-ce）${COLOR_RESET}"
+      sudo apt-get remove docker.io docker-doc docker-compose podman-docker containerd runc || echo ""
 
-    echo -e "${COLOR_BLUE}containerd 安装${COLOR_RESET}" && sudo apt-get install -y containerd.io
+      echo -e "${COLOR_BLUE}containerd 安装${COLOR_RESET}" && sudo apt-get install -y containerd.io
+    fi
+
+    echo -e "${COLOR_BLUE}停止 containerd${COLOR_RESET}" && sudo systemctl stop containerd.service
+
+    local containerd_conf=/etc/containerd/config.toml
+    local containerd_conf_backup="${containerd_conf}.$(date +%Y%m%d%H%M%S)"
+    if [ -f "$containerd_conf" ]; then
+      echo -e "${COLOR_BLUE}containerd 旧配置文件 ${containerd_conf} 备份开始${COLOR_RESET}"
+      sudo cp "$containerd_conf" "$containerd_conf_backup"
+      echo -e "${COLOR_BLUE}containerd 旧配置文件 ${containerd_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${containerd_conf_backup}${COLOR_RESET}"
+    fi
+
+    echo -e "${COLOR_BLUE}containerd 生成配置文件 ${containerd_conf}${COLOR_RESET}"
+    sudo containerd config default | sudo tee $containerd_conf
+
+    echo -e "${COLOR_BLUE}containerd 配置 pause 使用阿里云镜像${COLOR_RESET}"
+    sudo sed -i "s#registry.k8s.io/pause#registry.aliyuncs.com/google_containers/pause#g" $containerd_conf
+
+    # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/#containerd-systemd
+    echo -e "${COLOR_BLUE}containerd 配置 systemd cgroup 驱动${COLOR_RESET}"
+    sudo sed -i "s#SystemdCgroup = false#SystemdCgroup = true#g" $containerd_conf
+
+    echo -e "${COLOR_BLUE}containerd 配置文件${COLOR_RESET}" && cat $containerd_conf
+
+    echo -e "${COLOR_BLUE}containerd 重启${COLOR_RESET}" && sudo systemctl restart containerd.service
+    echo -e "${COLOR_BLUE}containerd 状态${COLOR_RESET}" && sudo systemctl status containerd.service -n 0
+    echo -e "${COLOR_BLUE}containerd 设置开机自启${COLOR_RESET}" && sudo systemctl enable containerd.service
+
+    echo -e "${COLOR_BLUE}containerd 安装结束${COLOR_RESET}"
   fi
-
-  echo -e "${COLOR_BLUE}停止 containerd${COLOR_RESET}" && sudo systemctl stop containerd.service
-
-  local containerd_conf=/etc/containerd/config.toml
-  local containerd_conf_backup="${containerd_conf}.$(date +%Y%m%d%H%M%S)"
-  if [ -f "$containerd_conf" ]; then
-    echo -e "${COLOR_BLUE}containerd 旧配置文件 ${containerd_conf} 备份开始${COLOR_RESET}"
-    sudo cp "$containerd_conf" "$containerd_conf_backup"
-    echo -e "${COLOR_BLUE}containerd 旧配置文件 ${containerd_conf} 备份完成，备份文件名 ${COLOR_RESET}${COLOR_GREEN}${containerd_conf_backup}${COLOR_RESET}"
-  fi
-
-  echo -e "${COLOR_BLUE}containerd 生成配置文件 ${containerd_conf}${COLOR_RESET}"
-  sudo containerd config default | sudo tee $containerd_conf
-
-  echo -e "${COLOR_BLUE}containerd 配置 pause 使用阿里云镜像${COLOR_RESET}"
-  sudo sed -i "s#registry.k8s.io/pause#registry.aliyuncs.com/google_containers/pause#g" $containerd_conf
-
-  # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/#containerd-systemd
-  echo -e "${COLOR_BLUE}containerd 配置 systemd cgroup 驱动${COLOR_RESET}"
-  sudo sed -i "s#SystemdCgroup = false#SystemdCgroup = true#g" $containerd_conf
-
-  echo -e "${COLOR_BLUE}containerd 配置文件${COLOR_RESET}" && cat $containerd_conf
-
-  echo -e "${COLOR_BLUE}containerd 重启${COLOR_RESET}" && sudo systemctl restart containerd.service
-  echo -e "${COLOR_BLUE}containerd 状态${COLOR_RESET}" && sudo systemctl status containerd.service -n 0
-  echo -e "${COLOR_BLUE}containerd 设置开机自启${COLOR_RESET}" && sudo systemctl enable containerd.service
-
-  echo -e "${COLOR_BLUE}containerd 安装结束${COLOR_RESET}"
 }
 
 # docker-ce 安装
 _docker_ce_install() {
-  echo -e "${COLOR_BLUE}docker-ce 安装开始${COLOR_RESET}"
+  if [[ $docker_ce_install_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}安装 docker-ce 已被跳过${COLOR_RESET}"
+  else
+    echo -e "${COLOR_BLUE}docker-ce 安装开始${COLOR_RESET}"
 
-  if [[ $ID == anolis || $ID == centos ]]; then
-    # https://docs.docker.com/engine/install/centos/
+    if [[ $ID == anolis || $ID == centos ]]; then
+      # https://docs.docker.com/engine/install/centos/
 
-    sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-  elif [[ $ID == ubuntu ]]; then
-    # https://docs.docker.com/engine/install/ubuntu/
+      sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    elif [[ $ID == ubuntu ]]; then
+      # https://docs.docker.com/engine/install/ubuntu/
 
-    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-  fi
+      sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    fi
 
-  echo -e "${COLOR_BLUE}docker-ce 停止${COLOR_RESET}" && sudo systemctl stop docker.service
-  echo -e "${COLOR_BLUE}docker-ce 创建 配置文件的文件夹${COLOR_RESET}" && sudo mkdir -p /etc/docker
-  echo -e "${COLOR_BLUE}docker-ce 创建 配置文件${COLOR_RESET}"
-  sudo tee /etc/docker/daemon.json <<-'EOF'
-  {
-    "registry-mirrors": ["https://hnkfbj7x.mirror.aliyuncs.com"],
-    "exec-opts": ["native.cgroupdriver=systemd"]
-  }
+    echo -e "${COLOR_BLUE}docker-ce 停止${COLOR_RESET}" && sudo systemctl stop docker.service
+    echo -e "${COLOR_BLUE}docker-ce 创建 配置文件的文件夹${COLOR_RESET}" && sudo mkdir -p /etc/docker
+    echo -e "${COLOR_BLUE}docker-ce 创建 配置文件${COLOR_RESET}"
+    cat <<EOF >/etc/docker/daemon.json
+{
+  "registry-mirrors": ["https://hnkfbj7x.mirror.aliyuncs.com"],
+  "exec-opts": ["native.cgroupdriver=systemd"]
+}
 EOF
-  echo -e "${COLOR_BLUE}docker-ce 配置文件${COLOR_RESET}" && cat /etc/docker/daemon.json
-  echo -e "${COLOR_BLUE}docker-ce 重启${COLOR_RESET}" && sudo systemctl restart docker.service
-  echo -e "${COLOR_BLUE}docker-ce 状态${COLOR_RESET}" && sudo systemctl status docker.service -n 0
-  echo -e "${COLOR_BLUE}docker-ce 设置开机自启${COLOR_RESET}" && sudo systemctl enable docker.service
 
-  echo -e "${COLOR_BLUE}docker-ce 安装结束${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}docker-ce 配置文件${COLOR_RESET}" && cat /etc/docker/daemon.json
+    echo -e "${COLOR_BLUE}docker-ce 重启${COLOR_RESET}" && sudo systemctl restart docker.service
+    echo -e "${COLOR_BLUE}docker-ce 状态${COLOR_RESET}" && sudo systemctl status docker.service -n 0
+    echo -e "${COLOR_BLUE}docker-ce 设置开机自启${COLOR_RESET}" && sudo systemctl enable docker.service
+
+    echo -e "${COLOR_BLUE}docker-ce 安装结束${COLOR_RESET}"
+  fi
 }
 
 # kubernetes 仓库
 _kubernetes_repo() {
   # https://developer.aliyun.com/mirror/kubernetes/
 
-  echo -e "${COLOR_BLUE}kubernetes 仓库 添加开始${COLOR_RESET}"
+  if [[ $kubernetes_repo_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}添加 kubernetes 仓库 已被跳过${COLOR_RESET}"
+  else
+    echo -e "${COLOR_BLUE}kubernetes 仓库 添加开始${COLOR_RESET}"
 
-  if [[ $ID == anolis || $ID == centos ]]; then
+    if [[ $ID == anolis || $ID == centos ]]; then
 
-    cat <<EOF >/etc/yum.repos.d/kubernetes.repo
+      cat <<EOF >/etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
 baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
@@ -431,59 +470,62 @@ gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors
 
 EOF
 
-    echo -e "${COLOR_BLUE}kubernetes 仓库 内容：${COLOR_RESET}${COLOR_GREEN}/etc/yum.repos.d/kubernetes.repo${COLOR_RESET}" && cat /etc/yum.repos.d/kubernetes.repo
+    elif [[ $ID == ubuntu ]]; then
 
-  elif [[ $ID == ubuntu ]]; then
+      sudo apt-get install -y apt-transport-https
+      curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
+      echo "deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-    sudo apt-get install -y apt-transport-https
-    curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
-    echo "deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+      echo -e "${COLOR_BLUE}kubernetes 仓库 内容：${COLOR_RESET}${COLOR_GREEN}/etc/apt/sources.list.d/kubernetes.list${COLOR_RESET}" && cat /etc/apt/sources.list.d/kubernetes.list
 
-    echo -e "${COLOR_BLUE}kubernetes 仓库 内容：${COLOR_RESET}${COLOR_GREEN}/etc/apt/sources.list.d/kubernetes.list${COLOR_RESET}" && cat /etc/apt/sources.list.d/kubernetes.list
+      echo -e "${COLOR_BLUE}更新 kubernetes 仓库源${COLOR_RESET}" && sudo apt-get update
+    fi
 
-    echo -e "${COLOR_BLUE}更新 kubernetes 仓库源${COLOR_RESET}" && sudo apt-get update
+    echo -e "${COLOR_BLUE}kubernetes 仓库 添加结束${COLOR_RESET}"
   fi
-
-  echo -e "${COLOR_BLUE}kubernetes 仓库 添加结束${COLOR_RESET}"
 }
 
 # kubernetes 配置
 _kubernetes_conf() {
   # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
 
-  echo -e "${COLOR_BLUE}kubernetes 配置开始${COLOR_RESET}"
+  if [[ $kubernetes_conf_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}kubernetes 配置 已被跳过${COLOR_RESET}"
+  else
+    echo -e "${COLOR_BLUE}kubernetes 配置开始${COLOR_RESET}"
 
-  echo -e "${COLOR_BLUE}kubernetes 配置：${COLOR_RESET}${COLOR_GREEN}/etc/modules-load.d/k8s.conf${COLOR_RESET}"
-  cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+    echo -e "${COLOR_BLUE}kubernetes 配置：${COLOR_RESET}${COLOR_GREEN}/etc/modules-load.d/k8s.conf${COLOR_RESET}"
+    cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
 EOF
 
-  echo -e "${COLOR_BLUE}kubernetes 配置：加载 br_netfilter${COLOR_RESET}" && sudo modprobe br_netfilter
-  echo -e "${COLOR_BLUE}kubernetes 配置：加载 overlay${COLOR_RESET}" && sudo modprobe overlay
+    echo -e "${COLOR_BLUE}kubernetes 配置：加载 br_netfilter${COLOR_RESET}" && sudo modprobe br_netfilter
+    echo -e "${COLOR_BLUE}kubernetes 配置：加载 overlay${COLOR_RESET}" && sudo modprobe overlay
 
-  # 设置所需的 sysctl 参数，参数在重新启动后保持不变
+    # 设置所需的 sysctl 参数，参数在重新启动后保持不变
 
-  echo -e "${COLOR_BLUE}kubernetes 配置：${COLOR_RESET}${COLOR_GREEN}/etc/sysctl.d/k8s.conf${COLOR_RESET}"
-  cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+    echo -e "${COLOR_BLUE}kubernetes 配置：${COLOR_RESET}${COLOR_GREEN}/etc/sysctl.d/k8s.conf${COLOR_RESET}"
+    cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables  = 1
 net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1
 EOF
 
-  # 应用 sysctl 参数而不重新启动
-  echo -e "${COLOR_BLUE}kubernetes 配置：重新加载内核${COLOR_RESET}" && sudo sysctl --system
+    # 应用 sysctl 参数而不重新启动
+    echo -e "${COLOR_BLUE}kubernetes 配置：重新加载内核${COLOR_RESET}" && sudo sysctl --system
 
-  # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
-  # 通过运行以下指令确认 br_netfilter 和 overlay 模块被加载：
-  echo -e "${COLOR_BLUE}kubernetes 配置：确认加载 br_netfilter${COLOR_RESET}" && lsmod | grep br_netfilter
-  echo -e "${COLOR_BLUE}kubernetes 配置：确认加载 overlay${COLOR_RESET}" && lsmod | grep overlay
+    # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
+    # 通过运行以下指令确认 br_netfilter 和 overlay 模块被加载：
+    echo -e "${COLOR_BLUE}kubernetes 配置：确认加载 br_netfilter${COLOR_RESET}" && lsmod | grep br_netfilter
+    echo -e "${COLOR_BLUE}kubernetes 配置：确认加载 overlay${COLOR_RESET}" && lsmod | grep overlay
 
-  # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
-  # 通过运行以下指令确认 net.bridge.bridge-nf-call-iptables、net.bridge.bridge-nf-call-ip6tables 和 net.ipv4.ip_forward 系统变量在你的 sysctl 配置中被设置为 1：
-  echo -e "${COLOR_BLUE}kubernetes 配置：修改网络${COLOR_RESET}" && sudo sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
+    # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
+    # 通过运行以下指令确认 net.bridge.bridge-nf-call-iptables、net.bridge.bridge-nf-call-ip6tables 和 net.ipv4.ip_forward 系统变量在你的 sysctl 配置中被设置为 1：
+    echo -e "${COLOR_BLUE}kubernetes 配置：修改网络${COLOR_RESET}" && sudo sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
 
-  echo -e "${COLOR_BLUE}kubernetes 配置结束${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}kubernetes 配置结束${COLOR_RESET}"
+  fi
 }
 
 # 主机名判断
@@ -513,38 +555,62 @@ _hostname() {
 
 # kubernetes 安装
 _kubernetes_install() {
-  echo -e "${COLOR_BLUE}kubernetes 安装开始${COLOR_RESET}"
+  if [[ $kubernetes_install_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}kubernetes 安装 已被跳过${COLOR_RESET}"
+  else
+    echo -e "${COLOR_BLUE}kubernetes 安装开始${COLOR_RESET}"
 
-  # 主机名判断
-  _hostname
+    # 主机名判断
+    _hostname
 
-  if [[ $ID == anolis || $ID == centos ]]; then
-    if [ "$kubernetes_version" ]; then
-      echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
-      sudo yum install -y kubelet-"$kubernetes_version"-0 kubeadm-"$kubernetes_version"-0 kubectl-"$kubernetes_version"-0 --disableexcludes=kubernetes --nogpgcheck
-    else
-      echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}最新版${COLOR_RESET}"
-      sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
+    if [[ $ID == anolis || $ID == centos ]]; then
+      if [ "$kubernetes_version" ]; then
+        echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
+        sudo yum install -y kubelet-"$kubernetes_version"-0 kubeadm-"$kubernetes_version"-0 kubectl-"$kubernetes_version"-0 --disableexcludes=kubernetes --nogpgcheck
+      else
+        echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}最新版${COLOR_RESET}"
+        sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
+      fi
+    elif [[ $ID == ubuntu ]]; then
+
+      if [ "$kubernetes_version" ]; then
+        echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
+        sudo apt-get install -y kubelet="$kubernetes_version"-00 kubeadm="$kubernetes_version"-00 kubectl="$kubernetes_version"-00
+      else
+        echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}最新版${COLOR_RESET}"
+        sudo apt-get install -y kubelet kubeadm kubectl
+      fi
     fi
-  elif [[ $ID == ubuntu ]]; then
+    echo -e "${COLOR_BLUE}线程守护${COLOR_RESET}" && sudo systemctl daemon-reload
+    echo -e "${COLOR_GREEN}kubelet${COLOR_RESET}${COLOR_BLUE} 重启${COLOR_RESET}" && sudo systemctl restart kubelet
+    echo -e "${COLOR_GREEN}kubelet${COLOR_RESET}${COLOR_BLUE} 设置开机自启${COLOR_RESET}" && sudo systemctl enable kubelet
+    echo -e "${COLOR_BLUE}kubernetes 安装结束${COLOR_RESET}"
+  fi
+}
 
+# kubernetes 拉取镜像
+_kubernetes_images_pull() {
+  if [[ $kubernetes_images_pull == true ]]; then
     if [ "$kubernetes_version" ]; then
-      echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
-      sudo apt-get install -y kubelet="$kubernetes_version"-00 kubeadm="$kubernetes_version"-00 kubectl="$kubernetes_version"-00
+      echo -e "${COLOR_BLUE}kubernetes 拉取 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}${COLOR_BLUE} 镜像开始${COLOR_RESET}"
+      kubeadm config images list --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
+      kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
+      echo -e "${COLOR_BLUE}kubernetes 拉取 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}${COLOR_BLUE} 镜像结束${COLOR_RESET}"
     else
-      echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}最新版${COLOR_RESET}"
-      sudo apt-get install -y kubelet kubeadm kubectl
+      # https://cdn.dl.k8s.io/release/stable-1.txt
+      echo -e "${COLOR_BLUE}kubernetes 拉取 ${COLOR_RESET}${COLOR_GREEN}当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}${COLOR_BLUE} 开始${COLOR_RESET}"
+      kubeadm config images list --image-repository=registry.aliyuncs.com/google_containers
+      kubeadm config images pull --image-repository=registry.aliyuncs.com/google_containers
+      echo -e "${COLOR_BLUE}kubernetes 拉取 ${COLOR_RESET}${COLOR_GREEN}当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}${COLOR_BLUE} 结束${COLOR_RESET}"
     fi
   fi
-  echo -e "${COLOR_BLUE}线程守护${COLOR_RESET}" && sudo systemctl daemon-reload
-  echo -e "${COLOR_GREEN}kubelet${COLOR_RESET}${COLOR_BLUE} 重启${COLOR_RESET}" && sudo systemctl restart kubelet
-  echo -e "${COLOR_GREEN}kubelet${COLOR_RESET}${COLOR_BLUE} 设置开机自启${COLOR_RESET}" && sudo systemctl enable kubelet
-  echo -e "${COLOR_BLUE}kubernetes 安装结束${COLOR_RESET}"
 }
 
 # kubernetes 初始化
 _kubernetes_init() {
-  if [[ $kubernetes_init_skip != true ]]; then
+  if [[ $kubernetes_init_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}kubernetes 初始化 已被跳过${COLOR_RESET}"
+  else
     echo -e "${COLOR_BLUE}kubernetes 初始化开始${COLOR_RESET}"
 
     if [[ $availability_vip ]]; then
@@ -552,6 +618,7 @@ _kubernetes_init() {
         echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${availability_vip} 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
         kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version" --control-plane-endpoint "$availability_vip:9443" --upload-certs
       else
+        # https://cdn.dl.k8s.io/release/stable-1.txt
         echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${availability_vip} 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
         kubeadm init --image-repository=registry.aliyuncs.com/google_containers --control-plane-endpoint "$availability_vip:9443" --upload-certs
       fi
@@ -560,6 +627,7 @@ _kubernetes_init() {
         echo -e "${COLOR_BLUE}kubernetes 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
         kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
       else
+        # https://cdn.dl.k8s.io/release/stable-1.txt
         echo -e "${COLOR_BLUE}kubernetes 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
         kubeadm init --image-repository=registry.aliyuncs.com/google_containers
       fi
@@ -596,6 +664,30 @@ _kubernetes_init() {
   fi
 }
 
+# kubernetes 去污
+_kubernetes_taint() {
+  if [[ $kubernetes_taint == true ]]; then
+      echo -e "${COLOR_BLUE}kubernetes 去污开始${COLOR_RESET}"
+
+      echo -e "${COLOR_BLUE}kubernetes 查看污点${COLOR_RESET}"
+      kubectl get no -o yaml | grep taint -A 10 || echo -e "${COLOR_YELLOW}kubernetes 查看污点 失败${COLOR_RESET}"
+
+      echo -e "${COLOR_BLUE}kubernetes 去污${COLOR_RESET}"
+      kubectl taint nodes --all node-role.kubernetes.io/control-plane- || echo -e "${COLOR_YELLOW}kubernetes 去污 失败${COLOR_RESET}"
+
+      echo -e "${COLOR_BLUE}kubernetes 查看污点${COLOR_RESET}"
+      kubectl get no -o yaml | grep taint -A 10 || echo -e "${COLOR_YELLOW}kubernetes 查看污点 失败${COLOR_RESET}"
+
+      echo -e "${COLOR_BLUE}kubernetes 查看节点${COLOR_RESET}"
+      kubectl get nodes
+
+      echo -e "${COLOR_BLUE}kubernetes 查看所有 pod${COLOR_RESET}"
+      kubectl get pod --all-namespaces -o wide
+
+      echo -e "${COLOR_BLUE}kubernetes 去污结束${COLOR_RESET}"
+  fi
+}
+
 # 网卡
 _interface_name() {
   if ! [[ $interface_name ]]; then
@@ -609,9 +701,11 @@ _interface_name() {
   fi
 }
 
-# kubernetes 网络插件 calico 安装
+# kubernetes 网络插件 calico 初始化
 function _calico_init() {
-  if [[ $calico_init_skip != true ]]; then
+  if [[ $calico_init_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}calico 初始化 已被跳过${COLOR_RESET}"
+  else
     echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 初始化开始${COLOR_RESET}"
 
     echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用版本：${COLOR_RESET}${COLOR_GREEN}${calico_version}${COLOR_RESET}"
@@ -626,7 +720,7 @@ function _calico_init() {
     sed -i "s#INTERFACE_NAME#$interface_name#g" calico.yaml
 
     if [ "$calico_mirrors" ]; then
-      echo "接收到参数 calico_mirrors：$calico_mirrors"
+      echo -e "${COLOR_BLUE}接收到参数 calico-mirrors：${COLOR_RESET}${COLOR_GREEN}${calico_mirrors}${COLOR_RESET}"
       sed -i "s#docker\.io#$calico_mirrors#g" calico.yaml
     fi
 
@@ -644,6 +738,50 @@ function _calico_init() {
     echo ""
   fi
 }
+
+
+# Metrics Server 插件
+_metrics_server_install() {
+  if [ "$metrics_server_install" == true ]; then
+    echo -e "${COLOR_BLUE}Metrics Server 插件 安装开始${COLOR_RESET}"
+
+    # 自定义镜像：优先级高于 metrics_server_version、metrics_server_availability
+    if [ "$metrics_server_components_mirror" ]; then
+      echo -e "${COLOR_BLUE}Metrics Server 插件 使用自定义配置文件：${COLOR_RESET}${COLOR_GREEN}${metrics_server_components_mirror}${COLOR_RESET}"
+      curl -o components.yaml "$metrics_server_components_mirror"
+    else
+
+      # 自定义高可用
+      if [ "$metrics_server_availability" == true ]; then
+        echo -e "${COLOR_BLUE}Metrics Server 插件 下载 ${COLOR_RESET}${COLOR_GREEN}高可用${COLOR_RESET}${COLOR_BLUE} 配置文件${COLOR_RESET}"
+        curl -o components.yaml "https://github.com/kubernetes-sigs/metrics-server/releases/download/v$metrics_server_version/high-availability-1.21+.yaml"
+      else
+        echo -e "${COLOR_BLUE}Metrics Server 插件 下载配置文件${COLOR_RESET}"
+        curl -o components.yaml "https://github.com/kubernetes-sigs/metrics-server/releases/download/v$metrics_server_version/components.yaml"
+      fi
+
+    fi
+
+    # 不验证证书
+    echo -e "${COLOR_BLUE}Metrics Server 插件 不验证证书${COLOR_RESET}"
+    sed -i '/- args:/a \ \ \ \ \ \ \ \ - --kubelet-insecure-tls' components.yaml
+
+    # 使用 docker hub 镜像
+    echo -e "${COLOR_BLUE}Metrics Server 插件 设置镜像：${COLOR_RESET}${COLOR_GREEN}${metrics_server_mirror}${COLOR_RESET}"
+    sed -i "s|registry\.k8s\.io/metrics-server/metrics-server|$metrics_server_mirror|g" components.yaml
+
+    # 应用
+    echo -e "${COLOR_BLUE}Metrics Server 插件 应用配置${COLOR_RESET}"
+    kubectl apply -f components.yaml
+
+    # 查看 所有 pod
+    echo -e "${COLOR_BLUE}查看所有 pod${COLOR_RESET}"
+    kubectl get pod,svc --all-namespaces -o wide
+
+    echo -e "${COLOR_BLUE}Metrics Server 插件 安装完成${COLOR_RESET}"
+  fi
+}
+
 
 # 高可用 VIP haproxy 安装
 _availability_haproxy_install() {
@@ -839,11 +977,6 @@ fi
 while [[ $# -gt 0 ]]; do
   case "$1" in
 
-  docker-install | -docker-install | --docker-install)
-    docker_install=true
-    echo -e "${COLOR_BLUE}启用 docker-ce 安装${COLOR_RESET}"
-    ;;
-
   kubernetes-version=* | -kubernetes-version=* | --kubernetes-version=*)
     kubernetes_version="${1#*=}"
 
@@ -851,16 +984,6 @@ while [[ $# -gt 0 ]]; do
     echo -e "${COLOR_BLUE}kubernetes 指定版本号：${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
 
     _check_kubernetes_version_range "$kubernetes_version"
-    ;;
-
-  kubernetes-init-skip | -kubernetes-init-skip | --kubernetes-init-skip)
-    kubernetes_init_skip=true
-    echo -e "${COLOR_BLUE}跳过 kubernetes 初始化${COLOR_RESET}"
-    ;;
-
-  calico-init-skip | -calico-init-skip | --calico-init-skip)
-    calico_init_skip=true
-    echo -e "${COLOR_BLUE}跳过 calico 安装${COLOR_RESET}"
     ;;
 
   calico-version=* | -calico-version=* | --calico-version=*)
@@ -871,6 +994,79 @@ while [[ $# -gt 0 ]]; do
 
   ntp-install-skip | -ntp-install-skip | --ntp-install-skip)
     ntp_install_skip=true
+    ;;
+
+  bash-completion-install-skip | -bash-completion-install-skip | --bash-completion-install-skip)
+    bash_completion_install_skip=true
+    ;;
+
+  selinux-permissive-skip | -bash-completion-install-skip | --bash-completion-install-skip)
+    selinux_permissive_skip=true
+    ;;
+
+  firewalld-stop-skip | -firewalld-stop-skip | --firewalld-stop-skip)
+    firewalld_stop_skip=true
+    ;;
+
+  swap-off-skip | -swap-off-skip | --swap-off-skip)
+    swap_off_skip=true
+    ;;
+
+  docker-repo-skip | -docker-repo-skip | --docker-repo-skip)
+    docker_repo_skip=true
+    ;;
+
+  containerd-install-skip | -containerd-install-skip | --containerd-install-skip)
+    containerd_install_skip=true
+    ;;
+
+  docker-ce-install-skip | -docker-ce-install-skip | --docker-ce-install-skip)
+    docker_ce_install_skip=true
+    ;;
+
+  kubernetes-repo-skip | -kubernetes-repo-skip | --kubernetes-repo-skip)
+    kubernetes_repo_skip=true
+    ;;
+
+  kubernetes-conf-skip | -kubernetes-conf-skip | --kubernetes-conf-skip)
+    kubernetes_conf_skip=true
+    ;;
+
+  kubernetes-install-skip | -kubernetes-install-skip | --kubernetes-install-skip)
+    kubernetes_install_skip=true
+    ;;
+
+  kubernetes-images-pull | -kubernetes-images-pull | --kubernetes-images-pull)
+    kubernetes_images_pull=true
+    ;;
+
+  kubernetes-init-skip | -kubernetes-init-skip | --kubernetes-init-skip)
+    kubernetes_init_skip=true
+    ;;
+
+  kubernetes-taint | -kubernetes-taint | --kubernetes-taint)
+    kubernetes_taint=true
+    ;;
+
+  calico-init-skip | -calico-init-skip | --calico-init-skip)
+    calico_init_skip=true
+    ;;
+
+  metrics-server-install | -metrics-server-install | --metrics-server-install)
+    metrics_server_install=true
+    ;;
+
+  metrics-server-version=* | -metrics-server-version=* | --metrics-server-version=*)
+    metrics_server_version="${1#*=}"
+    echo -e "${COLOR_BLUE}Metrics Server 插件 自定义版本号：${COLOR_RESET}${COLOR_GREEN}${metrics_server_version}${COLOR_RESET}"
+    ;;
+
+  metrics-server-availability | -metrics-server-availability | --metrics-server-availability)
+    metrics_server_availability=true
+    ;;
+
+  metrics-server-components-mirror | -metrics-server-components-mirror | --metrics-server-components-mirror)
+    metrics_server_components_mirror=true
     ;;
 
   interface-name=* | -interface-name=* | --interface-name=*)
@@ -966,10 +1162,8 @@ _docker_repo
 # containerd 安装
 _containerd_install
 
-if [[ $docker_install == true ]]; then
-  # docker-ce 安装
-  _docker_ce_install
-fi
+# docker-ce 安装
+_docker_ce_install
 
 # 高可用 VIP 安装
 if [[ $availability_vip_install == true ]]; then
@@ -1012,8 +1206,17 @@ _kubernetes_conf
 # kubernetes 安装
 _kubernetes_install
 
+# kubernetes 拉取镜像
+_kubernetes_images_pull
+
 # kubernetes 初始化
 _kubernetes_init
 
+# kubernetes 去污
+_kubernetes_taint
+
 # kubernetes 网络插件 calico 初始化
 _calico_init
+
+# Metrics Server 插件
+_metrics_server_install

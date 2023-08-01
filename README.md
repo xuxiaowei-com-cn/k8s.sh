@@ -115,35 +115,36 @@
 
 ## 环境变量说明
 
-| 镜像环境变量                          | 说明                                   | 原始镜像                                                                                        | 加速镜像使用示例                                                    | 作者个人镜像                                                                                      |
-|---------------------------------|--------------------------------------|---------------------------------------------------------------------------------------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| CALICO_MIRRORS                  | calico 网络组件加速镜像                      | 包含 docker.io/calico/cni、docker.io/calico/kube-controllers、docker.io/calico/kube-controllers | export CALICO_MIRRORS=hub-mirror.c.163.com                  | export CALICO_MIRRORS=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud                  |
-| CALICO_MIRRORS_CALICO_CNI       | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/cni                                                                        | export CALICO_MIRRORS_CALICO_CNI=hub-mirror.c.163.com       | export CALICO_MIRRORS_CALICO_CNI=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud       |
-| CALICO_MIRRORS_KUBE_CONTROLLERS | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/kube-controllers                                                           | export CALICO_MIRRORS_KUBE_CONTROLLERS=hub-mirror.c.163.com | export CALICO_MIRRORS_KUBE_CONTROLLERS=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud |
-| CALICO_MIRRORS_CALICO_NODE      | calico 网络组件加速镜像，优先级高于 CALICO_MIRRORS | docker.io/calico/node                                                                       | export CALICO_MIRRORS_CALICO_NODE=hub-mirror.c.163.com      | export CALICO_MIRRORS_CALICO_NODE=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud      |
-| keepalived_mirror               |                                      |                                                                                             |                                                             |                                                                                             |
-| haproxy_mirror                  |                                      |                                                                                             |                                                             |                                                                                             |
+| 镜像参数                  | 说明                                                                   | 原始镜像                                                                                        | 加速镜像使用示例                                                                     | 作者个人镜像                                                                                                   |
+|-----------------------|----------------------------------------------------------------------|---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| calico-mirrors        | calico 网络组件加速镜像（注意此处有 s，控制多个镜像，不控制镜像名称、不控制版本号），自定义版本见 calico-version | 包含 docker.io/calico/cni、docker.io/calico/kube-controllers、docker.io/calico/kube-controllers | calico-mirrors=hub-mirror.c.163.com                                          | calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud                                      |
+| keepalived-mirror     | keepalived 镜像，只控制镜像名称、不控制版本号                                         | lettore/keepalived                                                                          | keepalived-mirror=hub-mirror.c.163.com/lettore/keepalived                    | keepalived-mirror=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/lettore/keepalived                |
+| haproxy-mirror        | haproxy 镜像，只控制镜像名称、不控制版本号                                            | haproxytech/haproxy-debian                                                                  | haproxy-mirror=hub-mirror.c.163.com/haproxytech/haproxy-debian               | haproxy-mirror=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/haproxytech/haproxy-debian           |
+| metrics-server-mirror | metrics-server 镜像，只控制镜像名称、不控制版本号，默认使用阿里云镜像                           | registry.k8s.io/metrics-server/metrics-server                                               | metrics-server-mirror=registry.aliyuncs.com/google_containers/metrics-server | metrics-server-mirror=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/metrics-server/metrics-server |
 
-| 安装/配置环境变量                     | 说明                                                                                                | 默认值                                                      | 使用示例                                                                                                                                              |
-|-------------------------------|---------------------------------------------------------------------------------------------------|----------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| INTERFACE_NAME                | 指定 k8s 网络插件使用的网卡名称，如果 k8s 宿主机有多个网卡，请自行指定网卡名称                                                      | 使用 ip route 获取上网的网卡名称                                    | export INTERFACE_NAME=ens33                                                                                                                       |
-| KUBERNETES_VERSION            | 指定 k8s 版本，支持 1.24.0 ~ 1.27.3 （版本号不带字母）                                                            | 使用最新版 k8s                                                | export KUBERNETES_VERSION=1.26.0                                                                                                                  |
-| CALICO_VERSION                | 指定 calico 版本（版本号不带字母）                                                                             | 使用 3.25                                                  | export CALICO_VERSION=3.25                                                                                                                        |
-| INSTALL_ONLY                  | 仅安装、不初始化                                                                                          | 默认为空，默认初始化                                               | export INSTALL_ONLY=true                                                                                                                          |
-| INSTALL_MODE                  | 集群模式                                                                                              | 默认值：standalone，合法值：standalone（单机）、master（主节点）、node（工作节点） | export INSTALL_MODE=master                                                                                                                        |
-| IMAGES_PULL                   | 初始化前，先拉取镜像                                                                                        | 默认为空，默认在初始化时拉取镜像                                         | export IMAGES_PULL=true                                                                                                                           |
-| METRICS_SERVER_INSTALL        | Metrics Server 是否安装，用于支持 kubectl top 命令                                                           | 默认为空，默认不安装                                               | export METRICS_SERVER_INSTALL=true                                                                                                                |
-| METRICS_SERVER_VERSION        | Metrics Server 版本（版本号不带字母）                                                                        | 默认为 0.6.3                                                | export METRICS_SERVER_VERSION=0.6.3                                                                                                               |
-| METRICS_SERVER_AVAILABILITY   | Metrics Server 是否配置高可用（需要 k8s 为高可用），仅 Metrics Server 配置文件不同，安装过程不变                                | 默认为空，不使用高可用                                              | export METRICS_SERVER_AVAILABILITY=true                                                                                                           |
-| METRICS_SERVER_MIRROR         | Metrics Server 镜像地址，优先级高于 METRICS_SERVER_VERSION、METRICS_SERVER_AVAILABILITY                      | 默认为空，默认使用 GitHub 官方仓库地址                                  | export METRICS_SERVER_MIRROR=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml |
-| AVAILABILITY_VIP              | 高可用中 VIP（Virtual IP Address，虚拟 IP 地址），需要与 AVAILABILITY_INTERFACE_NAME 同时使用，创建 VIP 时必填，使用 -v、-m 激活 | 默认为空，默认不创建 VIP                                           | export AVAILABILITY_VIP=192.168.80.100                                                                                                            |
-| AVAILABILITY_VIP_NO           | 高可用中 VIP 的编号，整数数字类型，大于 0，其中 1 代表主，其余为备用，不可重复，创建 VIP 时必填，使用 -v 激活，VIP 节点中必须存在一个 1                  | 默认为空                                                     | export AVAILABILITY_VIP_NO=1                                                                                                                      |
-| AVAILABILITY_INTERFACE_NAME   | 高可用中 VIP 使用的网卡，需要与 AVAILABILITY_VIP 同时使用，创建 VIP 时必填，使用 -v 激活                                      | 默认为空，默认不创建 VIP                                           | export AVAILABILITY_INTERFACE_NAME=ens33                                                                                                          |
-| AVAILABILITY_HAPROXY_USERNAME | 高可用中 haproxy 用户名，推荐修改                                                                             | 默认为 admin                                                | export AVAILABILITY_HAPROXY_USERNAME=admin                                                                                                        |
-| AVAILABILITY_HAPROXY_PASSWORD | 高可用中 haproxy 密码，推荐修改                                                                              | 默认为 password                                             | export AVAILABILITY_HAPROXY_PASSWORD=password                                                                                                     |
-| AVAILABILITY_MASTER           | 高可用中 主节点信息，包含主节点名称（仅在VIP管理时使用）、主节点IP、主节点端口，创建 VIP 时必填，使用 -v 激活。格式：名称@IP:端口，多个值用英文逗号隔开             | 默认为空                                                     | export AVAILABILITY_MASTER=k8s-master1@192.168.80.81:6443,k8s-master2@192.168.80.82:6443,k8s-master3@192.168.80.83:6443                           |
-| keepalived_version            |                                                                                                   |                                                          |                                                                                                                                                   |
-| haproxy_version               |                                                                                                   |                                                          |                                                                                                                                                   |
+| 安装/配置参数                          | 说明                      | 默认值          | 使用示例                                                                                                                                                  |
+|----------------------------------|-------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ntp-install-skip                 | 跳过 NTP 安装               | false        | ntp-install-skip                                                                                                                                      |
+| bash-completion-install-skip     | 跳过 bash-completion 安装   | false        | bash-completion-install-skip                                                                                                                          |
+| selinux-permissive-skip          | 跳过 关闭 selinux           | false        | selinux-permissive-skip                                                                                                                               |
+| firewalld-stop-skip              | 跳过 关闭 防火墙 firewalld     | false        | firewalld-stop-skip                                                                                                                                   |
+| swap-off-skip                    | 跳过 关闭 交换空间 swap         | false        | swap-off-skip                                                                                                                                         |
+| docker-repo-skip                 | 跳过 添加 docker 仓库         | false        | docker-repo-skip                                                                                                                                      |
+| containerd-install-skip          | 跳过 containerd 安装        | false        | containerd-install-skip                                                                                                                               |
+| kubernetes-repo-skip             | 跳过 添加 kubernetes 仓库     | false        | kubernetes-repo-skip                                                                                                                                  |
+| kubernetes-conf-skip             | 跳过 kubernetes 配置        | false        | kubernetes-conf-skip                                                                                                                                  |
+| kubernetes-install-skip          | 跳过 kubernetes 安装        | false        | kubernetes-install-skip                                                                                                                               |
+| kubernetes-init-skip             | 跳过 kubernetes 初始化       | false        | kubernetes-init-skip                                                                                                                                  |
+| kubernetes-taint                 | 指定 kubernetes 全部去污      | false        | kubernetes-taint                                                                                                                                      |
+| calico-init-skip                 | 跳过 calico 初始化           | false        | kubernetes-calico-skip                                                                                                                                |
+| docker-ce-install-skip           | 跳过 docker-ce 安装         | false        | docker-ce-install-skip                                                                                                                                |
+| interface-name                   | 指定 网卡 名称                | 自动获取         | interface-name=ens33                                                                                                                                  |
+| calico-version                   | 指定 calico 版本            | 3.2          | calico-version=3.25                                                                                                                                   |
+| kubernetes-version               | 指定 kubernetes 版本        | 最新版          | kubernetes-version=1.26.0                                                                                                                             |
+| metrics-server-install           | 指定 Metrics Server 安装    | false        | metrics-server-install                                                                                                                                |
+| metrics-server-version           | 指定 Metrics Server 版本    | 0.6.3        | metrics-server-version=0.6.3                                                                                                                          |
+| metrics-server-availability      | 指定 Metrics Server 使用高可用 | false        | metrics-server-availability                                                                                                                           |
+| metrics-server-components-mirror | 自定义 Metrics Server 配置文件 | 从 GitHub 中获取 | metrics-server-components-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml |
 
 ## 使用前说明
 
@@ -151,7 +152,7 @@
 2. <strong><font color="red">请务必使用独立系统执行脚本。</font></strong>
 3. <strong><font color="red">请务必使用独立系统执行脚本。</font></strong>
 4. k8s 各节点主机名唯一，不能存在相同的。推荐主节点使用 k8s-xx 或者 control-plane-xx，工作节点 node-xx
-5. k8s 主机名只能包含：字母、数字、小数点、英文横杠
+5. k8s 主机名：必须符合小写的 RFC 1123 子域，必须由小写字母数字字符“-”或“.”组成，并且必须以字母数字字符开头和结尾
 6. 由于某些软件基于主机名才能正常运行，为了避免风险，脚本不支持修改主机名，请自行修改
 7. 命令 hostname 为临时修改主机名，配置文件 /etc/hostname 为配置文件中的主机名，服务器重启后，会 hostname 配置的主机名会消失，恢复成
    /etc/hostname 中的主机名
@@ -183,116 +184,125 @@
 ## 使用说明
 
 1. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试）
+
     ```shell
-    # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+    # 下载脚本，下载后的文件名为 k8s.sh
+    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
-    chmod +x install.sh
+    chmod +x k8s.sh
     # 执行安装命令
-    sudo ./install.sh
+    ./k8s.sh
     ```
 
 2. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 k8s 指定版本
+
     ```shell
-    # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+    # 下载脚本，下载后的文件名为 k8s.sh
+    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
-    chmod +x install.sh
+    chmod +x k8s.sh
     # 执行安装命令
     # 指定 k8s 版本号（版本号不带字母）
     # 在 GitHub 查看 k8s 发布的版本：https://github.com/kubernetes/kubernetes/tags
     # 在 GitCode 查看 k8s 发布的版本：https://gitcode.net/mirrors/kubernetes/kubernetes/-/tags
-    export KUBERNETES_VERSION=1.26.0 && sudo ./install.sh
+    ./k8s.sh kubernetes-version=1.26.0
     ```
 
-3. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装，不进行初始化
+3. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），不安装 docker-ce（k8s 使用 containerd）
+
     ```shell
-    # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+    # 下载脚本，下载后的文件名为 k8s.sh
+    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
-    chmod +x install.sh
+    chmod +x k8s.sh
+    # 执行安装命令
+    ./k8s.sh docker-ce-install-skip
+    ```
+
+4. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装，不进行初始化
+
+    ```shell
+    # 下载脚本，下载后的文件名为 k8s.sh
+    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    # 授权
+    chmod +x k8s.sh
     # 执行安装命令，仅安装，不进行初始化
-    export INSTALL_ONLY=true && sudo ./install.sh
+    ./k8s.sh kubernetes-init-skip calico-init-skip
     ```
 
-4. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装、拉取镜像，不进行初始化
+5. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装、拉取镜像，不进行初始化
+
     ```shell
-    # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+    # 下载脚本，下载后的文件名为 k8s.sh
+    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
-    chmod +x install.sh
+    chmod +x k8s.sh
     # 执行安装命令，仅安装、拉取镜像，不进行初始化
-    export INSTALL_ONLY=true IMAGES_PULL=true && sudo ./install.sh
+    ./k8s.sh kubernetes-init-skip calico-init-skip kubernetes-images-pull
     ```
 
-5. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 指定版本
+6. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 指定版本
+
     ```shell
-    # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+    # 下载脚本，下载后的文件名为 k8s.sh
+    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
-    chmod +x install.sh
+    chmod +x k8s.sh
     # 执行安装命令
     # 指定 calico 版本号（版本号不带字母）
     # 查看 calico 发布的版本：https://docs.tigera.io/archive/
-    export CALICO_VERSION=3.24 && sudo ./install.sh
+    ./k8s.sh calico-version=3.25
     ```
 
-6. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 网络组件的加速镜像
+7. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 网络组件的加速镜像
+
     ```shell
-    # calico 网络组件：使用网易云
+    # calico 网络组件：使用网易云 calico-mirrors=hub-mirror.c.163.com
     # 如果自己有镜像，也可使用自己的镜像
-    # 作者个人镜像仓库：export CALICO_MIRRORS=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud
-    export CALICO_MIRRORS=hub-mirror.c.163.com
+    # 作者个人镜像仓库：calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud
     
-    # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+    # 下载脚本，下载后的文件名为 k8s.sh
+    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
-    chmod +x install.sh
+    chmod +x k8s.sh
     # 执行安装命令
-    sudo ./install.sh
+    ./k8s.sh calico-mirrors=hub-mirror.c.163.com
     ```
 
-7. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），安装 Metrics Server 插件
+8. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），安装 Metrics Server 插件
+
     ```shell
-    # 下载脚本，下载后的文件名为 install.sh
-    curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+    # 下载脚本，下载后的文件名为 k8s.sh
+    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
-    chmod +x install.sh
+    chmod +x k8s.sh
     # 执行安装命令
-    export METRICS_SERVER_INSTALL=true \
-      && sudo ./install.sh
+    ./k8s.sh metrics-server-install
     
     # 执行安装命令：自定义版本
-    #export METRICS_SERVER_INSTALL=true \
-    #  METRICS_SERVER_VERSION=0.6.2 \
-    #  && sudo ./install.sh
+    # ./k8s.sh metrics-server-install metrics-server-version=0.6.2
     
     # 执行安装命令：使用高可用
-    #export METRICS_SERVER_INSTALL=true \
-    #  METRICS_SERVER_AVAILABILITY=true \
-    #  && sudo ./install.sh
+    # ./k8s.sh metrics-server-install metrics-server-availability
     
     # 执行安装命令：自定义版本、使用高可用
-    #export METRICS_SERVER_INSTALL=true \
-    #  METRICS_SERVER_VERSION=0.6.2 \
-    #  METRICS_SERVER_AVAILABILITY=true \
-    #  && sudo ./install.sh
+    # ./k8s.sh metrics-server-install metrics-server-version=0.6.2 metrics-server-availability
     
-    # 执行安装命令：自定义镜像（优先级高于 METRICS_SERVER_VERSION、METRICS_SERVER_AVAILABILITY，可指定高可用镜像）
-    #export METRICS_SERVER_INSTALL=true \
-    #  METRICS_SERVER_MIRROR=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml \
-    #  && sudo ./install.sh
+    # 执行安装命令：自定义下载配置文件（优先级高于 metrics-server-version、metrics-server-availability，可指定高可用）
+    # ./k8s.sh metrics-server-install metrics-server-components-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml
     ```
 
-8. k8s 集群（一主多从，无高可用，仅用于学习、测试）
+9. k8s 集群（一主多从，无高可用，仅用于学习、测试）
+
     1. 主节点：安装软件、初始化集群
+
         ```shell
-        # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+        # 下载脚本，下载后的文件名为 k8s.sh
+        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
-        chmod +x install.sh
+        chmod +x k8s.sh
         # 执行安装命令
-        export INSTALL_MODE=master && sudo ./install.sh
+        ./k8s.sh
         
         
         # 暂存初始化完成后控制台打印的工作节点加入集群的命令，例如：
@@ -304,14 +314,16 @@
         
         
         ```
+
     2. 工作节点：安装软件、加入集群
+
         ```shell
-        # 下载脚本，下载后的文件名为 install.sh
-        curl -o install.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/install.sh
+        # 下载脚本，下载后的文件名为 k8s.sh
+        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
-        chmod +x install.sh
-        # 执行安装命令
-        export INSTALL_MODE=node && sudo ./install.sh
+        chmod +x k8s.sh
+        # 执行安装命令，仅安装、拉取镜像，不进行初始化
+        ./k8s.sh kubernetes-init-skip calico-init-skip
         
         
         # 执行在主节点得到的工作加入集群的命令，例如：
@@ -321,7 +333,7 @@
         
         ```
 
-9. k8s 集群（三主多从，高可用，生产就绪）
+10. k8s 集群（三主多从，高可用，生产就绪）
 
     1. VIP（Virtual IP Address，虚拟 IP 地址）
 
@@ -373,10 +385,7 @@
         ./k8s.sh availability-vip=192.168.80.100
         
         # 安装 Metrics Server 插件（仅第一个主节点执行即可）
-        # export AVAILABILITY_VIP=192.168.80.100 \
-        #   METRICS_SERVER_INSTALL=true \
-        #   METRICS_SERVER_MIRROR=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/high-availability-1.21+.yaml \
-        #   && sudo ./install.sh -m
+        # ./k8s.sh availability-vip=192.168.80.100 metrics-server-install metrics-server-availability
         ```
 
     3. 主节点：***其余机器***：安装软件、使用主节点角色加入集群
