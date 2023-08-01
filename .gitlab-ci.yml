@@ -3,13 +3,13 @@ stages:
   # 代码同步
   - sync
 
-install:
+centos-7.9:
   stage: install
   script:
-    - chmod +x install.sh
-    - echo "root" | script -qec "sudo -S ./install.sh"
+    - chmod +x k8s.sh
+    - echo "root" | script -qec "sudo -S ./k8s.sh"
   tags:
-    - ssh-centos-7.0
+    - ssh-centos-7.9
 
 # 嵌入
 include:
