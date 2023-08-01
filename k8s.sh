@@ -119,6 +119,8 @@ _check_availability_vip_no() {
 _check_availability_master() {
   local master=$1
 
+  echo -e "${COLOR_BLUE}检查/处理 主节点地址 ${master} 开始${COLOR_RESET}"
+
   # 使用 @ 符号分割主机名和地址
   IFS='@' read -ra parts <<<"$master"
   local name="${parts[0]}"
@@ -148,6 +150,8 @@ _check_availability_master() {
 
   # 将解析结果存入数组
   availability_master_array+=("$name $address")
+
+  echo -e "${COLOR_BLUE}检查/处理 主节点地址 ${master} 结束${COLOR_RESET}"
 }
 
 # NTP（网络时间协议） 安装
