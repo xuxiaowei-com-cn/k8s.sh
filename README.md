@@ -122,29 +122,34 @@
 | haproxy-mirror        | haproxy 镜像，只控制镜像名称、不控制版本号                                            | haproxytech/haproxy-debian                                                                  | haproxy-mirror=hub-mirror.c.163.com/haproxytech/haproxy-debian               | haproxy-mirror=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/haproxytech/haproxy-debian           |
 | metrics-server-mirror | metrics-server 镜像，只控制镜像名称、不控制版本号，默认使用阿里云镜像                           | registry.k8s.io/metrics-server/metrics-server                                               | metrics-server-mirror=registry.aliyuncs.com/google_containers/metrics-server | metrics-server-mirror=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/metrics-server/metrics-server |
 
-| 安装/配置参数                          | 说明                      | 默认值          | 使用示例                                                                                                                                                  |
-|----------------------------------|-------------------------|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ntp-install-skip                 | 跳过 NTP 安装               | false        | ntp-install-skip                                                                                                                                      |
-| bash-completion-install-skip     | 跳过 bash-completion 安装   | false        | bash-completion-install-skip                                                                                                                          |
-| selinux-permissive-skip          | 跳过 关闭 selinux           | false        | selinux-permissive-skip                                                                                                                               |
-| firewalld-stop-skip              | 跳过 关闭 防火墙 firewalld     | false        | firewalld-stop-skip                                                                                                                                   |
-| swap-off-skip                    | 跳过 关闭 交换空间 swap         | false        | swap-off-skip                                                                                                                                         |
-| docker-repo-skip                 | 跳过 添加 docker 仓库         | false        | docker-repo-skip                                                                                                                                      |
-| containerd-install-skip          | 跳过 containerd 安装        | false        | containerd-install-skip                                                                                                                               |
-| kubernetes-repo-skip             | 跳过 添加 kubernetes 仓库     | false        | kubernetes-repo-skip                                                                                                                                  |
-| kubernetes-conf-skip             | 跳过 kubernetes 配置        | false        | kubernetes-conf-skip                                                                                                                                  |
-| kubernetes-install-skip          | 跳过 kubernetes 安装        | false        | kubernetes-install-skip                                                                                                                               |
-| kubernetes-init-skip             | 跳过 kubernetes 初始化       | false        | kubernetes-init-skip                                                                                                                                  |
-| kubernetes-taint                 | 指定 kubernetes 全部去污      | false        | kubernetes-taint                                                                                                                                      |
-| calico-init-skip                 | 跳过 calico 初始化           | false        | kubernetes-calico-skip                                                                                                                                |
-| docker-ce-install-skip           | 跳过 docker-ce 安装         | false        | docker-ce-install-skip                                                                                                                                |
-| interface-name                   | 指定 网卡 名称                | 自动获取         | interface-name=ens33                                                                                                                                  |
-| calico-version                   | 指定 calico 版本            | 3.2          | calico-version=3.25                                                                                                                                   |
-| kubernetes-version               | 指定 kubernetes 版本        | 最新版          | kubernetes-version=1.26.0                                                                                                                             |
-| metrics-server-install           | 指定 Metrics Server 安装    | false        | metrics-server-install                                                                                                                                |
-| metrics-server-version           | 指定 Metrics Server 版本    | 0.6.3        | metrics-server-version=0.6.3                                                                                                                          |
-| metrics-server-availability      | 指定 Metrics Server 使用高可用 | false        | metrics-server-availability                                                                                                                           |
-| metrics-server-components-mirror | 自定义 Metrics Server 配置文件 | 从 GitHub 中获取 | metrics-server-components-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml |
+| 安装/配置参数                          | 说明                                                                           | 默认值          | 使用示例                                                                                                                                                     |
+|----------------------------------|------------------------------------------------------------------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ntp-install-skip                 | 跳过 NTP 安装                                                                    | false        | ntp-install-skip                                                                                                                                         |
+| bash-completion-install-skip     | 跳过 bash-completion 安装                                                        | false        | bash-completion-install-skip                                                                                                                             |
+| selinux-permissive-skip          | 跳过 关闭 selinux                                                                | false        | selinux-permissive-skip                                                                                                                                  |
+| firewalld-stop-skip              | 跳过 关闭 防火墙 firewalld                                                          | false        | firewalld-stop-skip                                                                                                                                      |
+| swap-off-skip                    | 跳过 关闭 交换空间 swap                                                              | false        | swap-off-skip                                                                                                                                            |
+| docker-repo-skip                 | 跳过 添加 docker 仓库                                                              | false        | docker-repo-skip                                                                                                                                         |
+| docker-ce-install-skip           | 跳过 docker-ce 安装                                                              | false        | docker-ce-install-skip                                                                                                                                   |
+| containerd-install-skip          | 跳过 containerd 安装                                                             | false        | containerd-install-skip                                                                                                                                  |
+| kubernetes-repo-skip             | 跳过 添加 kubernetes 仓库                                                          | false        | kubernetes-repo-skip                                                                                                                                     |
+| kubernetes-conf-skip             | 跳过 kubernetes 配置                                                             | false        | kubernetes-conf-skip                                                                                                                                     |
+| kubernetes-install-skip          | 跳过 kubernetes 安装                                                             | false        | kubernetes-install-skip                                                                                                                                  |
+| kubernetes-init-skip             | 跳过 kubernetes 初始化                                                            | false        | kubernetes-init-skip                                                                                                                                     |
+| kubernetes-taint                 | 指定 kubernetes 全部去污                                                           | false        | kubernetes-taint                                                                                                                                         |
+| kubernetes-version               | 指定 kubernetes 版本                                                             | 最新版          | kubernetes-version=1.26.0                                                                                                                                |
+| kubernetes-images-pull           | 拉取 kubernetes 镜像（在初始化前提前拉取）                                                  | false        | kubernetes-images-pull                                                                                                                                   |
+| calico-init-skip                 | 跳过 calico 初始化                                                                | false        | calico-init-skip                                                                                                                                         |
+| calico-version                   | 指定 calico 版本                                                                 | 3.2          | calico-version=3.25                                                                                                                                      |
+| interface-name                   | 指定 网卡 名称                                                                     | 自动获取         | interface-name=ens33                                                                                                                                     |
+| metrics-server-install           | 指定 Metrics Server 安装                                                         | false        | metrics-server-install                                                                                                                                   |
+| metrics-server-version           | 指定 Metrics Server 版本                                                         | 0.6.3        | metrics-server-version=0.6.3                                                                                                                             |
+| metrics-server-availability      | 指定 Metrics Server 使用高可用                                                      | false        | metrics-server-availability                                                                                                                              |
+| metrics-server-components-mirror | 自定义 Metrics Server 配置文件                                                      | 从 GitHub 中获取 | metrics-server-components-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml    |
+| availability-vip-install         | 开启高可用 VIP 安装                                                                 | false        | availability-vip-install                                                                                                                                 |
+| availability-vip                 | 高可用 VIP 地址（Virtual IP Address，虚拟 IP 地址）                                      | 无            | availability-vip=192.168.80.100                                                                                                                          |
+| availability-vip-no              | 高可用 VIP 编号，整数数字类型，其中 1 代表主，其余为备用，不可重复，创建 VIP 时必填，VIP 节点中必须存在一个 1             | 无            | availability-vip-no=1                                                                                                                                    |
+| availability-master              | 高可用 主节点配置，包含主节点名称（仅在VIP管理时使用）、主节点IP、主节点端口，创建 VIP 时必填，格式：名称@ip:端口，使用多次指定设置多个值 | 无            | availability-master=k8s-master1@192.168.80.81:6443 availability-master=k8s-master2@192.168.80.82:6443 availability-master=k8s-master3@192.168.80.83:6443 |
 
 ## 使用前说明
 
@@ -191,7 +196,7 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
-    ./k8s.sh
+    ./k8s.sh kubernetes-taint
     ```
 
 2. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 k8s 指定版本
@@ -205,7 +210,7 @@
     # 指定 k8s 版本号（版本号不带字母）
     # 在 GitHub 查看 k8s 发布的版本：https://github.com/kubernetes/kubernetes/tags
     # 在 GitCode 查看 k8s 发布的版本：https://gitcode.net/mirrors/kubernetes/kubernetes/-/tags
-    ./k8s.sh kubernetes-version=1.26.0
+    ./k8s.sh kubernetes-taint kubernetes-version=1.26.0
     ```
 
 3. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），不安装 docker-ce（k8s 使用 containerd）
@@ -216,7 +221,7 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
-    ./k8s.sh docker-ce-install-skip
+    ./k8s.sh kubernetes-taint docker-ce-install-skip
     ```
 
 4. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装，不进行初始化
@@ -227,7 +232,7 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令，仅安装，不进行初始化
-    ./k8s.sh kubernetes-init-skip calico-init-skip
+    ./k8s.sh kubernetes-taint kubernetes-init-skip calico-init-skip
     ```
 
 5. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装、拉取镜像，不进行初始化
@@ -238,7 +243,7 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令，仅安装、拉取镜像，不进行初始化
-    ./k8s.sh kubernetes-init-skip calico-init-skip kubernetes-images-pull
+    ./k8s.sh kubernetes-taint kubernetes-init-skip calico-init-skip kubernetes-images-pull
     ```
 
 6. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 指定版本
@@ -251,7 +256,7 @@
     # 执行安装命令
     # 指定 calico 版本号（版本号不带字母）
     # 查看 calico 发布的版本：https://docs.tigera.io/archive/
-    ./k8s.sh calico-version=3.25
+    ./k8s.sh kubernetes-taint calico-version=3.25
     ```
 
 7. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 网络组件的加速镜像
@@ -266,7 +271,7 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
-    ./k8s.sh calico-mirrors=hub-mirror.c.163.com
+    ./k8s.sh kubernetes-taint calico-mirrors=hub-mirror.c.163.com
     ```
 
 8. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），安装 Metrics Server 插件
@@ -277,19 +282,19 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
-    ./k8s.sh metrics-server-install
+    ./k8s.sh kubernetes-taint metrics-server-install
     
     # 执行安装命令：自定义版本
-    # ./k8s.sh metrics-server-install metrics-server-version=0.6.2
+    # ./k8s.sh kubernetes-taint metrics-server-install metrics-server-version=0.6.2
     
     # 执行安装命令：使用高可用
-    # ./k8s.sh metrics-server-install metrics-server-availability
+    # ./k8s.sh kubernetes-taint metrics-server-install metrics-server-availability
     
     # 执行安装命令：自定义版本、使用高可用
-    # ./k8s.sh metrics-server-install metrics-server-version=0.6.2 metrics-server-availability
+    # ./k8s.sh kubernetes-taint metrics-server-install metrics-server-version=0.6.2 metrics-server-availability
     
     # 执行安装命令：自定义下载配置文件（优先级高于 metrics-server-version、metrics-server-availability，可指定高可用）
-    # ./k8s.sh metrics-server-install metrics-server-components-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml
+    # ./k8s.sh kubernetes-taint metrics-server-install metrics-server-components-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml
     ```
 
 9. k8s 集群（一主多从，无高可用，仅用于学习、测试）
