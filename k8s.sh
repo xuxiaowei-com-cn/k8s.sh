@@ -7,6 +7,9 @@
 # 如果发现脚本不能正常运行，可尝试执行：sed -i 's/\r$//' k8s.sh
 #
 
+# 一旦有命令返回非零值，立即退出脚本
+set -e
+
 # 颜色定义
 readonly COLOR_BLUE='\033[34m'
 readonly COLOR_GREEN='\033[92m'
@@ -20,9 +23,6 @@ readonly lower_minor=24
 readonly upper_major=1
 readonly upper_minor=27
 
-# 一旦有命令返回非零值，立即退出脚本
-set -e
-
 # 高可用主节点地址
 availability_master_array=()
 
@@ -34,9 +34,14 @@ availability_haproxy_password=password
 # kubernetes 网络插件 calico 版本
 calico_version=3.25
 
+# 高可用 VIP keepalived 镜像
 keepalived_mirror=lettore/keepalived
+# 高可用 VIP keepalived 镜像 版本
 keepalived_version=3.16-2.2.7
+
+# 高可用 VIP haproxy 镜像
 haproxy_mirror=haproxytech/haproxy-debian
+# 高可用 VIP haproxy 镜像 版本
 haproxy_version=2.8
 
 # 检查 kubernetes 版本号
