@@ -615,11 +615,11 @@ _kubernetes_init() {
 
     if [[ $availability_vip ]]; then
       if [ "$kubernetes_version" ]; then
-        echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${availability_vip} 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${COLOR_RESET}${COLOR_GREEN}${availability_vip}${COLOR_RESET}${COLOR_BLUE} 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
         kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version" --control-plane-endpoint "$availability_vip:9443" --upload-certs
       else
         # https://cdn.dl.k8s.io/release/stable-1.txt
-        echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${availability_vip} 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${COLOR_RESET}${COLOR_GREEN}${availability_vip}${COLOR_RESET}${COLOR_BLUE} 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
         kubeadm init --image-repository=registry.aliyuncs.com/google_containers --control-plane-endpoint "$availability_vip:9443" --upload-certs
       fi
     else
