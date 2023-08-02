@@ -997,7 +997,7 @@ while [[ $# -gt 0 ]]; do
     calico_init_skip=true
     ;;
 
-  calico-manifests-mirror | -calico-manifests-mirror | --calico-manifests-mirror)
+  calico-manifests-mirror=* | -calico-manifests-mirror=* | --calico-manifests-mirror=*)
     calico_manifests_mirror=true
     ;;
 
