@@ -44,6 +44,7 @@ centos-7.9:
   variables:
     KUBECONFIG: /etc/kubernetes/admin.conf
   script:
+    - set -e
     - cat /etc/redhat-release
     - cat /etc/os-release
     - uname -a

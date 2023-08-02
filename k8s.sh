@@ -998,7 +998,7 @@ while [[ $# -gt 0 ]]; do
     ;;
 
   calico-manifests-mirror=* | -calico-manifests-mirror=* | --calico-manifests-mirror=*)
-    calico_manifests_mirror=true
+    calico_manifests_mirror="${1#*=}"
     ;;
 
   ntp-install-skip | -ntp-install-skip | --ntp-install-skip)
