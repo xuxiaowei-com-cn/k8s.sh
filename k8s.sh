@@ -667,24 +667,24 @@ _kubernetes_init() {
 # kubernetes 去污
 _kubernetes_taint() {
   if [[ $kubernetes_taint == true ]]; then
-      echo -e "${COLOR_BLUE}kubernetes 去污开始${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}kubernetes 去污开始${COLOR_RESET}"
 
-      echo -e "${COLOR_BLUE}kubernetes 查看污点${COLOR_RESET}"
-      kubectl get no -o yaml | grep taint -A 10 || echo -e "${COLOR_YELLOW}kubernetes 查看污点 失败${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}kubernetes 查看污点${COLOR_RESET}"
+    kubectl get no -o yaml | grep taint -A 10 || echo -e "${COLOR_YELLOW}kubernetes 查看污点 失败${COLOR_RESET}"
 
-      echo -e "${COLOR_BLUE}kubernetes 去污${COLOR_RESET}"
-      kubectl taint nodes --all node-role.kubernetes.io/control-plane- || echo -e "${COLOR_YELLOW}kubernetes 去污 失败${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}kubernetes 去污${COLOR_RESET}"
+    kubectl taint nodes --all node-role.kubernetes.io/control-plane- || echo -e "${COLOR_YELLOW}kubernetes 去污 失败${COLOR_RESET}"
 
-      echo -e "${COLOR_BLUE}kubernetes 查看污点${COLOR_RESET}"
-      kubectl get no -o yaml | grep taint -A 10 || echo -e "${COLOR_YELLOW}kubernetes 查看污点 失败${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}kubernetes 查看污点${COLOR_RESET}"
+    kubectl get no -o yaml | grep taint -A 10 || echo -e "${COLOR_YELLOW}kubernetes 查看污点 失败${COLOR_RESET}"
 
-      echo -e "${COLOR_BLUE}kubernetes 查看节点${COLOR_RESET}"
-      kubectl get nodes
+    echo -e "${COLOR_BLUE}kubernetes 查看节点${COLOR_RESET}"
+    kubectl get nodes
 
-      echo -e "${COLOR_BLUE}kubernetes 查看所有 pod${COLOR_RESET}"
-      kubectl get pod --all-namespaces -o wide
+    echo -e "${COLOR_BLUE}kubernetes 查看所有 pod${COLOR_RESET}"
+    kubectl get pod --all-namespaces -o wide
 
-      echo -e "${COLOR_BLUE}kubernetes 去污结束${COLOR_RESET}"
+    echo -e "${COLOR_BLUE}kubernetes 去污结束${COLOR_RESET}"
   fi
 }
 
@@ -708,8 +708,13 @@ function _calico_init() {
   else
     echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 初始化开始${COLOR_RESET}"
 
-    echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用版本：${COLOR_RESET}${COLOR_GREEN}${calico_version}${COLOR_RESET}"
-    curl -o calico.yaml https://docs.tigera.io/archive/v"$calico_version"/manifests/calico.yaml
+    if [[ $calico_manifests_mirror ]]; then
+      echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用自定义配置文件：${COLOR_RESET}${COLOR_GREEN}${calico_manifests_mirror}${COLOR_RESET}"
+      curl -o calico.yaml "$calico_manifests_mirror"
+    else
+      echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用版本：${COLOR_RESET}${COLOR_GREEN}${calico_version}${COLOR_RESET}"
+      curl -o calico.yaml https://docs.tigera.io/archive/v"$calico_version"/manifests/calico.yaml
+    fi
 
     # 网卡
     _interface_name
@@ -739,16 +744,15 @@ function _calico_init() {
   fi
 }
 
-
 # Metrics Server 插件
 _metrics_server_install() {
   if [ "$metrics_server_install" == true ]; then
     echo -e "${COLOR_BLUE}Metrics Server 插件 安装开始${COLOR_RESET}"
 
     # 自定义镜像：优先级高于 metrics_server_version、metrics_server_availability
-    if [ "$metrics_server_components_mirror" ]; then
-      echo -e "${COLOR_BLUE}Metrics Server 插件 使用自定义配置文件：${COLOR_RESET}${COLOR_GREEN}${metrics_server_components_mirror}${COLOR_RESET}"
-      curl -o components.yaml "$metrics_server_components_mirror"
+    if [ "$metrics_server_manifests_mirror" ]; then
+      echo -e "${COLOR_BLUE}Metrics Server 插件 使用自定义配置文件：${COLOR_RESET}${COLOR_GREEN}${metrics_server_manifests_mirror}${COLOR_RESET}"
+      curl -o components.yaml "$metrics_server_manifests_mirror"
     else
 
       # 自定义高可用
@@ -781,7 +785,6 @@ _metrics_server_install() {
     echo -e "${COLOR_BLUE}Metrics Server 插件 安装完成${COLOR_RESET}"
   fi
 }
-
 
 # 高可用 VIP haproxy 安装
 _availability_haproxy_install() {
@@ -988,8 +991,14 @@ while [[ $# -gt 0 ]]; do
 
   calico-version=* | -calico-version=* | --calico-version=*)
     calico_version="${1#*=}"
+    ;;
 
-    echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 指定版本号：${COLOR_RESET}${COLOR_GREEN}${calico_version}${COLOR_RESET}"
+  calico-init-skip | -calico-init-skip | --calico-init-skip)
+    calico_init_skip=true
+    ;;
+
+  calico-manifests-mirror | -calico-manifests-mirror | --calico-manifests-mirror)
+    calico_manifests_mirror=true
     ;;
 
   ntp-install-skip | -ntp-install-skip | --ntp-install-skip)
@@ -1048,10 +1057,6 @@ while [[ $# -gt 0 ]]; do
     kubernetes_taint=true
     ;;
 
-  calico-init-skip | -calico-init-skip | --calico-init-skip)
-    calico_init_skip=true
-    ;;
-
   metrics-server-install | -metrics-server-install | --metrics-server-install)
     metrics_server_install=true
     ;;
@@ -1065,8 +1070,8 @@ while [[ $# -gt 0 ]]; do
     metrics_server_availability=true
     ;;
 
-  metrics-server-components-mirror | -metrics-server-components-mirror | --metrics-server-components-mirror)
-    metrics_server_components_mirror=true
+  metrics-server-manifests-mirror | -metrics-server-manifests-mirror | --metrics-server-manifests-mirror)
+    metrics_server_manifests_mirror=true
     ;;
 
   interface-name=* | -interface-name=* | --interface-name=*)

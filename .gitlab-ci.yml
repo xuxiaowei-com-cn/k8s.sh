@@ -32,6 +32,8 @@ centos-7.9:env:
           sleep 1;
         fi
       done
+    - echo '等待一段时间，待服务器完全启动'
+    - sleep 30
   tags:
     - plugin-kubernetes
 
@@ -46,7 +48,7 @@ centos-7.9:
     - cat /etc/os-release
     - uname -a
     - chmod +x k8s.sh
-    - echo "root" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && echo $KUBECONFIG && kubectl get pod --all-namespaces -o wide && kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s && kubectl get pod --all-namespaces -o wide"
+    - echo "root" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/projectcalico/calico/v3.25/manifests/calico.yaml calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && echo $KUBECONFIG && kubectl get pod --all-namespaces -o wide && kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s && kubectl get pod --all-namespaces -o wide"
   tags:
     - ssh-centos-7.9
 
