@@ -13,7 +13,7 @@ count=0
 max_attempts=100
 
 while [ $count -lt $max_attempts ]; do
-  echo "${COLOR_BLUE}检查 pod 状态...${COLOR_RESET}"
+  echo -e "${COLOR_BLUE}检查 pod 状态...${COLOR_RESET}"
   kubectl get pod --all-namespaces
   all_running=true
 
@@ -29,7 +29,7 @@ while [ $count -lt $max_attempts ]; do
   done <<<"$pod_status"
 
   if $all_running; then
-    echo "${COLOR_GREEN}所有 pods 全部运行${COLOR_RESET}"
+    echo -e "${COLOR_GREEN}所有 pods 全部运行${COLOR_RESET}"
     break
   fi
 
