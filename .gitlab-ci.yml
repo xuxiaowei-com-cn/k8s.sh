@@ -36,6 +36,8 @@ centos-7.8:env:
     - sleep 30
   tags:
     - plugin-kubernetes
+  only:
+    - test/machine/centos-7.8/latest
 
 centos-7.8:
   stage: install
@@ -91,6 +93,8 @@ centos-7.9:env:
     - sleep 30
   tags:
     - plugin-kubernetes
+  only:
+    - test/machine/centos-7.9/latest
 
 centos-7.9:
   stage: install
