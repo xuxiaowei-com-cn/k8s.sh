@@ -6,7 +6,7 @@ stages:
 
 centos-7.9:env:
   stage: env
-  image: xuxiaoweicomcn/ubuntu:23.10
+  image: xuxiaoweicomcn/debian:curl-jq
   script:
     # 获取凭证
     - response=$(curl -k --request POST --url "$PVE_ADDRESS/api2/json/access/ticket?username=$PVE_USERNAME&password=$PVE_PASSWORD")
