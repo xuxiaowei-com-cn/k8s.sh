@@ -100,7 +100,7 @@ centos-7.5:reboot:
     - echo '等待一段时间，待服务器完全启动'
     - sleep 30
   tags:
-    - ssh-centos-7.5
+    - plugin-kubernetes
   only:
     - test/machine/centos-7.5/latest
 
