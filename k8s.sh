@@ -213,9 +213,9 @@ _ntp_install() {
         echo -e "${COLOR_BLUE}NTP 完成创建配置文件 ${ntp_conf}${COLOR_RESET}"
         echo -e "${COLOR_BLUE}NTP 查看配置文件 ${ntp_conf} 内容${COLOR_RESET}" && cat $ntp_conf
 
-        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status chronyd -n 0 || echo -e "${COLOR_YELLOW}NTP 未正常运行${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status chronyd --no-pager || echo -e "${COLOR_YELLOW}NTP 未正常运行${COLOR_RESET}"
         echo -e "${COLOR_BLUE}NTP 重启${COLOR_RESET}" && sudo systemctl restart chronyd
-        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status chronyd -n 0
+        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status chronyd --no-pager
         echo -e "${COLOR_BLUE}NTP 设置开机启动${COLOR_RESET}" && sudo systemctl enable chronyd
       fi
     elif [[ $ID == ubuntu ]]; then
@@ -402,7 +402,7 @@ _containerd_install() {
     echo -e "${COLOR_BLUE}containerd 配置文件${COLOR_RESET}" && cat $containerd_conf
 
     echo -e "${COLOR_BLUE}containerd 重启${COLOR_RESET}" && sudo systemctl restart containerd.service
-    echo -e "${COLOR_BLUE}containerd 状态${COLOR_RESET}" && sudo systemctl status containerd.service -n 0
+    echo -e "${COLOR_BLUE}containerd 状态${COLOR_RESET}" && sudo systemctl status containerd.service --no-pager
     echo -e "${COLOR_BLUE}containerd 设置开机自启${COLOR_RESET}" && sudo systemctl enable containerd.service
 
     echo -e "${COLOR_BLUE}containerd 安装结束${COLOR_RESET}"
@@ -438,7 +438,7 @@ EOF
 
     echo -e "${COLOR_BLUE}docker-ce 配置文件${COLOR_RESET}" && cat /etc/docker/daemon.json
     echo -e "${COLOR_BLUE}docker-ce 重启${COLOR_RESET}" && sudo systemctl restart docker.service
-    echo -e "${COLOR_BLUE}docker-ce 状态${COLOR_RESET}" && sudo systemctl status docker.service -n 0
+    echo -e "${COLOR_BLUE}docker-ce 状态${COLOR_RESET}" && sudo systemctl status docker.service --no-pager
     echo -e "${COLOR_BLUE}docker-ce 设置开机自启${COLOR_RESET}" && sudo systemctl enable docker.service
 
     echo -e "${COLOR_BLUE}docker-ce 安装结束${COLOR_RESET}"
