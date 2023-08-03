@@ -498,6 +498,8 @@
 
 - main
     1. 主分支，安装脚本以此分支为准
+- SNAPSHOT/\*.\*.\*
+    1. 快照分支
 - images-mirrors/\*.\*.\*-0
     1. docker 镜像加速计划，镜像地址：https://jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/container_registry
     2. docker 镜像离线安装计划：可在 [流水线](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines) 产物中，下载所需
@@ -511,7 +513,12 @@
     2. 有效期默认 30 天，可重试 [流水线](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines) 重新生成
     3. 可自行 fork 本项目，修改配置，生成自己所需安装 k8s、docker 等相关软件的 yum 离线安装包
     4. 可创建议题、PR，生成所需 yum 离线安装包
-- xuxiaowei*
+- xuxiaowei/*
     1. 个人分支
-- test*
-    1. 测试分支
+- test/machine/centos-\*/\*
+    1. 在实体机器测试的分支
+    2. centos：代表测试 CentOS 系统
+    3. 第一个 *：代表 CentOS 版本
+    4. 第二个 *：代表 k8s 的版本，latest 代表最新版
+- test/\*.\*.\*
+    1. 测试固定版本分支
