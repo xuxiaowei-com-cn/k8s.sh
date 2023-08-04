@@ -251,6 +251,21 @@ _ntp_install() {
   fi
 }
 
+# ca-certificates 安装
+_ca_certificates_install() {
+  if [[ $ca_certificates_install_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}ca-certificates 安装 已被跳过${COLOR_RESET}"
+  else
+    if [[ $ID == centos ]]; then
+      if [[ $VERSION == 7* ]]; then
+        echo -e "${COLOR_BLUE}${ID} ${VERSION} ca-certificates 安装开始${COLOR_RESET}"
+        sudo yum -y install ca-certificates
+        echo -e "${COLOR_BLUE}${ID} ${VERSION} ca-certificates 安装结束${COLOR_RESET}"
+      fi
+    fi
+  fi
+}
+
 # bash-completion 安装
 _bash_completion_install() {
   if [[ $bash_completion_install_skip == true ]]; then
@@ -1005,6 +1020,10 @@ while [[ $# -gt 0 ]]; do
     ntp_install_skip=true
     ;;
 
+  ca-certificates-install-skip | -ca-certificates-install-skip | --ca-certificates-install-skip)
+    ca_certificates_install_skip=true
+    ;;
+
   bash-completion-install-skip | -bash-completion-install-skip | --bash-completion-install-skip)
     bash_completion_install_skip=true
     ;;
@@ -1148,6 +1167,9 @@ done
 
 # NTP（网络时间协议） 安装
 _ntp_install
+
+# ca-certificates 安装
+_ca_certificates_install
 
 # bash-completion 安装
 _bash_completion_install
