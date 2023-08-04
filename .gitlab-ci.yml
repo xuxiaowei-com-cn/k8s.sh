@@ -62,24 +62,25 @@ centos-7.3:kernel-update:
     - cat /etc/os-release
     # 升级完成再次查看内核（需要重启才能生效）
     - uname -a
-    - reboot
+    # 1分钟后关机
+    - shutdown -h +1
   tags:
     - ssh-centos-7.3
   only:
     - test/machine/centos-7.3/latest
 
-centos-7.3:reboot:
+centos-7.3:power-up:
   stage: reboot
   image: xuxiaoweicomcn/debian:curl-jq
   needs:
     - centos-7.3:kernel-update
   script:
+    - sleep 120s
     # 获取凭证
     - response=$(curl -k --request POST --url "$PVE_ADDRESS/api2/json/access/ticket?username=$PVE_USERNAME&password=$PVE_PASSWORD")
     # 解析凭证
     - token=$(echo $response | jq -r '.data.CSRFPreventionToken')
     - ticket=$(echo $response | jq -r '.data.ticket')
-    - sleep 30
     # 开机
     - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/status/start" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
     - |
@@ -105,7 +106,7 @@ centos-7.3:reboot:
 centos-7.3:
   stage: install
   needs:
-    - centos-7.3:reboot
+    - centos-7.3:power-up
   variables:
     KUBECONFIG: /etc/kubernetes/admin.conf
   script:
