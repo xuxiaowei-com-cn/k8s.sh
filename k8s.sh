@@ -1009,7 +1009,7 @@ while [[ $# -gt 0 ]]; do
     bash_completion_install_skip=true
     ;;
 
-  selinux-permissive-skip | -bash-completion-install-skip | --bash-completion-install-skip)
+  selinux-permissive-skip | -selinux-permissive-skip | --selinux-permissive-skip)
     selinux_permissive_skip=true
     ;;
 
