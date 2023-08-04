@@ -1,3 +1,17 @@
+#!/bin/bash
+#
+# 作者：徐晓伟 xuxiaowei@xuxiaowei.com.cn
+# 使用：chmod +x check.sh && sudo ./check.sh
+# 仓库：https://jihulab.com/xuxiaowei-com-cn/k8s.sh
+# 版本：SNAPSHOT/0.2.0
+# 如果发现脚本不能正常运行，可尝试执行：sed -i 's/\r$//' check.sh
+# 代码格式使用：https://github.com/mvdan/sh
+# 代码格式化命令：shfmt -l -w -i 2 .\check.sh
+#
+
+# 一旦有命令返回非零值，立即退出脚本
+set -e
+
 # 颜色定义
 readonly COLOR_BLUE='\033[34m'
 readonly COLOR_GREEN='\033[92m'
