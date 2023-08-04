@@ -7,6 +7,8 @@ stages:
   - power-up
   # 安装 k8s
   - install
+  # 测试 k8s
+  - test
   # 代码同步
   - sync
 
@@ -155,6 +157,26 @@ centos-7.3:
     - chmod +x k8s.sh
     - chmod +x check.sh
     - echo "$CENTOS_7_3_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/mirrors/projectcalico/calico/v3.25/manifests/calico.yaml calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+  tags:
+    - ssh-centos-7.3
+  only:
+    - test/machine/centos-7.3/latest
+
+centos-7.3:test:
+  stage: test
+  needs:
+    - centos-7.3
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
   tags:
     - ssh-centos-7.3
   only:

@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: test-ns
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-httpd-deployment
+  # 此处可使用 namespace 指定命名空间，一旦这里指定了命名空间，下面的 Service 与此命名空间相同
+  # 不指定时默认 default
+  namespace: test-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-httpd
+  template:
+    metadata:
+      labels:
+        app: test-httpd
+    spec:
+      containers:
+        - name: test-httpd
+          image: registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/httpd:2.4.57
+          ports:
+            - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-httpd-service
+  namespace: test-ns
+spec:
+  selector:
+    app: test-httpd
+  ports:
+    - nodePort: 30080
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  type: NodePort
