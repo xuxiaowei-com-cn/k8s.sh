@@ -31,7 +31,7 @@ centos-7.3:env:
         lock=$(echo "$response" | jq -r '.data.lock')
         if [ "$lock" = "rollback" ]; then
           echo "正在还原中";
-          sleep 32;
+          sleep 3;
         else
           echo "还原完成";
           break
