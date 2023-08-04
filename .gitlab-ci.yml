@@ -25,6 +25,20 @@ centos-7.3:env:
     - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/snapshot/$CENTOS_7_3_SNAPSHOT/rollback" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
     - |
       while true; do
+        # 查看状态
+        response=$(curl -k --request GET --url "$PVE_ADDRESS/api2/json/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/status/current" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token")
+        echo $response
+        lock=$(echo "$response" | jq -r '.data.lock')
+        if [ "$lock" = "rollback" ]; then
+          echo "正在还原中";
+          sleep 32;
+        else
+          echo "还原完成";
+          break
+        fi
+      done
+    - |
+      while true; do
         if nc -z -w 1 $CENTOS_7_3_IP 22; then
           echo "$CENTOS_7_3_IP 正在运行"
         else
