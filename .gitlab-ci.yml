@@ -332,6 +332,26 @@ centos-7.4:
   only:
     - test/machine/centos-7.4/latest
 
+centos-7.4:test:
+  stage: test
+  needs:
+    - centos-7.4
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
+  tags:
+    - ssh-centos-7.4
+  only:
+    - test/machine/centos-7.4/latest
+
 centos-7.5:env:
   stage: env
   image: xuxiaoweicomcn/debian:curl-jq-netcat-openbsd
@@ -482,6 +502,26 @@ centos-7.5:
   only:
     - test/machine/centos-7.5/latest
 
+centos-7.5:test:
+  stage: test
+  needs:
+    - centos-7.5
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
+  tags:
+    - ssh-centos-7.5
+  only:
+    - test/machine/centos-7.5/latest
+
 centos-7.6:env:
   stage: env
   image: xuxiaoweicomcn/debian:curl-jq
@@ -534,6 +574,26 @@ centos-7.6:
     - chmod +x k8s.sh
     - chmod +x check.sh
     - echo "$CENTOS_7_6_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/mirrors/projectcalico/calico/v3.25/manifests/calico.yaml calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+  tags:
+    - ssh-centos-7.6
+  only:
+    - test/machine/centos-7.6/latest
+
+centos-7.6:test:
+  stage: test
+  needs:
+    - centos-7.6
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
   tags:
     - ssh-centos-7.6
   only:
@@ -596,6 +656,26 @@ centos-7.7:
   only:
     - test/machine/centos-7.7/latest
 
+centos-7.7:test:
+  stage: test
+  needs:
+    - centos-7.7
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
+  tags:
+    - ssh-centos-7.7
+  only:
+    - test/machine/centos-7.7/latest
+
 centos-7.8:env:
   stage: env
   image: xuxiaoweicomcn/debian:curl-jq
@@ -648,6 +728,26 @@ centos-7.8:
     - chmod +x k8s.sh
     - chmod +x check.sh
     - echo "$CENTOS_7_8_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/mirrors/projectcalico/calico/v3.25/manifests/calico.yaml calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+  tags:
+    - ssh-centos-7.8
+  only:
+    - test/machine/centos-7.8/latest
+
+centos-7.8:test:
+  stage: test
+  needs:
+    - centos-7.8
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
   tags:
     - ssh-centos-7.8
   only:
@@ -710,6 +810,26 @@ centos-7.9:
   only:
     - test/machine/centos-7.9/latest
 
+centos-7.9:test:
+  stage: test
+  needs:
+    - centos-7.9
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
+  tags:
+    - ssh-centos-7.9
+  only:
+    - test/machine/centos-7.9/latest
+
 centos-8.0:env:
   stage: env
   image: xuxiaoweicomcn/debian:curl-jq
@@ -762,6 +882,26 @@ centos-8.0:
     - chmod +x k8s.sh
     - chmod +x check.sh
     - echo "$CENTOS_8_0_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/mirrors/projectcalico/calico/v3.25/manifests/calico.yaml calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+  tags:
+    - ssh-centos-8.0
+  only:
+    - test/machine/centos-8.0/latest
+
+centos-8.0:test:
+  stage: test
+  needs:
+    - centos-8.0
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
   tags:
     - ssh-centos-8.0
   only:
@@ -824,6 +964,26 @@ centos-8.1:
   only:
     - test/machine/centos-8.1/latest
 
+centos-8.1:test:
+  stage: test
+  needs:
+    - centos-8.1
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
+  tags:
+    - ssh-centos-8.1
+  only:
+    - test/machine/centos-8.1/latest
+
 centos-8.2:env:
   stage: env
   image: xuxiaoweicomcn/debian:curl-jq
@@ -876,6 +1036,26 @@ centos-8.2:
     - chmod +x k8s.sh
     - chmod +x check.sh
     - echo "$CENTOS_8_2_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/mirrors/projectcalico/calico/v3.25/manifests/calico.yaml calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+  tags:
+    - ssh-centos-8.2
+  only:
+    - test/machine/centos-8.2/latest
+
+centos-8.2:test:
+  stage: test
+  needs:
+    - centos-8.2
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
   tags:
     - ssh-centos-8.2
   only:
@@ -938,6 +1118,26 @@ centos-8.3:
   only:
     - test/machine/centos-8.3/latest
 
+centos-8.3:test:
+  stage: test
+  needs:
+    - centos-8.3
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
+  tags:
+    - ssh-centos-8.3
+  only:
+    - test/machine/centos-8.3/latest
+
 centos-8.4:env:
   stage: env
   image: xuxiaoweicomcn/debian:curl-jq
@@ -995,6 +1195,26 @@ centos-8.4:
   only:
     - test/machine/centos-8.4/latest
 
+centos-8.4:test:
+  stage: test
+  needs:
+    - centos-8.4
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
+  tags:
+    - ssh-centos-8.4
+  only:
+    - test/machine/centos-8.4/latest
+
 centos-8.5:env:
   stage: env
   image: xuxiaoweicomcn/debian:curl-jq
@@ -1047,6 +1267,26 @@ centos-8.5:
     - chmod +x k8s.sh
     - chmod +x check.sh
     - echo "$CENTOS_8_5_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/mirrors/projectcalico/calico/v3.25/manifests/calico.yaml calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+  tags:
+    - ssh-centos-8.5
+  only:
+    - test/machine/centos-8.5/latest
+
+centos-8.5:test:
+  stage: test
+  needs:
+    - centos-8.5
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
   tags:
     - ssh-centos-8.5
   only:
