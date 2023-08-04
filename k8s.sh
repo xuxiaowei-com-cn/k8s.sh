@@ -308,11 +308,31 @@ _selinux_permissive() {
 # 停止 防火墙
 _firewalld_stop() {
   if [[ $firewalld_stop_skip == true ]]; then
-    echo -e "${COLOR_YELLOW}停止 防火墙 firewall 已被跳过${COLOR_RESET}"
+    echo -e "${COLOR_YELLOW}停止 防火墙 已被跳过${COLOR_RESET}"
   else
-    if [[ $ID == anolis || $ID == centos ]]; then
-      echo -e "${COLOR_BLUE}firewalld 关闭${COLOR_RESET}" && sudo systemctl stop firewalld.service
-      echo -e "${COLOR_BLUE}firewalld 关闭开机自启${COLOR_RESET}" && sudo systemctl disable firewalld.service
+    if [[ $ID == centos && $(cat /etc/redhat-release) == *"CentOS Linux release 7.2"* ]]; then
+      active_status=$(systemctl is-active iptables || true)
+
+      if [[ $active_status == "inactive" || $active_status == "unknown" ]]; then
+        echo -e "${COLOR_BLUE}防火墙 已关闭，无需操作${COLOR_RESET}"
+      else
+        echo -e "${COLOR_BLUE}防火墙 未关闭，正在进行关闭${COLOR_RESET}" && sudo systemctl stop iptables.service && echo -e "${COLOR_BLUE}防火墙 已关闭${COLOR_RESET}"
+      fi
+    elif [[ $ID == anolis || $ID == centos ]]; then
+      active_status=$(systemctl is-active firewalld || true)
+      enabled_status=$(systemctl is-enabled firewalld || true)
+
+      if [[ $active_status == "inactive" || $active_status == "unknown" ]]; then
+        echo -e "${COLOR_BLUE}防火墙 已关闭，无需操作${COLOR_RESET}"
+      else
+        echo -e "${COLOR_BLUE}防火墙 未关闭，正在进行关闭${COLOR_RESET}" && sudo systemctl stop firewalld.service && echo -e "${COLOR_BLUE}防火墙 已关闭${COLOR_RESET}"
+      fi
+
+      if [[ $enabled_status == "enabled" || $enabled_status == "unknown" ]]; then
+        echo -e "${COLOR_BLUE}防火墙开机自启 已关闭，无需操作${COLOR_RESET}"
+      else
+        echo -e "${COLOR_BLUE}防火墙开机自启 未关闭，正在进行关闭${COLOR_RESET}" && sudo systemctl disable firewalld.service && echo -e "${COLOR_BLUE}防火墙开机自启 已关闭${COLOR_RESET}"
+      fi
     fi
   fi
 }
