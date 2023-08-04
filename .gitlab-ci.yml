@@ -23,8 +23,6 @@ centos-7.3:env:
     - ticket=$(echo $response | jq -r '.data.ticket')
     # 还原服务器快照
     - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/snapshot/$CENTOS_7_3_SNAPSHOT/rollback" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
-    # 休眠一段时间后检查还原结果
-    - sleep 10
     - |
       while true; do
         # 查看状态
@@ -87,6 +85,7 @@ centos-7.3:kernel-update:
     # 升级完成再次查看内核（需要重启才能生效）
     - uname -a
     # 1分钟后重启
+    # 升级内核可以在重启后自动生效
     - shutdown -r +1
   tags:
     - ssh-centos-7.3
@@ -99,18 +98,29 @@ centos-7.3:power-up:
   needs:
     - centos-7.3:kernel-update
   script:
-    - sleep 120s
     # 获取凭证
     - response=$(curl -k --request POST --url "$PVE_ADDRESS/api2/json/access/ticket?username=$PVE_USERNAME&password=$PVE_PASSWORD")
     # 解析凭证
     - token=$(echo $response | jq -r '.data.CSRFPreventionToken')
     - ticket=$(echo $response | jq -r '.data.ticket')
+    - |
+      while true; do
+        if nc -z -w 1 $CENTOS_7_3_IP 22; then
+          echo "$CENTOS_7_3_IP 正在运行，等待关机"
+        else
+          echo "$CENTOS_7_3_IP 已关机"
+          break
+        fi
+        sleep 3
+      done
+    # 休眠一段时间，然后开机
+    - sleep 10
     # 开机
     - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/status/start" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
     - |
       while true; do
         if nc -z -w 1 $CENTOS_7_3_IP 22; then
-          echo "$CENTOS_7_3_IP is up!"
+          echo "$CENTOS_7_3_IP 正在运行"
           break
         fi
         sleep 3
