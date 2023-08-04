@@ -19,8 +19,12 @@ readonly COLOR_RESET='\033[0m'
 
 echo "$KUBECONFIG"
 
+kubectl get nodes
 kubectl get pod --all-namespaces -o wide
+
 kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+
+kubectl get nodes
 kubectl get pod --all-namespaces -o wide
 
 count=0
@@ -28,7 +32,10 @@ max_attempts=1000
 
 while [ $count -lt $max_attempts ]; do
   echo -e "${COLOR_BLUE}检查 pod 状态...${COLOR_RESET}"
+
+  kubectl get nodes
   kubectl get pod --all-namespaces
+
   all_running=true
 
   # 获取所有 pod 的状态
@@ -44,6 +51,10 @@ while [ $count -lt $max_attempts ]; do
 
   if $all_running; then
     echo -e "${COLOR_GREEN}所有 pods 全部运行${COLOR_RESET}"
+
+    kubectl get nodes
+    kubectl get pod --all-namespaces
+
     break
   fi
 
