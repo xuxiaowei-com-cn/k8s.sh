@@ -24,7 +24,7 @@ kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
 kubectl get pod --all-namespaces -o wide
 
 count=0
-max_attempts=100
+max_attempts=1000
 
 while [ $count -lt $max_attempts ]; do
   echo -e "${COLOR_BLUE}检查 pod 状态...${COLOR_RESET}"
