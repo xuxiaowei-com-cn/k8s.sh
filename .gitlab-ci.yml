@@ -3,6 +3,8 @@ stages:
   - env
   # 内核升级
   - kernel-update
+  # 重启
+  - reboot
   # 安装 k8s
   - install
   # 代码同步
@@ -274,6 +276,17 @@ centos-7.5:kernel-update:
     - cat /etc/os-release
     # 升级完成再次查看内核（需要重启才能生效）
     - uname -a
+  tags:
+    - ssh-centos-7.5
+  only:
+    - test/machine/centos-7.5/latest
+
+centos-7.5:reboot:
+  stage: reboot
+  image: xuxiaoweicomcn/debian:curl-jq
+  needs:
+    - centos-7.5:kernel-update
+  script:
     # 获取凭证
     - response=$(curl -k --request POST --url "$PVE_ADDRESS/api2/json/access/ticket?username=$PVE_USERNAME&password=$PVE_PASSWORD")
     # 解析凭证
@@ -301,14 +314,14 @@ centos-7.5:kernel-update:
     - echo '等待一段时间，待服务器完全启动'
     - sleep 30
   tags:
-    - ssh-centos-7.5
+    - plugin-kubernetes
   only:
     - test/machine/centos-7.5/latest
 
 centos-7.5:
   stage: install
   needs:
-    - centos-7.5:kernel-update
+    - centos-7.5:reboot
   variables:
     KUBECONFIG: /etc/kubernetes/admin.conf
   script:
