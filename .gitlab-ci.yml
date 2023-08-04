@@ -46,7 +46,7 @@ centos-7.3:env:
         sleep 3
       done
     # 休眠一段时间，等待服务器完全还原/关机
-    - sleep 20
+    - sleep 30
     # 开机
     - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/status/start" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
     - |
@@ -196,7 +196,7 @@ centos-7.4:env:
         sleep 3
       done
     # 休眠一段时间，等待服务器完全还原/关机
-    - sleep 20
+    - sleep 30
     # 开机
     - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$CENTOS_7_4_QEMU_ID/status/start" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
     - |
@@ -346,7 +346,7 @@ centos-7.5:env:
         sleep 3
       done
     # 休眠一段时间，等待服务器完全还原/关机
-    - sleep 20
+    - sleep 30
     # 开机
     - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$CENTOS_7_5_QEMU_ID/status/start" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
     - |
