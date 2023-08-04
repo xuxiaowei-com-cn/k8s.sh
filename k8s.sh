@@ -23,7 +23,7 @@ readonly COLOR_YELLOW='\033[93m'
 readonly systemd_target_version=systemd-219-42.el7.x86_64
 
 # kernel 最低目标版本
-readonly kernel_target_version=kernel-3.10.0-957.el7.x86_64
+readonly kernel_target_version=3.10.0-957.el7.x86_64
 
 # 定义支持的 kubernetes 版本范围的下限和上限
 readonly lower_major=1
@@ -616,7 +616,7 @@ _kernel_required() {
     echo -e "${COLOR_YELLOW}kernel 需求检查 已被跳过${COLOR_RESET}"
   else
     if [[ $ID == centos ]]; then
-      local kernel_version=$(rpm -q kernel)
+      local kernel_version=$(uname -r)
       echo -e "${COLOR_BLUE}kernel 版本 ${COLOR_RESET}${COLOR_GREEN}${kernel_version}${COLOR_RESET}"
 
       if [[ "$kernel_version" < "$kernel_target_version" ]]; then
