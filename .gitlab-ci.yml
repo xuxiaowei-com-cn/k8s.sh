@@ -170,6 +170,7 @@ centos-7.3:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -340,6 +341,7 @@ centos-7.4:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -510,6 +512,7 @@ centos-7.5:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -587,6 +590,7 @@ centos-7.6:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -664,6 +668,7 @@ centos-7.7:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -741,6 +746,7 @@ centos-7.8:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -818,6 +824,7 @@ centos-7.9:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -895,6 +902,7 @@ centos-8.0:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -972,6 +980,7 @@ centos-8.1:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -1049,6 +1058,7 @@ centos-8.2:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -1126,6 +1136,7 @@ centos-8.3:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -1203,6 +1214,7 @@ centos-8.4:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
@@ -1280,6 +1292,7 @@ centos-8.5:test:
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
     - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
     - kubectl apply -f test-httpd-deployment.yaml
     - kubectl get nodes
     - kubectl get pod --all-namespaces -o wide
