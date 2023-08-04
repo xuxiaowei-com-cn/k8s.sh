@@ -19,6 +19,9 @@ readonly COLOR_RED='\033[31m'
 readonly COLOR_RESET='\033[0m'
 readonly COLOR_YELLOW='\033[93m'
 
+# systemd 最低目标版本
+readonly systemd_target_version=systemd-219-42.el7.x86_64
+
 # 定义支持的 kubernetes 版本范围的下限和上限
 readonly lower_major=1
 readonly lower_minor=24
@@ -568,6 +571,28 @@ _hostname() {
   fi
 }
 
+# systemd 安装
+_systemd_install() {
+  if [[ $ID == centos ]]; then
+    local systemd_version=$(rpm -q systemd)
+    echo -e "${COLOR_BLUE}systemd 版本 ${COLOR_RESET}${COLOR_GREEN}${systemd_version}${COLOR_RESET}"
+
+    local major=$(echo "$systemd_version" | awk -F "-" '{print $2}')
+    local minor=$(echo "$systemd_version" | awk -F "-" '{print $3}' | awk -F "." '{print $1}')
+
+    local major_target=$(echo "$systemd_target_version" | awk -F "-" '{print $2}')
+    local minor_target=$(echo "$systemd_target_version" | awk -F "-" '{print $3}' | awk -F "." '{print $1}')
+
+    if [[ "$major" -lt "$major_target" ]] || [[ "$major" -eq "$major_target" && "$minor" -lt "$minor_target" ]]; then
+      echo -e "${COLOR_BLUE}systemd 版本过低，升级 systemd 开始${COLOR_RESET}"
+      sudo yum -y install systemd
+      echo -e "${COLOR_BLUE}systemd 版本过低，升级 systemd 结束${COLOR_RESET}"
+    else
+      echo -e "${COLOR_BLUE}systemd 版本 符合要求，继续安装${COLOR_RESET}"
+    fi
+  fi
+}
+
 # kubernetes 安装
 _kubernetes_install() {
   if [[ $kubernetes_install_skip == true ]]; then
@@ -577,6 +602,9 @@ _kubernetes_install() {
 
     # 主机名判断
     _hostname
+
+    # systemd 安装
+    _systemd_install
 
     if [[ $ID == anolis || $ID == centos ]]; then
       if [ "$kubernetes_version" ]; then
