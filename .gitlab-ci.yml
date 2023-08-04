@@ -25,20 +25,14 @@ centos-7.3:env:
     - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/snapshot/$CENTOS_7_3_SNAPSHOT/rollback" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
     - |
       while true; do
-        # 查看状态
-        response=$(curl -k --request GET --url "$PVE_ADDRESS/api2/json/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/status/current" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token")
-        lock=$(echo "$response" | jq -r '.data.lock')
-        echo $lock
-        if [ "$lock" = "rollback" ]; then
-          echo "正在还原中";
-          sleep 5;
+        if nc -z -w 1 $CENTOS_7_3_IP 22; then
+          echo "$CENTOS_7_3_IP 正在运行"
         else
-          echo "还原完成";
+          echo "$CENTOS_7_3_IP 已关机"
           break
         fi
+        sleep 3
       done
-    # 休眠一段时间，然后开机
-    - sleep 10
     # 开机
     - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/status/start" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
     - |
@@ -47,17 +41,17 @@ centos-7.3:env:
         response=$(curl -k --request GET --url "$PVE_ADDRESS/api2/json/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/status/current" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token")
         status=$(echo "$response" | jq -r '.data.status')
         if [ "$status" = "running" ]; then
-          echo "服务器已运行";
+          echo "$CENTOS_7_3_IP 已运行";
           break
         else
-          echo '等待服务器运行';
-          sleep 5;
+          echo '$CENTOS_7_3_IP 等待运行';
+          sleep 3;
         fi
       done
     - |
       while true; do
         if nc -z -w 1 $CENTOS_7_3_IP 22; then
-          echo "$CENTOS_7_3_IP is up!"
+          echo "$CENTOS_7_3_IP 正在运行"
           break
         fi
         sleep 3
@@ -113,8 +107,6 @@ centos-7.3:power-up:
         fi
         sleep 3
       done
-    # 休眠一段时间，然后开机
-    - sleep 10
     # 开机
     - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/status/start" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
     - |
