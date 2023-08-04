@@ -62,6 +62,7 @@ centos-7.3:kernel-update:
     - cat /etc/os-release
     # 升级完成再次查看内核（需要重启才能生效）
     - uname -a
+    - reboot
   tags:
     - ssh-centos-7.3
   only:
@@ -78,9 +79,6 @@ centos-7.3:reboot:
     # 解析凭证
     - token=$(echo $response | jq -r '.data.CSRFPreventionToken')
     - ticket=$(echo $response | jq -r '.data.ticket')
-    # 关机
-    - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/131/status/shutdown" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
-    # 休眠一段时间，等待服务器完全关机
     - sleep 30
     # 开机
     - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$CENTOS_7_3_QEMU_ID/status/start" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
