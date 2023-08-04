@@ -22,6 +22,9 @@ readonly COLOR_YELLOW='\033[93m'
 # systemd 最低目标版本
 readonly systemd_target_version=systemd-219-42.el7.x86_64
 
+# kernel 最低目标版本
+readonly kernel_target_version=kernel-3.10.0-957.el7.x86_64
+
 # 定义支持的 kubernetes 版本范围的下限和上限
 readonly lower_major=1
 readonly lower_minor=24
@@ -577,18 +580,35 @@ _systemd_install() {
     local systemd_version=$(rpm -q systemd)
     echo -e "${COLOR_BLUE}systemd 版本 ${COLOR_RESET}${COLOR_GREEN}${systemd_version}${COLOR_RESET}"
 
-    local major=$(echo "$systemd_version" | awk -F "-" '{print $2}')
-    local minor=$(echo "$systemd_version" | awk -F "-" '{print $3}' | awk -F "." '{print $1}')
-
-    local major_target=$(echo "$systemd_target_version" | awk -F "-" '{print $2}')
-    local minor_target=$(echo "$systemd_target_version" | awk -F "-" '{print $3}' | awk -F "." '{print $1}')
-
-    if [[ "$major" -lt "$major_target" ]] || [[ "$major" -eq "$major_target" && "$minor" -lt "$minor_target" ]]; then
+    if [[ "$systemd_version" < "$systemd_target_version" ]]; then
       echo -e "${COLOR_BLUE}systemd 版本过低，升级 systemd 开始${COLOR_RESET}"
       sudo yum -y install systemd
       echo -e "${COLOR_BLUE}systemd 版本过低，升级 systemd 结束${COLOR_RESET}"
     else
       echo -e "${COLOR_BLUE}systemd 版本 符合要求，继续安装${COLOR_RESET}"
+    fi
+  fi
+}
+
+# kernel 需求检查
+_kernel_required() {
+  if [[ $kernel_required_skip == true ]]; then
+    echo -e "${COLOR_YELLOW}kernel 需求检查 已被跳过${COLOR_RESET}"
+  else
+    if [[ $ID == centos ]]; then
+      local kernel_version=$(rpm -q kernel)
+      echo -e "${COLOR_BLUE}kernel 版本 ${COLOR_RESET}${COLOR_GREEN}${kernel_version}${COLOR_RESET}"
+
+      if [[ "$kernel_version" < "$kernel_target_version" ]]; then
+        echo -e "${COLOR_RED}kernel 版本低于 ${kernel_target_version} 不符合要求，停止安装${COLOR_RESET}"
+        echo -e "${COLOR_RED}升级 kernel 属于敏感操作，并且需要重启系统，因此该脚本不支持自动执行升级 kernel${COLOR_RESET}"
+        echo -e "${COLOR_RED}请手动指定以下命令升级 kernel${COLOR_RESET}"
+        echo -e "${COLOR_GREEN}yum -y install kernel${COLOR_RESET}"
+        echo -e "${COLOR_RED}重启系统，使新内核生效，即可重新执行安装${COLOR_RESET}"
+        exit 1
+      else
+        echo -e "${COLOR_BLUE}kernel 版本 符合要求，继续安装${COLOR_RESET}"
+      fi
     fi
   fi
 }
@@ -1032,6 +1052,10 @@ while [[ $# -gt 0 ]]; do
     _check_kubernetes_version_range "$kubernetes_version"
     ;;
 
+  kernel-required-skip | -kernel-required-skip | --kernel-required-skip)
+    kernel_required_skip=true
+    ;;
+
   calico-version=* | -calico-version=* | --calico-version=*)
     calico_version="${1#*=}"
     ;;
@@ -1251,6 +1275,9 @@ if [[ $availability_vip_install == true ]]; then
   echo -e "${COLOR_BLUE}kubernetes 高可用 VIP 安装结束${COLOR_RESET}"
   exit 0
 fi
+
+# kernel 需求检查
+_kernel_required
 
 # kubernetes 仓库
 _kubernetes_repo
