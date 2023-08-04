@@ -107,7 +107,7 @@ centos-7.3:reboot:
 centos-7.3:
   stage: install
   needs:
-    - centos-7.3:kernel-update
+    - centos-7.3:reboot
   variables:
     KUBECONFIG: /etc/kubernetes/admin.conf
   script:
