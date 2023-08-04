@@ -81,6 +81,48 @@ _check_kubernetes_version_range() {
   fi
 }
 
+# 版本号比较
+_compare_version() {
+  local version=$1
+  local target_version=$2
+
+  # 相等
+  if [[ "$version" == "$target_version" ]]; then
+    echo "${version} 与 ${target_version} 相等"
+    return 0
+  fi
+
+  # 将 - 替换成 .
+  local version_replace=${version//-/.}
+  local target_version_replace=${target_version//-/.}
+
+  # 使用 . 作为分隔符
+  IFS="." read -ra version_replace_split <<<"$version_replace"
+  IFS="." read -ra target_version_replace_split <<<"$target_version_replace"
+
+  # 获取长度
+  local version_replace_split_length=${#version_replace_split[@]}
+  local target_version_replace_split_length=${#target_version_replace_split[@]}
+
+  if [[ $version_replace_split_length -lt $target_version_replace_split_length ]]; then
+    local min=$version_replace_split_length
+  else
+    local min=$target_version_replace_split_length
+  fi
+
+  # 逐个比较
+  for ((i = 0; i < min; i++)); do
+    if [[ ${version_replace_split[$i]} -lt ${target_version_replace_split[$i]} ]]; then
+      echo "${version} 小于 ${target_version}"
+      return 1
+      break
+    fi
+  done
+
+  echo "${version} 大于 ${target_version}"
+  return 2
+}
+
 # 检查 网卡名称
 _check_interface_name() {
   local name=$1
@@ -619,7 +661,8 @@ _kernel_required() {
       local kernel_version=$(uname -r)
       echo -e "${COLOR_BLUE}kernel 版本 ${COLOR_RESET}${COLOR_GREEN}${kernel_version}${COLOR_RESET}"
 
-      if [[ "$kernel_version" < "$kernel_target_version" ]]; then
+      result=$(_compare_version "$kernel_version" "$kernel_target_version") || true
+      if [[ $result == 1 ]]; then
         echo -e "${COLOR_RED}kernel 版本低于 ${kernel_target_version} 不符合要求，停止安装${COLOR_RESET}"
         echo -e "${COLOR_RED}升级 kernel 属于敏感操作，并且需要重启系统，因此该脚本不支持自动执行升级 kernel${COLOR_RESET}"
         echo -e "${COLOR_RED}请手动指定以下命令升级 kernel${COLOR_RESET}"
