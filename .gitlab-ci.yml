@@ -169,6 +169,17 @@ centos-7.4:kernel-update:
     - cat /etc/os-release
     # 升级完成再次查看内核（需要重启才能生效）
     - uname -a
+  tags:
+    - ssh-centos-7.4
+  only:
+    - test/machine/centos-7.4/latest
+
+centos-7.4:reboot:
+  stage: reboot
+  image: xuxiaoweicomcn/debian:curl-jq
+  needs:
+    - centos-7.4:kernel-update
+  script:
     # 获取凭证
     - response=$(curl -k --request POST --url "$PVE_ADDRESS/api2/json/access/ticket?username=$PVE_USERNAME&password=$PVE_PASSWORD")
     # 解析凭证
@@ -196,14 +207,14 @@ centos-7.4:kernel-update:
     - echo '等待一段时间，待服务器完全启动'
     - sleep 30
   tags:
-    - ssh-centos-7.4
+    - plugin-kubernetes
   only:
     - test/machine/centos-7.4/latest
 
 centos-7.4:
   stage: install
   needs:
-    - centos-7.4:kernel-update
+    - centos-7.4:reboot
   variables:
     KUBECONFIG: /etc/kubernetes/admin.conf
   script:
