@@ -1934,7 +1934,7 @@ ubuntu-23.04:
     KUBECONFIG: /etc/kubernetes/admin.conf
   script:
     - set -e
-    - cat /etc/anolis-release
+    - cat /etc/debian_version
     - cat /etc/os-release
     - uname -a
     - cat /etc/hosts
