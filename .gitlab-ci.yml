@@ -1738,7 +1738,7 @@ anolisos-8.8:
     KUBECONFIG: /etc/kubernetes/admin.conf
   script:
     - set -e
-    - cat /etc/redhat-release
+    - cat /etc/anolis-release
     - cat /etc/os-release
     - uname -a
     - cat /etc/hosts
