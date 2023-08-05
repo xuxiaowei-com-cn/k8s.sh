@@ -1096,11 +1096,6 @@ elif [[ $ID == centos ]]; then
     exit 1
   fi
 elif [[ $ID == ubuntu ]]; then
-  if ! [[ $VERSION == 20* || $VERSION == 22* ]]; then
-    echo -e "${COLOR_RED}不支持 ${VERSION} 版本的 ${ID}${COLOR_RESET}"
-    exit 1
-  fi
-
   echo -e "${COLOR_BLUE}更新 ${ID} 仓库源${COLOR_RESET}" && sudo apt-get update
 else
   echo -e "${COLOR_RED}不支持 ${ID} 系统${COLOR_RESET}"
