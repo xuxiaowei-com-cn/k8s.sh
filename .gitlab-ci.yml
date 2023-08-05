@@ -2022,7 +2022,7 @@ ubuntu-22.10:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$UBUNTU_22_10_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/mirrors/projectcalico/calico/v3.25/manifests/calico.yaml calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$UBUNTU_22_10_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/mirrors/projectcalico/calico/v3.25/manifests/calico.yaml calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud docker-ce-install-skip && ./check.sh"
   tags:
     - ssh-ubuntu-22.10
   only:
