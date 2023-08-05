@@ -778,7 +778,7 @@ _kubernetes_init() {
     . /etc/os-release
 
     echo -e "${COLOR_BLUE}显示群集信息${COLOR_RESET}" && kubectl cluster-info
-    echo -e "${COLOR_BLUE}显示 node 信息${COLOR_RESET}" && kubectl get nodes
+    echo -e "${COLOR_BLUE}显示 node 信息${COLOR_RESET}" && kubectl get nodes -o wide
     echo -e "${COLOR_BLUE}显示 pod 信息${COLOR_RESET}" && kubectl get pod --all-namespaces -o wide
     echo -e "${COLOR_BLUE}显示 svc 信息${COLOR_RESET}" && kubectl get svc --all-namespaces -o wide
 
@@ -808,7 +808,7 @@ _kubernetes_taint() {
     kubectl get no -o yaml | grep taint -A 10 || echo -e "${COLOR_YELLOW}kubernetes 查看污点 失败${COLOR_RESET}"
 
     echo -e "${COLOR_BLUE}kubernetes 查看节点${COLOR_RESET}"
-    kubectl get nodes
+    kubectl get nodes -o wide
 
     echo -e "${COLOR_BLUE}kubernetes 查看所有 pod${COLOR_RESET}"
     kubectl get pod --all-namespaces -o wide
@@ -859,7 +859,7 @@ function _calico_init() {
     fi
 
     kubectl apply -f calico.yaml
-    kubectl get nodes
+    kubectl get nodes -o wide
     kubectl get pod,svc --all-namespaces -o wide
 
     echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 初始化结束${COLOR_RESET}"
