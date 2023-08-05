@@ -1844,7 +1844,7 @@ anolisos-23:env:
   tags:
     - plugin-kubernetes
   only:
-    - test/machine/anolisos-8.8/latest
+    - test/machine/anolisos-23/latest
 
 anolisos-23:
   stage: install
