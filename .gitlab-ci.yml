@@ -1695,6 +1695,84 @@ anolisos-8.6:test:
   only:
     - test/machine/anolisos-8.6/latest
 
+anolisos-8.8:env:
+  stage: env
+  image: xuxiaoweicomcn/debian:curl-jq
+  script:
+    # 获取凭证
+    - response=$(curl -k --request POST --url "$PVE_ADDRESS/api2/json/access/ticket?username=$PVE_USERNAME&password=$PVE_PASSWORD")
+    # 解析凭证
+    - token=$(echo $response | jq -r '.data.CSRFPreventionToken')
+    - ticket=$(echo $response | jq -r '.data.ticket')
+    # 还原服务器快照
+    - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$ANOLISOS_8_8_QEMU_ID/snapshot/$ANOLISOS_8_8_SNAPSHOT/rollback" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
+    # 休眠一段时间，等待服务器还原快照
+    - sleep 30
+    # 开机
+    - curl -k --request POST --url "$PVE_ADDRESS/api2/extjs/nodes/pve/qemu/$ANOLISOS_8_8_QEMU_ID/status/start" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token"
+    - |
+      while true; do
+        # 查看状态
+        response=$(curl -k --request GET --url "$PVE_ADDRESS/api2/json/nodes/pve/qemu/$ANOLISOS_8_8_QEMU_ID/status/current" --header "Cookie:PVEAuthCookie=$ticket" --header "CSRFPreventionToken:$token")
+        status=$(echo "$response" | jq -r '.data.status')
+        if [ "$status" = "running" ]; then
+          echo "服务器已运行";
+          break
+        else
+          echo '等待服务器运行';
+          sleep 1;
+        fi
+      done
+    - echo '等待一段时间，待服务器完全启动'
+    - sleep 30
+  tags:
+    - plugin-kubernetes
+  only:
+    - test/machine/anolisos-8.8/latest
+
+anolisos-8.8:
+  stage: install
+  needs:
+    - anolisos-8.8:env
+  variables:
+    KUBECONFIG: /etc/kubernetes/admin.conf
+  script:
+    - set -e
+    - cat /etc/redhat-release
+    - cat /etc/os-release
+    - uname -a
+    - cat /etc/hosts
+    - echo "$ANOLISOS_8_8_IP" $(hostname) >> /etc/hosts
+    - cat /etc/hosts
+    - chmod +x k8s.sh
+    - chmod +x check.sh
+    - echo "$ANOLISOS_8_8_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/mirrors/projectcalico/calico/v3.25/manifests/calico.yaml calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+  tags:
+    - ssh-anolisos-8.8
+  only:
+    - test/machine/anolisos-8.8/latest
+
+anolisos-8.8:test:
+  stage: test
+  needs:
+    - anolisos-8.8
+  script:
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - cat test-httpd-deployment.yaml
+    - kubectl apply -f test-httpd-deployment.yaml
+    - kubectl get nodes
+    - kubectl get pod --all-namespaces -o wide
+    - kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
+    - chmod +x check.sh
+    - ./check.sh
+    - curl http://127.0.0.1:30080
+  tags:
+    - ssh-anolisos-8.8
+  only:
+    - test/machine/anolisos-8.8/latest
+
 # 嵌入
 include:
   # 同步代码
