@@ -512,6 +512,7 @@ _docker_ce_install() {
 
     echo -e "${COLOR_BLUE}docker-ce 停止${COLOR_RESET}" && sudo systemctl stop docker.service
     echo -e "${COLOR_BLUE}docker-ce 创建 配置文件的文件夹${COLOR_RESET}" && sudo mkdir -p /etc/docker
+    echo -e "${COLOR_BLUE}docker-ce 修改 配置文件的文件夹 权限${COLOR_RESET}" && sudo chmod o+w /etc/docker
     echo -e "${COLOR_BLUE}docker-ce 创建 配置文件${COLOR_RESET}"
     cat <<EOF >/etc/docker/daemon.json
 {
