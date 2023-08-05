@@ -323,6 +323,7 @@ _bash_completion_install() {
       echo -e "${COLOR_BLUE}bash-completion 安装开始${COLOR_RESET}"
       sudo yum -y install bash-completion
       source /etc/profile
+      . /etc/os-release
       echo -e "${COLOR_BLUE}bash-completion 安装完成${COLOR_RESET}"
     fi
   fi
@@ -765,6 +766,7 @@ _kubernetes_init() {
     sudo chmod a+r /etc/kubernetes/admin.conf
     echo -e "${COLOR_BLUE}刷新环境变量${COLOR_RESET}"
     source /etc/profile
+    . /etc/os-release
 
     # https://kubernetes.io/zh-cn/docs/tasks/tools/install-kubectl-linux/#optional-kubectl-configurations
 
@@ -773,6 +775,7 @@ _kubernetes_init() {
     sudo chmod a+r /etc/bash_completion.d/kubectl
     echo -e "${COLOR_BLUE}源引 ~/.bashrc 文件${COLOR_RESET}"
     source ~/.bashrc
+    . /etc/os-release
 
     echo -e "${COLOR_BLUE}显示群集信息${COLOR_RESET}" && kubectl cluster-info
     echo -e "${COLOR_BLUE}显示 node 信息${COLOR_RESET}" && kubectl get nodes
