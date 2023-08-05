@@ -101,7 +101,26 @@
 
 <p></p>
 
-1. 支持 CentOS 7/8、Anolis 7/8/23 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/12
+1. 支持 CentOS 7/8、Anolis 7/8/23 系统主流版本，[点击查看详情](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/12)
+    1. [CentOS 7.3 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.3%2Flatest)
+    2. [CentOS 7.4 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.4%2Flatest)
+    3. [CentOS 7.5 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.5%2Flatest)
+    4. [CentOS 7.6 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.6%2Flatest)
+    5. [CentOS 7.7 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.7%2Flatest)
+    6. [CentOS 7.8 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.8%2Flatest)
+    7. [CentOS 7.9 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.9%2Flatest)
+    8. [CentOS 8.1 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.1%2Flatest)
+    9. [CentOS 8.2 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.2%2Flatest)
+    10. [CentOS 8.3 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.3%2Flatest)
+    11. [CentOS 8.4 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.4%2Flatest)
+    12. [CentOS 8.5 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.5%2Flatest)
+    13. [Anolis 7.7 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.7%2Flatest)
+    14. [Anolis 7.9 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.9%2Flatest)
+    15. [Anolis 8.2 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.2%2Flatest)
+    16. [Anolis 8.4 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.4%2Flatest)
+    17. [Anolis 8.6 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.6%2Flatest)
+    18. [Anolis 8.8 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.8%2Flatest)
+    19. [Anolis 23 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-23%2Flatest)
 2. 支持 Ubuntu 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/21
 3. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
 4. 一键支持 单机集群
