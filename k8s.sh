@@ -399,6 +399,8 @@ _docker_repo() {
   else
     echo -e "${COLOR_BLUE}docker 仓库 添加开始${COLOR_RESET}"
     if [[ $ID == anolis || $ID == centos ]]; then
+      # https://docs.docker.com/engine/install/centos/
+
       echo -e "${COLOR_BLUE}安装/更新 curl${COLOR_RESET}" && sudo yum install -y curl
       echo -e "${COLOR_BLUE}增加 docker 仓库${COLOR_RESET}"
       sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -409,6 +411,8 @@ _docker_repo() {
 
       echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/yum.repos.d/docker-ce.repo
     elif [[ $ID == ubuntu ]]; then
+      # https://docs.docker.com/engine/install/ubuntu/
+
       echo -e "${COLOR_BLUE}安装 ca-certificates curl gnupg${COLOR_RESET}" && sudo apt-get install -y ca-certificates curl gnupg
 
       echo -e "${COLOR_BLUE}修改仓库 gpg 秘钥文件夹权限${COLOR_RESET}" && sudo install -m 0755 -d /etc/apt/keyrings
