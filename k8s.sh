@@ -538,8 +538,13 @@ _docker_ce_install() {
 EOF
 
     echo -e "${COLOR_BLUE}docker-ce 配置文件${COLOR_RESET}" && cat /etc/docker/daemon.json
-    echo -e "${COLOR_BLUE}docker-ce 重启${COLOR_RESET}" && sudo systemctl restart docker.service
-    echo -e "${COLOR_BLUE}docker-ce 状态${COLOR_RESET}" && sudo systemctl status docker.service --no-pager
+    echo -e "${COLOR_BLUE}docker-ce 重启${COLOR_RESET}"
+    # 需要先停止，在启动，否则在 openkylin 中将存在问题（原因是 openkylin 中原来存在 docker 软件）
+    sudo systemctl stop docker.service
+    sudo systemctl stop docker.socket
+    sudo systemctl restart docker.service
+    sudo systemctl restart docker.socket
+    echo -e "${COLOR_BLUE}docker-ce 状态${COLOR_RESET}" && sudo systemctl status docker.service --no-pager || true
     echo -e "${COLOR_BLUE}docker-ce 设置开机自启${COLOR_RESET}" && sudo systemctl enable docker.service
 
     echo -e "${COLOR_BLUE}docker-ce 安装结束${COLOR_RESET}"
