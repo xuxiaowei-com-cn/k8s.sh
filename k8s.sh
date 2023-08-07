@@ -703,7 +703,7 @@ _kubernetes_install() {
         echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}最新版${COLOR_RESET}"
         sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
       fi
-    elif [[ $ID == ubuntu ]]; then
+    elif [[ $ID == ubuntu || $ID == openkylin ]]; then
 
       if [ "$kubernetes_version" ]; then
         echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
