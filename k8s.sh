@@ -745,23 +745,31 @@ _kubernetes_init() {
   else
     echo -e "${COLOR_BLUE}kubernetes 初始化开始${COLOR_RESET}"
 
+    if [[ $kubernetes_init_v ]]; then
+      init_v="--v=$kubernetes_init_v"
+    fi
+
     if [[ $availability_vip ]]; then
       if [ "$kubernetes_version" ]; then
         echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${COLOR_RESET}${COLOR_GREEN}${availability_vip}${COLOR_RESET}${COLOR_BLUE} 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
-        kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version" --control-plane-endpoint "$availability_vip:9443" --upload-certs
+        # 此处的 $init_v 不能带引号
+        kubeadm init $init_v --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version" --control-plane-endpoint "$availability_vip:9443" --upload-certs
       else
         # https://cdn.dl.k8s.io/release/stable-1.txt
         echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${COLOR_RESET}${COLOR_GREEN}${availability_vip}${COLOR_RESET}${COLOR_BLUE} 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
-        kubeadm init --image-repository=registry.aliyuncs.com/google_containers --control-plane-endpoint "$availability_vip:9443" --upload-certs
+        # 此处的 $init_v 不能带引号
+        kubeadm init $init_v --image-repository=registry.aliyuncs.com/google_containers --control-plane-endpoint "$availability_vip:9443" --upload-certs
       fi
     else
       if [ "$kubernetes_version" ]; then
         echo -e "${COLOR_BLUE}kubernetes 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
-        kubeadm init --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
+        # 此处的 $init_v 不能带引号
+        kubeadm init $init_v --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
       else
         # https://cdn.dl.k8s.io/release/stable-1.txt
         echo -e "${COLOR_BLUE}kubernetes 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
-        kubeadm init --image-repository=registry.aliyuncs.com/google_containers
+        # 此处的 $init_v 不能带引号
+        kubeadm init $init_v --image-repository=registry.aliyuncs.com/google_containers
       fi
     fi
 
@@ -1168,6 +1176,10 @@ while [[ $# -gt 0 ]]; do
 
   docker-ce-install-skip | -docker-ce-install-skip | --docker-ce-install-skip)
     docker_ce_install_skip=true
+    ;;
+
+  kubernetes-init-v=* | -kubernetes-init-v=* | --kubernetes-init-v=*)
+    kubernetes_init_v="${1#*=}"
     ;;
 
   kubernetes-repo-skip | -kubernetes-repo-skip | --kubernetes-repo-skip)
