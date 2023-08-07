@@ -57,6 +57,11 @@ metrics_server_version=0.6.3
 # Metrics Server 镜像
 metrics_server_mirror=registry.aliyuncs.com/google_containers/metrics-server
 
+# 统信 fuse-overlayfs 镜像
+uos_fuse_overlayfs_mirror=https://mirrors.aliyun.com/centos/8.5.2111/AppStream/x86_64/os/Packages/fuse-overlayfs-0.7.8-1.module_el8.5.0+1004+c00a74f5.x86_64.rpm
+# 统信 slirp4netns 镜像
+uos_slirp4netns_mirror=https://mirrors.aliyun.com/centos/8.5.2111/AppStream/x86_64/os/Packages/slirp4netns-0.4.2-3.git21fdece.module_el8.5.0+1004+c00a74f5.x86_64.rpm
+
 # 检查 kubernetes 版本号
 _check_kubernetes_version_range() {
   local version=$1
@@ -529,6 +534,19 @@ _docker_ce_install() {
 
     if [[ $ID == anolis || $ID == centos || $ID == uos ]]; then
       # https://docs.docker.com/engine/install/centos/
+
+      if [[ $ID == uos ]]; then
+        if [[ $uos_fuse_overlayfs_mirror ]]; then
+          yum -y install $uos_fuse_overlayfs_mirror
+        else
+          echo -e "${COLOR_YELLOW}UOS 跳过安装 fuse-overlayfs${COLOR_RESET}"
+        fi
+        if [[ $uos_slirp4netns_mirror ]]; then
+          yum -y install $uos_slirp4netns_mirror
+        else
+          echo -e "${COLOR_YELLOW}UOS 跳过安装 slirp4netns${COLOR_RESET}"
+        fi
+      fi
 
       sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     elif [[ $ID == ubuntu || $ID == openkylin ]]; then
@@ -1323,6 +1341,14 @@ while [[ $# -gt 0 ]]; do
     availability_haproxy_password="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 高可用 haproxy 指定密码：${COLOR_RESET}${COLOR_GREEN}${availability_haproxy_password}${COLOR_RESET}"
 
+    ;;
+
+  uos-slirp4netns-mirror=* | -uos-slirp4netns-mirror=* | --uos-slirp4netns-mirror=*)
+    uos_slirp4netns_mirror="${1#*=}"
+    ;;
+
+  uos-fuse-overlayfs-mirror=* | -uos-fuse-overlayfs-mirror=* | --uos-fuse-overlayfs-mirror=*)
+    uos_fuse_overlayfs_mirror="${1#*=}"
     ;;
 
   *)
