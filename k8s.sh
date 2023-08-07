@@ -1109,6 +1109,9 @@ elif [[ $ID == centos ]]; then
   fi
 elif [[ $ID == ubuntu ]]; then
   echo -e "${COLOR_BLUE}更新 ${ID} 仓库源${COLOR_RESET}" && sudo apt-get update
+elif [[ $ID == openkylin ]]; then
+  echo -e "${COLOR_BLUE}更新 ${ID} 仓库源${COLOR_RESET}" && sudo apt-get update
+  echo -e "${COLOR_BLUE}安装 curl${COLOR_RESET}" && sudo apt install curl
 else
   echo -e "${COLOR_RED}不支持 ${ID} 系统${COLOR_RESET}"
   exit 1
