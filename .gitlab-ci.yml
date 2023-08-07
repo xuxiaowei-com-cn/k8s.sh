@@ -2094,7 +2094,7 @@ openKylin-1.0:
     KUBECONFIG: /etc/kubernetes/admin.conf
   script:
     - set -e
-    - cat /etc/debian_version
+    - cat /etc/kylin-build
     - cat /etc/os-release
     - uname -a
     - cat /etc/hosts
