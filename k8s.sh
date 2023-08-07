@@ -470,7 +470,7 @@ _containerd_install() {
       sudo yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine
 
       echo -e "${COLOR_BLUE}containerd 安装${COLOR_RESET}" && sudo yum install -y containerd.io
-    elif [[ $ID == ubuntu ]]; then
+    elif [[ $ID == ubuntu || $ID == openkylin ]]; then
       # https://docs.docker.com/engine/install/ubuntu/
 
       echo -e "${COLOR_BLUE}卸载旧 docker（不是 docker-ce，目前都是使用的 docker-ce）${COLOR_RESET}"
