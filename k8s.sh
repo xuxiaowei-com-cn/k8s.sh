@@ -744,7 +744,16 @@ _kubernetes_install() {
     # systemd 安装
     _systemd_install
 
-    if [[ $ID == anolis || $ID == centos || $ID == uos ]]; then
+    if [[ $ID == uos ]]; then
+      # UOS 安装 kubernetes 失败时，重试一次
+      if [ "$kubernetes_version" ]; then
+        echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
+        sudo yum install -y kubelet-"$kubernetes_version"-0 kubeadm-"$kubernetes_version"-0 kubectl-"$kubernetes_version"-0 --disableexcludes=kubernetes --nogpgcheck || sudo yum install -y kubelet-"$kubernetes_version"-0 kubeadm-"$kubernetes_version"-0 kubectl-"$kubernetes_version"-0 --disableexcludes=kubernetes --nogpgcheck
+      else
+        echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}最新版${COLOR_RESET}"
+        sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck || sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
+      fi
+    elif [[ $ID == anolis || $ID == centos ]]; then
       if [ "$kubernetes_version" ]; then
         echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
         sudo yum install -y kubelet-"$kubernetes_version"-0 kubeadm-"$kubernetes_version"-0 kubectl-"$kubernetes_version"-0 --disableexcludes=kubernetes --nogpgcheck
