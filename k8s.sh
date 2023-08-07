@@ -723,7 +723,7 @@ _kubernetes_install() {
     # systemd 安装
     _systemd_install
 
-    if [[ $ID == anolis || $ID == centos ]]; then
+    if [[ $ID == anolis || $ID == centos || $ID == uos ]]; then
       if [ "$kubernetes_version" ]; then
         echo -e "${COLOR_BLUE}kubernetes 安装 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
         sudo yum install -y kubelet-"$kubernetes_version"-0 kubeadm-"$kubernetes_version"-0 kubectl-"$kubernetes_version"-0 --disableexcludes=kubernetes --nogpgcheck
