@@ -361,7 +361,7 @@ _firewalld_stop() {
       else
         echo -e "${COLOR_BLUE}防火墙 未关闭，正在进行关闭${COLOR_RESET}" && sudo systemctl stop iptables.service && echo -e "${COLOR_BLUE}防火墙 已关闭${COLOR_RESET}"
       fi
-    elif [[ $ID == anolis || $ID == centos ]]; then
+    elif [[ $ID == anolis || $ID == centos || $ID == uos ]]; then
       active_status=$(systemctl is-active firewalld || true)
       enabled_status=$(systemctl is-enabled firewalld || true)
 
