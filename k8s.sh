@@ -410,7 +410,7 @@ _docker_repo() {
       fi
 
       echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/yum.repos.d/docker-ce.repo
-    elif [[ $ID == ubuntu ]]; then
+    elif [[ $ID == ubuntu || $ID == openkylin ]]; then
       # https://docs.docker.com/engine/install/ubuntu/
 
       echo -e "${COLOR_BLUE}安装 ca-certificates curl gnupg${COLOR_RESET}" && sudo apt-get install -y ca-certificates curl gnupg
@@ -426,14 +426,26 @@ _docker_repo() {
       fi
 
       echo -e "${COLOR_BLUE}添加 docker 仓库 gpg 秘钥${COLOR_RESET}"
-      curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      if [[ $ID == openkylin ]]; then
+        curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      else
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      fi
       echo -e "${COLOR_BLUE}修改 docker 仓库 gpg 秘钥文件权限${COLOR_RESET}" && sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
       echo -e "${COLOR_BLUE}添加 docker 仓库${COLOR_RESET}"
-      echo \
-        "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-        "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" |
-        sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+
+      if [[ $ID == openkylin ]]; then
+        echo \
+          "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+          buster stable" |
+          sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+      else
+        echo \
+          "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+          "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" |
+          sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+      fi
 
       echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/apt/sources.list.d/docker.list
 
