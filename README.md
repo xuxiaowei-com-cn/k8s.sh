@@ -123,6 +123,7 @@
     19. [Anolis 23 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-23%2Flatest)
 2. 支持 Ubuntu 乌班图 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/21
 3. 支持 openKylin 开放麒麟 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/25
+   1. [openKylin 1.0 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2FopenKylin-1.0%2Flatest)
 4. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
 5. 一键支持 单机集群
 6. 一键支持 一主多从
