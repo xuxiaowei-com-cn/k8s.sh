@@ -123,16 +123,18 @@
     19. [Anolis 23 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-23%2Flatest)
 2. 支持 Ubuntu 乌班图 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/21
 3. 支持 openKylin 开放麒麟 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/25
-   1. [openKylin 1.0 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2FopenKylin-1.0%2Flatest)
-4. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
-5. 一键支持 单机集群
-6. 一键支持 一主多从
-7. 一键支持 高可用
-8. 自动安装、配置 Docker、Containerd
-9. 自动安装、配置 Kubernetes（k8s）
-10. 自动安装、配置 Calico 网络插件
-11. 自动安装、配置 kubectl 命令自动补充
-12. 自动安装、配置 VIP（Virtual IP Address，虚拟 IP 地址）
+    1. [openKylin 1.0 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2FopenKylin-1.0%2Flatest)
+4. 支持 UOS 统信 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/26
+    1. [UOS 20-1060e](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fuos-20-1060e%2Flatest)
+5. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
+6. 一键支持 单机集群
+7. 一键支持 一主多从
+8. 一键支持 高可用
+9. 自动安装、配置 Docker、Containerd
+10. 自动安装、配置 Kubernetes（k8s）
+11. 自动安装、配置 Calico 网络插件
+12. 自动安装、配置 kubectl 命令自动补充
+13. 自动安装、配置 VIP（Virtual IP Address，虚拟 IP 地址）
 
 ## 环境变量说明
 
