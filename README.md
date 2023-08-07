@@ -122,10 +122,13 @@
     18. [Anolis 8.8 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.8%2Flatest)
     19. [Anolis 23 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-23%2Flatest)
 2. 支持 Ubuntu 乌班图 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/21
+    1. Ubuntu 20.04 Focal Fossa
+    2. Ubuntu 22.10 Kinetic Kudu
+    3. [Ubuntu 23.04 Lunar Lobster 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fubuntu-23.04%2Flatest)
 3. 支持 openKylin 开放麒麟 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/25
     1. [openKylin 1.0 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2FopenKylin-1.0%2Flatest)
 4. 支持 UOS 统信 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/26
-    1. [UOS 20-1060e](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fuos-20-1060e%2Flatest)
+    1. [UOS 20-1060e 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fuos-20-1060e%2Flatest)
 5. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
 6. 一键支持 单机集群
 7. 一键支持 一主多从
