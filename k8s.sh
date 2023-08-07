@@ -520,7 +520,7 @@ _docker_ce_install() {
       # https://docs.docker.com/engine/install/centos/
 
       sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-    elif [[ $ID == ubuntu ]]; then
+    elif [[ $ID == ubuntu || $ID == openkylin ]]; then
       # https://docs.docker.com/engine/install/ubuntu/
 
       sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
