@@ -481,6 +481,8 @@ _containerd_install() {
 
     echo -e "${COLOR_BLUE}停止 containerd${COLOR_RESET}" && sudo systemctl stop containerd.service
 
+    sudo mkdir -p /etc/containerd
+
     local containerd_conf=/etc/containerd/config.toml
     local containerd_conf_backup="${containerd_conf}.$(date +%Y%m%d%H%M%S)"
     if [ -f "$containerd_conf" ]; then
@@ -801,6 +803,7 @@ _kubernetes_init() {
     # https://kubernetes.io/zh-cn/docs/tasks/tools/install-kubectl-linux/#optional-kubectl-configurations
 
     echo -e "${COLOR_BLUE}启动 kubectl 自动补全功能${COLOR_RESET}"
+    sudo mkdir -p /etc/bash_completion.d
     kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl >/dev/null
     sudo chmod a+r /etc/bash_completion.d/kubectl
     echo -e "${COLOR_BLUE}源引 ~/.bashrc 文件${COLOR_RESET}"
