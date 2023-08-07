@@ -559,7 +559,7 @@ gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors
 
 EOF
 
-    elif [[ $ID == ubuntu ]]; then
+    elif [[ $ID == ubuntu || $ID == openkylin ]]; then
 
       sudo apt-get install -y apt-transport-https
       curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
