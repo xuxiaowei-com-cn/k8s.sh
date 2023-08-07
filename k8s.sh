@@ -660,6 +660,7 @@ EOF
     echo -e "${COLOR_BLUE}kubernetes 配置：修改网络${COLOR_RESET}" && sudo sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
 
     sed -i 's/net.ipv4.ip_forward=0/net.ipv4.ip_forward=1/g' /etc/sysctl.conf
+    sudo sysctl -p /etc/sysctl.conf
 
     echo -e "${COLOR_BLUE}kubernetes 配置结束${COLOR_RESET}"
   fi
