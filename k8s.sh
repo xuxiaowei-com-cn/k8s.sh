@@ -831,6 +831,8 @@ _kubernetes_taint() {
   if [[ $kubernetes_taint == true ]]; then
     echo -e "${COLOR_BLUE}kubernetes 去污开始${COLOR_RESET}"
 
+    source /etc/profile
+
     echo -e "${COLOR_BLUE}kubernetes 查看污点${COLOR_RESET}"
     kubectl get no -o yaml | grep taint -A 10 || echo -e "${COLOR_YELLOW}kubernetes 查看污点 失败${COLOR_RESET}"
 
