@@ -339,7 +339,7 @@ _selinux_permissive() {
   if [[ $selinux_permissive_skip == true ]]; then
     echo -e "${COLOR_YELLOW}关闭 selinux 已被跳过${COLOR_RESET}"
   else
-    if [[ $ID == anolis || $ID == centos ]]; then
+    if [[ $ID == anolis || $ID == centos || $ID = openEuler ]]; then
       echo -e "${COLOR_BLUE}selinux 当前状态${COLOR_RESET}"
       if [[ $(getenforce) == "Disabled" ]]; then
         echo -e "${COLOR_BLUE}selinux 当前状态已禁用${COLOR_RESET}"
