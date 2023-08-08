@@ -324,7 +324,7 @@ _bash_completion_install() {
   if [[ $bash_completion_install_skip == true ]]; then
     echo -e "${COLOR_YELLOW}bash-completion 安装 已被跳过${COLOR_RESET}"
   else
-    if [[ $ID == anolis || $ID == centos ]]; then
+    if [[ $ID == anolis || $ID == centos || $ID = openEuler ]]; then
       echo -e "${COLOR_BLUE}bash-completion 安装开始${COLOR_RESET}"
       sudo yum -y install bash-completion
       source /etc/profile
