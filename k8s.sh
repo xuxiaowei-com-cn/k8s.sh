@@ -403,7 +403,7 @@ _docker_repo() {
     echo -e "${COLOR_YELLOW}添加 docker 仓库 已被跳过${COLOR_RESET}"
   else
     echo -e "${COLOR_BLUE}docker 仓库 添加开始${COLOR_RESET}"
-    if [[ $ID == anolis || $ID == centos || $ID == uos ]]; then
+    if [[ $ID == anolis || $ID == centos || $ID == uos || $ID == openEuler ]]; then
       # https://docs.docker.com/engine/install/centos/
 
       echo -e "${COLOR_BLUE}安装/更新 curl${COLOR_RESET}" && sudo yum install -y curl
@@ -415,7 +415,7 @@ _docker_repo() {
       fi
 
       if [[ $VERSION == 23* ]]; then
-        echo -e "${COLOR_BLUE}兼容 anolis 23${COLOR_RESET}" && sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
+        echo -e "${COLOR_BLUE}兼容 ${ID} 23${COLOR_RESET}" && sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
       fi
 
       echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/yum.repos.d/docker-ce.repo
