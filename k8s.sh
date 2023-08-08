@@ -589,7 +589,7 @@ _kubernetes_repo() {
   else
     echo -e "${COLOR_BLUE}kubernetes 仓库 添加开始${COLOR_RESET}"
 
-    if [[ $ID == anolis || $ID == centos || $ID == uos ]]; then
+    if [[ $ID == anolis || $ID == centos || $ID == uos || $ID = openEuler ]]; then
 
       cat <<EOF >/etc/yum.repos.d/kubernetes.repo
 [kubernetes]
