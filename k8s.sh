@@ -532,7 +532,7 @@ _docker_ce_install() {
   else
     echo -e "${COLOR_BLUE}docker-ce 安装开始${COLOR_RESET}"
 
-    if [[ $ID == anolis || $ID == centos || $ID == uos ]]; then
+    if [[ $ID == anolis || $ID == centos || $ID == uos || $ID = openEuler ]]; then
       # https://docs.docker.com/engine/install/centos/
 
       if [[ $ID == uos ]]; then
