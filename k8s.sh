@@ -472,7 +472,7 @@ _containerd_install() {
   else
     echo -e "${COLOR_BLUE}containerd 安装开始${COLOR_RESET}"
 
-    if [[ $ID == anolis || $ID == centos || $ID == uos ]]; then
+    if [[ $ID == anolis || $ID == centos || $ID == uos || $ID = openEuler ]]; then
       # https://docs.docker.com/engine/install/centos/
 
       echo -e "${COLOR_BLUE}卸载旧 docker（不是 docker-ce，目前都是使用的 docker-ce）${COLOR_RESET}"
