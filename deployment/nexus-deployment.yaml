@@ -54,8 +54,11 @@ spec:
     app: nexus
   ports:
     - name: http
+      nodePort: 31501
       port: 8081
       targetPort: 8081
     - name: https
+      nodePort: 31502
       port: 8443
       targetPort: 8443
+  type: NodePort

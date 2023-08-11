@@ -66,11 +66,15 @@ spec:
     app: gitlab-ee
   ports:
     - name: http
+      nodePort: 31201
       port: 80
       targetPort: 80
     - name: https
+      nodePort: 31202
       port: 443
       targetPort: 443
     - name: ssh
+      nodePort: 31203
       port: 22
       targetPort: 22
+  type: NodePort

@@ -58,8 +58,11 @@ spec:
     app: minio
   ports:
     - name: api
+      nodePort: 31401
       port: 9000
       targetPort: 9000
     - name: ui
+      nodePort: 31402
       port: 9001
       targetPort: 9001
+  type: NodePort
