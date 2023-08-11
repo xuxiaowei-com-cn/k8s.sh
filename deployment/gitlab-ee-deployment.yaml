@@ -28,6 +28,9 @@ spec:
             - containerPort: 80
             - containerPort: 443
             - containerPort: 22
+          env:
+            - name: TZ
+              value: Asia/Shanghai
           volumeMounts:
             # https://docs.gitlab.cn/jh/install/docker.html
             # grep 'Password:' /etc/gitlab/initial_root_password
