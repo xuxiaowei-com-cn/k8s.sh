@@ -27,13 +27,16 @@ spec:
             # kubectl -n nexus port-forward svc/nexus 4800:8081 --address 0.0.0.0
             - containerPort: 8081
             - containerPort: 8443
-          # env:
-          #   - name: TZ
-          #     value: Asia/Shanghai
           volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
             - name: nexus-data
               mountPath: /nexus-data
       volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
         - name: nexus-data
           nfs:
             path: /nfs/nexus/nexus-data
