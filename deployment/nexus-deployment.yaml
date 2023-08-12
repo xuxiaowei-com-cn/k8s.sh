@@ -46,6 +46,11 @@ spec:
             - containerPort: 8004
             # docker 宿主私库：https 端口
             - containerPort: 9004
+          resources:
+            requests:
+              cpu: "4"
+            limits:
+              cpu: "4"
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
