@@ -4,10 +4,10 @@
 # CERT_NAME=nexus.xuxiaowei.cn
 # kubectl -n nexus create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
 
-# kubectl get secret nexus.xuxiaowei.cn -n nexus -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -text
+# kubectl -n nexus get secret nexus.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -text
 
-# kubectl get secret nexus.xuxiaowei.cn -n nexus -o jsonpath='{.data.tls\.crt}' | base64 --decode > tls.crt
-# kubectl get secret nexus.xuxiaowei.cn -n nexus -o jsonpath='{.data.tls\.key}' | base64 --decode > tls.key
+# kubectl -n nexus get secret nexus.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode > tls.crt
+# kubectl -n nexus get secret nexus.xuxiaowei.cn -o jsonpath='{.data.tls\.key}' | base64 --decode > tls.key
 
 # kubectl -n nexus get ingress nexus-xuxiaowei-cn
 
