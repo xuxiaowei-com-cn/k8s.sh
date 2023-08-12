@@ -1,13 +1,13 @@
 # 此处使用的是泛域名
 # KEY_FILE=_.xuxiaowei.cn.key
 # CERT_FILE=_.xuxiaowei.cn.cer
-# CERT_NAME=nexus.xuxiaowei.cn
+# CERT_NAME=xuxiaowei.cn
 # kubectl -n nexus create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
 
-# kubectl -n nexus get secret nexus.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -text
+# kubectl -n nexus get secret xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -text
 
-# kubectl -n nexus get secret nexus.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode > tls.crt
-# kubectl -n nexus get secret nexus.xuxiaowei.cn -o jsonpath='{.data.tls\.key}' | base64 --decode > tls.key
+# kubectl -n nexus get secret xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode > tls.crt
+# kubectl -n nexus get secret xuxiaowei.cn -o jsonpath='{.data.tls\.key}' | base64 --decode > tls.key
 
 # kubectl -n nexus get ingress nexus-xuxiaowei-cn
 
@@ -30,7 +30,7 @@ spec:
             path: /
             pathType: Prefix
   tls:
-    - secretName: nexus.xuxiaowei.cn
+    - secretName: xuxiaowei.cn
       hosts:
         - nexus.xuxiaowei.cn
 
@@ -41,7 +41,7 @@ spec:
 # 此处使用的是泛域名
 # KEY_FILE=_.minio.xuxiaowei.cn.key
 # CERT_FILE=_.minio.xuxiaowei.cn.cer
-# CERT_NAME=nexus.minio.xuxiaowei.cn
+# CERT_NAME=minio.xuxiaowei.cn
 # kubectl -n nexus create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
 
 apiVersion: networking.k8s.io/v1
@@ -63,7 +63,7 @@ spec:
             path: /
             pathType: Prefix
   tls:
-    - secretName: nexus.minio.xuxiaowei.cn
+    - secretName: minio.xuxiaowei.cn
       hosts:
         - nexus.minio.xuxiaowei.cn
 
@@ -74,14 +74,16 @@ spec:
 # 此处使用的是泛域名
 # KEY_FILE=_.docker.xuxiaowei.cn.key
 # CERT_FILE=_.docker.xuxiaowei.cn.cer
-# CERT_NAME=jihulab.docker.xuxiaowei.cn
+# CERT_NAME=docker.xuxiaowei.cn
 # kubectl -n nexus create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: nexus
-  name: jihulab-docker-xuxiaowei-cn
+  name: docker-xuxiaowei-cn
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "1024m"
 spec:
   ingressClassName: nginx
   rules:
@@ -105,8 +107,30 @@ spec:
                   number: 8002
             path: /
             pathType: Prefix
+    - host: gitlab-jh.docker.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8003
+            path: /
+            pathType: Prefix
+    - host: hosted.docker.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8004
+            path: /
+            pathType: Prefix
   tls:
-    - secretName: jihulab.docker.xuxiaowei.cn
+    - secretName: docker.xuxiaowei.cn
       hosts:
         - jihulab.docker.xuxiaowei.cn
         - io.docker.xuxiaowei.cn
+        - gitlab-jh.docker.xuxiaowei.cn
+        - hosted.docker.xuxiaowei.cn

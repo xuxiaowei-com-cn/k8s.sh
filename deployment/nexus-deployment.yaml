@@ -38,6 +38,14 @@ spec:
             - containerPort: 8002
             # docker 代理私库：https 端口，代理 https://registry-1.docker.io
             - containerPort: 9002
+            # docker 代理私库：http 端口，代理 https://registry.gitlab.cn
+            - containerPort: 8003
+            # docker 代理私库：https 端口，代理 https://registry.gitlab.cn
+            - containerPort: 9003
+            # docker 宿主私库：http 端口
+            - containerPort: 8004
+            # docker 宿主私库：https 端口
+            - containerPort: 9004
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -88,4 +96,20 @@ spec:
       nodePort: 31592
       port: 9002
       targetPort: 9002
+    - name: docker-gitlab-jh-http
+      nodePort: 31583
+      port: 8003
+      targetPort: 8003
+    - name: docker-gitlab-jh-https
+      nodePort: 31593
+      port: 9003
+      targetPort: 9003
+    - name: docker-hosted-http
+      nodePort: 31584
+      port: 8004
+      targetPort: 8004
+    - name: docker-hosted-https
+      nodePort: 31594
+      port: 9004
+      targetPort: 9004
   type: NodePort
