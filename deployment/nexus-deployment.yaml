@@ -23,6 +23,7 @@ spec:
       containers:
         - name: nexus
           image: sonatype/nexus3:3.58.1
+          # 这里准备的 https 的端口没有使用，实际上使用的是 Ingress 配置的 https
           ports:
             # kubectl -n nexus port-forward svc/nexus 4800:8081 --address 0.0.0.0
             # http 端口
@@ -33,6 +34,10 @@ spec:
             - containerPort: 8001
             # docker 代理私库：https 端口，代理 https://registry.jihulab.com
             - containerPort: 9001
+            # docker 代理私库：http 端口，代理 https://registry-1.docker.io
+            - containerPort: 8002
+            # docker 代理私库：https 端口，代理 https://registry-1.docker.io
+            - containerPort: 9002
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -75,4 +80,12 @@ spec:
       nodePort: 31591
       port: 9001
       targetPort: 9001
+    - name: docker-io-http
+      nodePort: 31582
+      port: 8002
+      targetPort: 8002
+    - name: docker-io-https
+      nodePort: 31592
+      port: 9002
+      targetPort: 9002
   type: NodePort

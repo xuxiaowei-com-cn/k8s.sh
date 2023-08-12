@@ -95,7 +95,18 @@ spec:
                   number: 8001
             path: /
             pathType: Prefix
+    - host: io.docker.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8002
+            path: /
+            pathType: Prefix
   tls:
     - secretName: jihulab.docker.xuxiaowei.cn
       hosts:
         - jihulab.docker.xuxiaowei.cn
+        - io.docker.xuxiaowei.cn
