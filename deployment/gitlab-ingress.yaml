@@ -1,13 +1,13 @@
 # 此处使用的是泛域名
 # KEY_FILE=_.ce.xuxiaowei.cn.key
 # CERT_FILE=_.ce.xuxiaowei.cn.cer
-# CERT_NAME=gitlab.ce.xuxiaowei.cn
+# CERT_NAME=ce.xuxiaowei.cn
 # kubectl -n gitlab create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
 
-# kubectl -n gitlab get secret gitlab.ce.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -text
+# kubectl -n gitlab get secret ce.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -text
 
-# kubectl -n gitlab get secret gitlab.ce.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode > tls.crt
-# kubectl -n gitlab get secret gitlab.ce.xuxiaowei.cn -o jsonpath='{.data.tls\.key}' | base64 --decode > tls.key
+# kubectl -n gitlab get secret ce.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode > tls.crt
+# kubectl -n gitlab get secret ce.xuxiaowei.cn -o jsonpath='{.data.tls\.key}' | base64 --decode > tls.key
 
 # kubectl -n gitlab get ingress gitlab-ce-xuxiaowei-cn
 
@@ -30,7 +30,7 @@ spec:
             path: /
             pathType: Prefix
   tls:
-    - secretName: gitlab.ce.xuxiaowei.cn
+    - secretName: ce.xuxiaowei.cn
       hosts:
         - gitlab.ce.xuxiaowei.cn
 
@@ -41,7 +41,7 @@ spec:
 # 此处使用的是泛域名
 # KEY_FILE=_.ee.xuxiaowei.cn.key
 # CERT_FILE=_.ee.xuxiaowei.cn.cer
-# CERT_NAME=gitlab.ee.xuxiaowei.cn
+# CERT_NAME=ee.xuxiaowei.cn
 # kubectl -n gitlab create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
 
 
@@ -64,7 +64,7 @@ spec:
             path: /
             pathType: Prefix
   tls:
-    - secretName: gitlab.ee.xuxiaowei.cn
+    - secretName: ee.xuxiaowei.cn
       hosts:
         - gitlab.ee.xuxiaowei.cn
 
@@ -75,7 +75,7 @@ spec:
 # 此处使用的是泛域名
 # KEY_FILE=_.jh.xuxiaowei.cn.key
 # CERT_FILE=_.jh.xuxiaowei.cn.cer
-# CERT_NAME=gitlab.jh.xuxiaowei.cn
+# CERT_NAME=jh.xuxiaowei.cn
 # kubectl -n gitlab create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
 
 
@@ -83,7 +83,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: gitlab
-  name: gitlab-jh-xuxiaowei-cn
+  name: jh-xuxiaowei-cn
 spec:
   ingressClassName: nginx
   rules:
@@ -98,7 +98,7 @@ spec:
             path: /
             pathType: Prefix
   tls:
-    - secretName: gitlab.jh.xuxiaowei.cn
+    - secretName: jh.xuxiaowei.cn
       hosts:
         - gitlab.jh.xuxiaowei.cn
 
