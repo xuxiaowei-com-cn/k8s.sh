@@ -25,8 +25,14 @@ spec:
           image: sonatype/nexus3:3.58.1
           ports:
             # kubectl -n nexus port-forward svc/nexus 4800:8081 --address 0.0.0.0
+            # http 端口
             - containerPort: 8081
+            # https 端口
             - containerPort: 8443
+            # docker 代理私库：http 端口，代理 https://registry.jihulab.com
+            - containerPort: 8001
+            # docker 代理私库：https 端口，代理 https://registry.jihulab.com
+            - containerPort: 9001
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
@@ -61,4 +67,12 @@ spec:
       nodePort: 31502
       port: 8443
       targetPort: 8443
+    - name: docker-jihulab-http
+      nodePort: 31581
+      port: 8001
+      targetPort: 8001
+    - name: docker-jihulab-https
+      nodePort: 31591
+      port: 9001
+      targetPort: 9001
   type: NodePort

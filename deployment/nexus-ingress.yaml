@@ -33,3 +33,34 @@ spec:
     - secretName: nexus.xuxiaowei.cn
       hosts:
         - nexus.xuxiaowei.cn
+
+# 此处使用的是泛域名
+# KEY_FILE=_.docker.xuxiaowei.cn.key
+# CERT_FILE=_.docker.xuxiaowei.cn.cer
+# CERT_NAME=jihulab.docker.xuxiaowei.cn
+# kubectl -n nexus create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: nexus
+  name: jihulab-docker-xuxiaowei-cn
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: jihulab.docker.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8001
+            path: /
+            pathType: Prefix
+  tls:
+    - secretName: jihulab.docker.xuxiaowei.cn
+      hosts:
+        - jihulab.docker.xuxiaowei.cn
