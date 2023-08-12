@@ -127,6 +127,26 @@ spec:
                   number: 8004
             path: /
             pathType: Prefix
+    - host: 163.docker.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8005
+            path: /
+            pathType: Prefix
+    - host: group.docker.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8006
+            path: /
+            pathType: Prefix
   tls:
     - secretName: docker.xuxiaowei.cn
       hosts:
@@ -134,3 +154,5 @@ spec:
         - io.docker.xuxiaowei.cn
         - gitlab-jh.docker.xuxiaowei.cn
         - hosted.docker.xuxiaowei.cn
+        - 163.docker.xuxiaowei.cn
+        - group.docker.xuxiaowei.cn

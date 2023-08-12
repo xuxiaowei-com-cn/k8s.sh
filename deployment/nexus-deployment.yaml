@@ -46,6 +46,14 @@ spec:
             - containerPort: 8004
             # docker 宿主私库：https 端口
             - containerPort: 9004
+            # docker 代理私库：http 端口，代理 https://hub-mirror.c.163.com
+            - containerPort: 8005
+            # docker 代理私库：https 端口，代理 https://hub-mirror.c.163.com
+            - containerPort: 9005
+            # docker 分组私库：http 端口
+            - containerPort: 8006
+            # docker 分组私库：https 端口
+            - containerPort: 9006
           resources:
             requests:
               cpu: "4"
@@ -117,4 +125,20 @@ spec:
       nodePort: 31594
       port: 9004
       targetPort: 9004
+    - name: docker-163-http
+      nodePort: 31585
+      port: 8005
+      targetPort: 8005
+    - name: docker-163-https
+      nodePort: 31595
+      port: 9005
+      targetPort: 9005
+    - name: docker-group-http
+      nodePort: 31586
+      port: 8006
+      targetPort: 8006
+    - name: docker-group-https
+      nodePort: 31596
+      port: 9006
+      targetPort: 9006
   type: NodePort
