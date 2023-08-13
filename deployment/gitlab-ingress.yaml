@@ -19,6 +19,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
+    # 管理中心 -> 设置 -> 通用 -> 可见性与访问控制 -> 自定义HTTP(S)协议Git克隆URL -> 设置克隆域名
     - host: gitlab.ce.xuxiaowei.cn
       http:
         paths:
@@ -53,6 +54,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
+    # 管理中心 -> 设置 -> 通用 -> 可见性与访问控制 -> 自定义HTTP(S)协议Git克隆URL -> 设置克隆域名
     - host: gitlab.ee.xuxiaowei.cn
       http:
         paths:
@@ -87,6 +89,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
+    # 管理中心 -> 设置 -> 通用 -> 可见性与访问控制 -> 自定义HTTP(S)协议Git克隆URL -> 设置克隆域名
     - host: gitlab.jh.xuxiaowei.cn
       http:
         paths:
