@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gitlab
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: gitlab
+  name: gitlab-ee-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab-ee
+  template:
+    metadata:
+      labels:
+        app: gitlab-ee
+    spec:
+      containers:
+        - name: gitlab-ee
+          image: gitlab/gitlab-ee:16.2.3-ee.0
+          ports:
+            # kubectl -n gitlab port-forward svc/gitlab-ee 2800:80 --address 0.0.0.0
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 22
+          env:
+            - name: TZ
+              value: Asia/Shanghai
+          volumeMounts:
+            # https://docs.gitlab.cn/jh/install/docker.html
+            # grep 'Password:' /etc/gitlab/initial_root_password
+            - name: gitlab-ee-config
+              mountPath: /etc/gitlab
+            - name: gitlab-ee-logs
+              mountPath: /var/log/gitlab
+            - name: gitlab-ee-data
+              mountPath: /var/opt/gitlab
+      volumes:
+        - name: gitlab-ee-config
+          nfs:
+            path: /nfs/gitlab/gitlab-ee/etc/gitlab
+            server: 172.25.25.5
+        - name: gitlab-ee-logs
+          nfs:
+            path: /nfs/gitlab/gitlab-ee/var/log/gitlab
+            server: 172.25.25.5
+        - name: gitlab-ee-data
+          nfs:
+            path: /nfs/gitlab/gitlab-ee/var/opt/gitlab
+            server: 172.25.25.5
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: gitlab
+  name: gitlab-ee-service
+spec:
+  selector:
+    app: gitlab-ee
+  ports:
+    - name: http
+      nodePort: 31201
+      port: 80
+      targetPort: 80
+    - name: https
+      nodePort: 31202
+      port: 443
+      targetPort: 443
+    - name: ssh
+      nodePort: 31203
+      port: 22
+      targetPort: 22
+  type: NodePort

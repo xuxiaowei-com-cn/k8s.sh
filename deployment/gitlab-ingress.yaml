@@ -1,0 +1,107 @@
+# 此处使用的是泛域名
+# KEY_FILE=_.ce.xuxiaowei.cn.key
+# CERT_FILE=_.ce.xuxiaowei.cn.cer
+# CERT_NAME=ce.xuxiaowei.cn
+# kubectl -n gitlab create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
+
+# kubectl -n gitlab get secret ce.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -text
+
+# kubectl -n gitlab get secret ce.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode > tls.crt
+# kubectl -n gitlab get secret ce.xuxiaowei.cn -o jsonpath='{.data.tls\.key}' | base64 --decode > tls.key
+
+# kubectl -n gitlab get ingress gitlab-ce-xuxiaowei-cn
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: gitlab
+  name: gitlab-ce-xuxiaowei-cn
+spec:
+  ingressClassName: nginx
+  rules:
+    # 管理中心 -> 设置 -> 通用 -> 可见性与访问控制 -> 自定义HTTP(S)协议Git克隆URL -> 设置克隆域名
+    - host: gitlab.ce.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: gitlab-ce-service
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - secretName: ce.xuxiaowei.cn
+      hosts:
+        - gitlab.ce.xuxiaowei.cn
+
+
+---
+
+
+# 此处使用的是泛域名
+# KEY_FILE=_.ee.xuxiaowei.cn.key
+# CERT_FILE=_.ee.xuxiaowei.cn.cer
+# CERT_NAME=ee.xuxiaowei.cn
+# kubectl -n gitlab create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: gitlab
+  name: gitlab-ee-xuxiaowei-cn
+spec:
+  ingressClassName: nginx
+  rules:
+    # 管理中心 -> 设置 -> 通用 -> 可见性与访问控制 -> 自定义HTTP(S)协议Git克隆URL -> 设置克隆域名
+    - host: gitlab.ee.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: gitlab-ee-service
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - secretName: ee.xuxiaowei.cn
+      hosts:
+        - gitlab.ee.xuxiaowei.cn
+
+
+---
+
+
+# 此处使用的是泛域名
+# KEY_FILE=_.jh.xuxiaowei.cn.key
+# CERT_FILE=_.jh.xuxiaowei.cn.cer
+# CERT_NAME=jh.xuxiaowei.cn
+# kubectl -n gitlab create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: gitlab
+  name: jh-xuxiaowei-cn
+spec:
+  ingressClassName: nginx
+  rules:
+    # 管理中心 -> 设置 -> 通用 -> 可见性与访问控制 -> 自定义HTTP(S)协议Git克隆URL -> 设置克隆域名
+    - host: gitlab.jh.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: gitlab-jh-service
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - secretName: jh.xuxiaowei.cn
+      hosts:
+        - gitlab.jh.xuxiaowei.cn
+

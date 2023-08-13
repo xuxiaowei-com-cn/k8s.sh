@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nexus
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: nexus
+  name: minio-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      containers:
+        - name: minio
+          image: minio/minio:RELEASE.2023-08-09T23-30-22Z
+          command:
+            - minio
+          args:
+            - server
+            - /data
+            - --console-address
+            - ":9001"
+          ports:
+            # kubectl -n nexus port-forward svc/minio 5800:8081 --address 0.0.0.0
+            - containerPort: 9000
+            - containerPort: 9001
+          # env:
+          #   - name: TZ
+          #     value: Asia/Shanghai
+          volumeMounts:
+            - name: minio-data
+              mountPath: /data
+      volumes:
+        - name: minio-data
+          nfs:
+            path: /nfs/nexus/minio-data
+            server: 172.25.25.5
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: nexus
+  name: minio-service
+spec:
+  selector:
+    app: minio
+  ports:
+    - name: api
+      nodePort: 31401
+      port: 9000
+      targetPort: 9000
+    - name: ui
+      nodePort: 31402
+      port: 9001
+      targetPort: 9001
+  type: NodePort

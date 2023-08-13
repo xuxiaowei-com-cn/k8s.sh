@@ -1,0 +1,191 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nexus
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: nexus
+  name: nexus-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nexus
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      containers:
+        - name: nexus
+          image: sonatype/nexus3:3.58.1
+          # 这里准备的 https 的端口没有使用，实际上使用的是 Ingress 配置的 https
+          ports:
+            # kubectl -n nexus port-forward svc/nexus 4800:8081 --address 0.0.0.0
+            # http 端口
+            - containerPort: 8081
+            # https 端口
+            - containerPort: 8443
+            # docker 代理私库：http 端口，代理 https://registry.jihulab.com
+            - containerPort: 8001
+            # docker 代理私库：https 端口，代理 https://registry.jihulab.com
+            - containerPort: 9001
+            # docker 代理私库：http 端口，代理 https://registry-1.docker.io
+            - containerPort: 8002
+            # docker 代理私库：https 端口，代理 https://registry-1.docker.io
+            - containerPort: 9002
+            # docker 代理私库：http 端口，代理 https://registry.gitlab.cn
+            - containerPort: 8003
+            # docker 代理私库：https 端口，代理 https://registry.gitlab.cn
+            - containerPort: 9003
+            # docker 宿主私库：http 端口
+            - containerPort: 8004
+            # docker 宿主私库：https 端口
+            - containerPort: 9004
+            # docker 代理私库：http 端口，代理 https://hub-mirror.c.163.com
+            - containerPort: 8005
+            # docker 代理私库：https 端口，代理 https://hub-mirror.c.163.com
+            - containerPort: 9005
+            # docker 分组私库：http 端口
+            - containerPort: 8006
+            # docker 分组私库：https 端口
+            - containerPort: 9006
+            # docker 代理私库：http 端口，代理 https://hnkfbj7x.mirror.aliyuncs.com
+            - containerPort: 8007
+            # docker 代理私库：https 端口，代理 https://hnkfbj7x.mirror.aliyuncs.com
+            - containerPort: 9007
+            # docker 代理私库：http 端口，代理 https://docker.elastic.co
+            - containerPort: 8008
+            # docker 代理私库：https 端口，代理 https://docker.elastic.co
+            - containerPort: 9008
+          resources:
+            requests:
+              cpu: "4"
+            limits:
+              cpu: "4"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 240
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8081
+            initialDelaySeconds: 240
+            periodSeconds: 20
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+              readOnly: true
+            - name: nexus-data
+              mountPath: /nexus-data
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: nexus-data
+          nfs:
+            path: /nfs/nexus/nexus-data
+            server: 172.25.25.5
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: nexus
+  name: nexus-service
+spec:
+  selector:
+    app: nexus
+  ports:
+    - name: http
+      nodePort: 31501
+      port: 8081
+      targetPort: 8081
+    - name: https
+      nodePort: 31502
+      port: 8443
+      targetPort: 8443
+    - name: docker-jihulab-http
+      nodePort: 31581
+      port: 8001
+      targetPort: 8001
+    - name: docker-jihulab-https
+      nodePort: 31591
+      port: 9001
+      targetPort: 9001
+    - name: docker-io-http
+      nodePort: 31582
+      port: 8002
+      targetPort: 8002
+    - name: docker-io-https
+      nodePort: 31592
+      port: 9002
+      targetPort: 9002
+    - name: docker-gitlab-jh-http
+      nodePort: 31583
+      port: 8003
+      targetPort: 8003
+    - name: docker-gitlab-jh-https
+      nodePort: 31593
+      port: 9003
+      targetPort: 9003
+    - name: docker-hosted-http
+      nodePort: 31584
+      port: 8004
+      targetPort: 8004
+    - name: docker-hosted-https
+      nodePort: 31594
+      port: 9004
+      targetPort: 9004
+    - name: docker-163-http
+      nodePort: 31585
+      port: 8005
+      targetPort: 8005
+    - name: docker-163-https
+      nodePort: 31595
+      port: 9005
+      targetPort: 9005
+    - name: docker-group-http
+      nodePort: 31586
+      port: 8006
+      targetPort: 8006
+    - name: docker-group-https
+      nodePort: 31596
+      port: 9006
+      targetPort: 9006
+    - name: docker-aliyuncs-http
+      nodePort: 31587
+      port: 8007
+      targetPort: 8007
+    - name: docker-aliyuncs-https
+      nodePort: 31597
+      port: 9007
+      targetPort: 9007
+    - name: docker-elastic-http
+      nodePort: 31588
+      port: 8008
+      targetPort: 8008
+    - name: docker-elastic-https
+      nodePort: 31598
+      port: 9008
+      targetPort: 9008
+  type: NodePort

@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gitlab
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: gitlab
+  name: gitlab-jh-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab-jh
+  template:
+    metadata:
+      labels:
+        app: gitlab-jh
+    spec:
+      containers:
+        - name: gitlab-jh
+          image: registry.gitlab.cn/omnibus/gitlab-jh:16.2.3
+          ports:
+            # kubectl -n gitlab port-forward svc/gitlab-jh 3800:80 --address 0.0.0.0
+            - containerPort: 80
+            - containerPort: 443
+            - containerPort: 22
+          env:
+            - name: TZ
+              value: Asia/Shanghai
+          volumeMounts:
+            # https://docs.gitlab.cn/jh/install/docker.html
+            # grep 'Password:' /etc/gitlab/initial_root_password
+            - name: gitlab-jh-config
+              mountPath: /etc/gitlab
+            - name: gitlab-jh-logs
+              mountPath: /var/log/gitlab
+            - name: gitlab-jh-data
+              mountPath: /var/opt/gitlab
+      volumes:
+        - name: gitlab-jh-config
+          nfs:
+            path: /nfs/gitlab/gitlab-jh/etc/gitlab
+            server: 172.25.25.5
+        - name: gitlab-jh-logs
+          nfs:
+            path: /nfs/gitlab/gitlab-jh/var/log/gitlab
+            server: 172.25.25.5
+        - name: gitlab-jh-data
+          nfs:
+            path: /nfs/gitlab/gitlab-jh/var/opt/gitlab
+            server: 172.25.25.5
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: gitlab
+  name: gitlab-jh-service
+spec:
+  selector:
+    app: gitlab-jh
+  ports:
+    - name: http
+      nodePort: 31301
+      port: 80
+      targetPort: 80
+    - name: https
+      nodePort: 31302
+      port: 443
+      targetPort: 443
+    - name: ssh
+      nodePort: 31303
+      port: 22
+      targetPort: 22
+  type: NodePort
