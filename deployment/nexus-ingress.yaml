@@ -147,6 +147,16 @@ spec:
                   number: 8006
             path: /
             pathType: Prefix
+    - host: aliyuncs.docker.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8007
+            path: /
+            pathType: Prefix
   tls:
     - secretName: docker.xuxiaowei.cn
       hosts:
@@ -156,3 +166,4 @@ spec:
         - hosted.docker.xuxiaowei.cn
         - 163.docker.xuxiaowei.cn
         - group.docker.xuxiaowei.cn
+        - aliyuncs.docker.xuxiaowei.cn

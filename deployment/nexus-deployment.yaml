@@ -59,6 +59,10 @@ spec:
             - containerPort: 8006
             # docker 分组私库：https 端口
             - containerPort: 9006
+            # docker 代理私库：http 端口，代理 https://hnkfbj7x.mirror.aliyuncs.com
+            - containerPort: 8007
+            # docker 代理私库：https 端口，代理 https://hnkfbj7x.mirror.aliyuncs.com
+            - containerPort: 9007
           resources:
             requests:
               cpu: "4"
@@ -164,4 +168,12 @@ spec:
       nodePort: 31596
       port: 9006
       targetPort: 9006
+    - name: docker-aliyuncs-http
+      nodePort: 31587
+      port: 8007
+      targetPort: 8007
+    - name: docker-aliyuncs-https
+      nodePort: 31597
+      port: 9007
+      targetPort: 9007
   type: NodePort
