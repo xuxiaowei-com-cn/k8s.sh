@@ -18,14 +18,15 @@
 
 ```shell
 [root@k8s-control-plane-1 ~]# kubectl get node -o wide
-NAME                  STATUS   ROLES           AGE    VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION              CONTAINER-RUNTIME
-k8s-control-plane-1   Ready    control-plane   3d3h   v1.27.4   172.25.25.211   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
-k8s-control-plane-2   Ready    control-plane   3d3h   v1.27.4   172.25.25.212   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
-k8s-control-plane-3   Ready    control-plane   3d3h   v1.27.4   172.25.25.213   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
-k8s-node-1            Ready    <none>          3d3h   v1.27.4   172.25.25.221   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
-k8s-node-2            Ready    <none>          3d3h   v1.27.4   172.25.25.222   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
-k8s-node-3            Ready    <none>          34h    v1.27.4   172.25.25.223   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
-k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
+NAME                  STATUS   ROLES           AGE     VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE       KERNEL-VERSION              CONTAINER-RUNTIME
+k8s-control-plane-1   Ready    control-plane   4d3h    v1.27.4   172.25.25.211   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
+k8s-control-plane-2   Ready    control-plane   4d3h    v1.27.4   172.25.25.212   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
+k8s-control-plane-3   Ready    control-plane   4d3h    v1.27.4   172.25.25.213   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
+k8s-node-1            Ready    <none>          4d3h    v1.27.4   172.25.25.221   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
+k8s-node-2            Ready    <none>          4d3h    v1.27.4   172.25.25.222   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
+k8s-node-3            Ready    <none>          2d10h   v1.27.4   172.25.25.223   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
+k8s-node-4            Ready    <none>          47h     v1.27.4   172.25.25.224   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
+k8s-node-5            Ready    <none>          3m32s   v1.27.4   172.25.25.225   <none>        Anolis OS 23   5.10.134-14.1.an23.x86_64   containerd://1.6.22
 [root@k8s-control-plane-1 ~]# 
 ```
 
