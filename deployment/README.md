@@ -40,12 +40,20 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
 
 ### apt
 
-| Name       | Format | Type  | URL	                                              | APT Distribution | Proxy Remote storage      | Blob store |
-|------------|--------|-------|---------------------------------------------------|------------------|---------------------------|------------|
-| apt-aliyun | apt    | proxy | https://nexus.xuxiaowei.cn/repository/apt-aliyun/ | lunar            | http://mirrors.aliyun.com | apt-aliyun |
+| Name                        | Format | Type  | URL	                                                               | APT Distribution | Proxy Remote storage               | Blob store    |
+|-----------------------------|--------|-------|--------------------------------------------------------------------|------------------|------------------------------------|---------------|
+| apt-aliyun                  | apt    | proxy | https://nexus.xuxiaowei.cn/repository/apt-aliyun/                  | lunar            | http://mirrors.aliyun.com          | apt-aliyun    |
+| apt-tencent                 | apt    | proxy | https://nexus.xuxiaowei.cn/repository/apt-tencent/                 | lunar            | http://mirrors.cloud.tencent.com   | apt-tencent   |
+| apt-docker                  | apt    | proxy | https://nexus.xuxiaowei.cn/repository/apt-docker/                  | lunar            | https://download.docker.com        | apt-docker    |
+| apt-openkylin-software      | apt    | proxy | https://nexus.xuxiaowei.cn/repository/apt-openkylin-software/      | default          | http://software.openkylin.top      | apt-openkylin |
+| apt-openkylin-archive-build | apt    | proxy | https://nexus.xuxiaowei.cn/repository/apt-openkylin-archive-build/ | yangtze          | http://archive.build.openkylin.top | apt-openkylin |
+| apt-openkylin-ppa-build     | apt    | proxy | https://nexus.xuxiaowei.cn/repository/apt-openkylin-ppa-build/     | yangtze          | http://ppa.build.openkylin.top     | apt-openkylin |
 
 - 使用说明
-    1. apt-aliyun 代理整个阿里云镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：ubuntu、debian
+    1. apt-aliyun 代理整个阿里云 apt 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：ubuntu、debian
+    2. apt-tencent 代理整个腾讯云 apt 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：ubuntu、debian
+    3. 阿里云存在 openkylin 的安装源 https://mirrors.aliyun.com/openkylin/
+       ，只不过在 https://developer.aliyun.com/mirror/ 没有列举出来
 - 使用方式
     1. 待更新
 
@@ -73,20 +81,27 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
 
 ### maven
 
-| Name                 | Format | Type  | URL                                                         | Version policy | Proxy Remote storage                        | Blob store   |
-|----------------------|--------|-------|-------------------------------------------------------------|----------------|---------------------------------------------|--------------|
-| maven-aliyun-central | maven2 | proxy | https://nexus.xuxiaowei.cn/repository/maven-aliyun-central/ | Release        | https://maven.aliyun.com/repository/central | maven-aliyun |
-| maven-aliyun-public  | maven2 | proxy | https://nexus.xuxiaowei.cn/repository/maven-aliyun-public/  | Release        | https://maven.aliyun.com/repository/public  | maven-aliyun |
-| maven-group          | maven2 | group | https://nexus.xuxiaowei.cn/repository/maven-group/          | Release        |                                             | maven-group  |
+| Name                 | Format | Type  | URL                                                         | Version policy | Proxy Remote storage                                           | Blob store           |
+|----------------------|--------|-------|-------------------------------------------------------------|----------------|----------------------------------------------------------------|----------------------|
+| maven-aliyun-central | maven2 | proxy | https://nexus.xuxiaowei.cn/repository/maven-aliyun-central/ | Release        | https://maven.aliyun.com/repository/central                    | maven-aliyun         |
+| maven-aliyun-public  | maven2 | proxy | https://nexus.xuxiaowei.cn/repository/maven-aliyun-public/  | Release        | https://maven.aliyun.com/repository/public                     | maven-aliyun         |
+| maven-tencent-public | maven2 | proxy | https://nexus.xuxiaowei.cn/repository/maven-tencent-public/ | Release        | http://mirrors.cloud.tencent.com/nexus/repository/maven-public | maven-tencent-public |
+| maven-group          | maven2 | group | https://nexus.xuxiaowei.cn/repository/maven-group/          | Release        |                                                                | maven-group          |
 
 - 使用方式
     1. 待更新
 
 ### yum
 
-| Name       | Format | Type  | URL                                               | Proxy Remote storage      | Blob store |
-|------------|--------|-------|---------------------------------------------------|---------------------------|------------|
-| yum-aliyun | yum    | proxy | https://nexus.xuxiaowei.cn/repository/yum-aliyun/ | http://mirrors.aliyun.com | yum-aliyun |
+| Name           | Format | Type  | URL                                                   | Proxy Remote storage             | Blob store     |
+|----------------|--------|-------|-------------------------------------------------------|----------------------------------|----------------|
+| yum-aliyun     | yum    | proxy | https://nexus.xuxiaowei.cn/repository/yum-aliyun/     | http://mirrors.aliyun.com        | yum-aliyun     |
+| yum-tencent    | yum    | proxy | https://nexus.xuxiaowei.cn/repository/yum-tencent/    | http://mirrors.cloud.tencent.com | yum-tencent    |
+| yum-docker     | yum    | proxy | https://nexus.xuxiaowei.cn/repository/yum-docker/     | https://download.docker.com      | yum-docker     |
+| yum-openanolis | yum    | proxy | https://nexus.xuxiaowei.cn/repository/yum-openanolis/ | https://mirrors.openanolis.cn    | yum-openanolis |
 
+- 使用说明
+    1. yum-aliyun 代理整个阿里云 yum 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：centos、centos-vault
+    2. yum-tencent 代理整个腾讯云 yum 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：
 - 使用方式
     1. 待更新
