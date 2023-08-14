@@ -10,9 +10,8 @@
     3. 每个宿主机都需要安装 NFS
 3. 宿主机系统：Anolis OS release 23
 4. 资源配置、软件版本
-
-- 主节点：2C4G100H
-- 工作节点：8C16G100H
+    1. 主节点：2C4G100H
+    2. 工作节点：8C16G100H
 
 ```shell
 [root@k8s-control-plane-1 ~]# kubectl get node -o wide
