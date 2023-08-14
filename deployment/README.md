@@ -27,6 +27,72 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
 [root@k8s-control-plane-1 ~]# 
 ```
 
+## 脚本说明
+
+### gitlab 命名空间
+
+1. [gitlab-ce-deployment.yaml](gitlab-ce-deployment.yaml)
+    1. 部署 gitlab-ce（社区版）
+2. [gitlab-ee-deployment.yaml](gitlab-ee-deployment.yaml)
+    1. 部署 gitlab-ee（企业版）
+3. [gitlab-jh-deployment.yaml](gitlab-jh-deployment.yaml)
+    1. 部署 gitlab-jh（极狐版）
+4. [gitlab-ingress.yaml](gitlab-ingress.yaml)
+    1. 配置 gitlab 域名、证书
+    2. 只使用 80/443 端口，使用不同域名区分访问目的地
+
+### nexus 命名空间
+
+1. [nexus-deployment.yaml](nexus-deployment.yaml)
+    1. 部署 nexus，搭建个人私库
+    2. 支持的私库类型（其中 hosted 代表宿主仓库，可以自己上传；proxy 代表代理仓库；group 代表分组仓库，可以将多个仓库聚合成一个仓库）：
+        1. apt (hosted)
+        2. apt (proxy)
+        3. bower (group)
+        4. bower (hosted)
+        5. bower (proxy)
+        6. cocoapods (proxy)
+        7. conan (proxy)
+        8. conda (proxy)
+        9. docker (group)
+        10. docker (hosted)
+        11. docker (proxy)
+        12. gitlfs (hosted)
+        13. go (group)
+        14. go (proxy)
+        15. helm (hosted)
+        16. helm (proxy)
+        17. maven2 (group)
+        18. maven2 (hosted)
+        19. maven2 (proxy)
+        20. npm (group)
+        21. npm (hosted)
+        22. npm (proxy)
+        23. nuget (group)
+        24. nuget (hosted)
+        25. nuget (proxy)
+        26. p2 (proxy)
+        27. pypi (group)
+        28. pypi (hosted)
+        29. pypi (proxy)
+        30. r (group)
+        31. r (hosted)
+        32. r (proxy)
+        33. raw (group)
+        34. raw (hosted)
+        35. raw (proxy)
+        36. rubygems (group)
+        37. rubygems (hosted)
+        38. rubygems (proxy)
+        39. yum (group)
+        40. yum (hosted)
+        41. yum (proxy)
+2. [minio-deployment.yaml](minio-deployment.yaml)
+    1. MinIO（支持 S3 协议），用户储存 nexus 文件/数据
+3. [nexus-ingress.yaml](nexus-ingress.yaml)
+    1. 配置 nexus 域名、证书
+    2. 主要用于 docker 私库域名证书的配置
+
 ## GitLab
 
 | Name      | Version     | Domain                 |
