@@ -17,8 +17,8 @@ metadata:
   namespace: nexus
   name: nexus-xuxiaowei-cn
   annotations:
-    # http 不强制跳转到 https（在 Linux 没有更新 ca-certificates 时，可能无法验证 SSL 证书）
-    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    # http 不强制跳转到 https（在 Linux 没有更新 ca-certificates 时，可能无法验证 SSL 证书，请使用浏览器“无痕模式”测试）
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   ingressClassName: nginx
   rules:
