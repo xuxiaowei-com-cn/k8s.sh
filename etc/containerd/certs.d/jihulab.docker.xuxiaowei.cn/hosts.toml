@@ -1,0 +1,7 @@
+server = "https://jihulab.docker.xuxiaowei.cn"
+
+# 填写真实能访问的 IP、端口
+[host."http://"]
+  capabilities = [ "pull", "resolve" ]
+  # 跳过证书验证
+  skip_verify = true
