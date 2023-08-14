@@ -142,9 +142,9 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
 - 使用说明
     1. 此处拉取 docker 镜像时，使用不同的域名拉取不同的仓库
 - docker 信任证书
-    1. 待更新
+    1. 参见：https://xuxiaowei-com-cn.gitee.io/gitlab-k8s/docs/nexus/docker-https-configuration
 - containerd 信任证书（k8s 使用 containerd）
-    1. 待更新
+    1. 参见：https://xuxiaowei-com-cn.gitee.io/gitlab-k8s/docs/k8s/containerd-mirrors/
 - 使用方式
     1. 待更新
 
