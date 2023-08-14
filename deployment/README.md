@@ -124,7 +124,56 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
     3. 阿里云存在 openkylin 的安装源 https://mirrors.aliyun.com/openkylin/
        ，只不过在 https://developer.aliyun.com/mirror/ 没有列举出来
 - 使用方式
-    1. 待更新
+    1. 备份 `/etc/apt/` 中的源
+        ```shell
+        cd /etc/apt/
+        ll
+        mv sources.list sources.list.bak
+        ll
+        ```
+    2. 根据当前系统，选择所需的配置文件，上传至 `/etc/apt/` 或 `/etc/apt/sources.list.d` 文件夹
+
+       | 系统名称   | 系统版本  | 安装源类型      | 代理镜像 | 安装源配置文件                                                                        |
+              |--------|-------|------------|------|--------------------------------------------------------------------------------|
+       | Ubuntu | 22.10 | 默认 apt     | 阿里云  | [/etc/apt/22.10/aliyun-sources.list](/etc/apt/22.10/aliyun-sources.list)       |
+       | Ubuntu | 22.10 | docker     | 阿里云  | [/etc/apt/22.10/aliyun-docker.list](/etc/apt/22.10/aliyun-docker.list)         |
+       | Ubuntu | 22.10 | kubernetes | 阿里云  | [/etc/apt/22.10/aliyun-kubernetes.list](/etc/apt/22.10/aliyun-kubernetes.list) |
+
+    3. 清理所有本地仓库
+
+        ```shell
+        sudo apt-get clean
+        ```
+
+    4. 重建索引测试
+
+        ```shell
+        sudo apt-get update
+        ```
+
+    5. CentOS 安装依赖测试
+
+        ```shell
+        # 可使用搜索进行测试
+        # sudo apt-cache madison autoconf
+        sudo apt-get -y install autoconf gcc gettext libcurl4-gnutls-dev libexpat1-dev libnl-3-dev libpcre3-dev libssl-dev make zlib1g-dev
+        ```
+
+    6. docker 安装依赖测试
+
+        ```shell
+        # 可使用搜索进行测试
+        # sudo apt-cache madison docker-ce
+        sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        ```
+
+    7. kubernetes 安装依赖测试
+
+        ```shell
+        # 可使用搜索进行测试
+        # sudo apt-cache madison kubelet
+        sudo apt-get -y install kubelet kubeadm kubectl
+        ```
 
 ### docker
 
@@ -182,13 +231,13 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
         ```
     2. 根据当前系统，选择所需的配置文件，上传至 `/etc/yum.repos.d/` 文件夹
 
-       | 系统名称         | 系统版本 | 安装源类型      | 代理镜像 | 安装源配置文件                                                                                 |
-       |--------------|------|------------|------|-----------------------------------------------------------------------------------------|
-       | CentOS       | 7    | 默认 yum     | 阿里云  | [aliyun-centos-7.repo](/etc/yum.repos.d/aliyun-centos-7.repo)                           |
-       | CentOS       | 8    | 默认 yum     | 阿里云  | [aliyun-centos-8.repo](/etc/yum.repos.d/aliyun-centos-8.repo)                           |
-       | CentOS vault | 8    | 默认 yum     | 阿里云  | [aliyun-centos-vault-8.5.2111.repo](/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo) |
-       | CentOS       | 7/8  | docker     | 阿里云  | [aliyun-docker-ce.repo](/etc/yum.repos.d/aliyun-docker-ce.repo)                         |
-       | CentOS       | 7/8  | kubernetes | 阿里云  | [aliyun-kubernetes.repo](/etc/yum.repos.d/aliyun-kubernetes.repo)                       |
+       | 系统名称         | 系统版本 | 安装源类型      | 代理镜像 | 安装源配置文件                                                                                                  |
+       |--------------|------|------------|------|----------------------------------------------------------------------------------------------------------|
+       | CentOS       | 7    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-7.repo](/etc/yum.repos.d/aliyun-centos-7.repo)                           |
+       | CentOS       | 8    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-8.repo](/etc/yum.repos.d/aliyun-centos-8.repo)                           |
+       | CentOS vault | 8    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo](/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo) |
+       | CentOS       | 7/8  | docker     | 阿里云  | [/etc/yum.repos.d/aliyun-docker-ce.repo](/etc/yum.repos.d/aliyun-docker-ce.repo)                         |
+       | CentOS       | 7/8  | kubernetes | 阿里云  | [/etc/yum.repos.d/aliyun-kubernetes.repo](/etc/yum.repos.d/aliyun-kubernetes.repo)                       |
 
     3. 清理所有本地仓库
 

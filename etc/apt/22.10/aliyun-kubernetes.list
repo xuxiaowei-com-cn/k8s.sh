@@ -1,0 +1,6 @@
+
+# 命令
+# sudo apt-get install -y apt-transport-https
+# curl http://nexus.xuxiaowei.cn/repository/apt-aliyun/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
+
+deb http://nexus.xuxiaowei.cn/repository/apt-aliyun/kubernetes/apt/ kubernetes-xenial main

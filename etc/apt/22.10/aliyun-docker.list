@@ -1,0 +1,8 @@
+# gpg 签名文件 /etc/apt/keyrings/docker.gpg 从 http://nexus.xuxiaowei.cn/repository/apt-aliyun/docker-ce/linux/ubuntu/gpg 上获取
+
+# 命令
+# sudo apt-get install -y ca-certificates curl gnupg
+# sudo install -m 0755 -d /etc/apt/keyrings
+# curl -fsSL http://nexus.xuxiaowei.cn/repository/apt-aliyun/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] http://nexus.xuxiaowei.cn/repository/apt-aliyun/docker-ce/linux/ubuntu kinetic stable
