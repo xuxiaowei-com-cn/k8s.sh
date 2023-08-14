@@ -128,13 +128,13 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
         ```shell
         cd /etc/apt/
         ll
-        mv sources.list sources.list.bak
+        sudo mv sources.list sources.list.bak
         ll
         ```
     2. 根据当前系统，选择所需的配置文件，上传至 `/etc/apt/` 或 `/etc/apt/sources.list.d` 文件夹
 
        | 系统名称   | 系统版本  | 安装源类型      | 代理镜像 | 安装源配置文件                                                                        |
-              |--------|-------|------------|------|--------------------------------------------------------------------------------|
+       |--------|-------|------------|------|--------------------------------------------------------------------------------|
        | Ubuntu | 22.10 | 默认 apt     | 阿里云  | [/etc/apt/22.10/aliyun-sources.list](/etc/apt/22.10/aliyun-sources.list)       |
        | Ubuntu | 22.10 | docker     | 阿里云  | [/etc/apt/22.10/aliyun-docker.list](/etc/apt/22.10/aliyun-docker.list)         |
        | Ubuntu | 22.10 | kubernetes | 阿里云  | [/etc/apt/22.10/aliyun-kubernetes.list](/etc/apt/22.10/aliyun-kubernetes.list) |
