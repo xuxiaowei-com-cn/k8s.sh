@@ -13,6 +13,8 @@
     1. PVE 8.0-2：40C256G7440H
     2. k8s 主节点：2C4G100H
     3. k8s 工作节点：8C16G100H
+    4. k8s 主节点 VIP：172.25.25.210
+    5. k8s 工作节点 VIP：172.25.25.220
 
 ```shell
 [root@k8s-control-plane-1 ~]# kubectl get node -o wide
