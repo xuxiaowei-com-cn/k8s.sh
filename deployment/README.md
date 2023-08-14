@@ -173,4 +173,33 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
     1. yum-aliyun 代理整个阿里云 yum 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：centos、centos-vault
     2. yum-tencent 代理整个腾讯云 yum 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：centos、centos-vault
 - 使用方式
-    1. 待更新
+    1. 备份 `/etc/yum.repos.d` 中的源
+        ```shell
+        cd /etc/yum.repos.d
+        ll
+        for file in *.repo; do mv "$file" "${file}.bak"; done
+        ll
+        ```
+    2. 根据当前系统，选择所需的配置文件
+
+       | 系统名称   | 7                                                             |
+       |--------|---------------------------------------------------------------|
+       | CentOS | [aliyun-centos-7.repo](/etc/yum.repos.d/aliyun-centos-7.repo) |
+
+    3. 清理所有本地仓库
+
+        ```shell
+        yum clean all
+        ```
+
+    4. 重建索引
+
+        ```shell
+        yum makecache
+        ```
+
+    5. 安装依赖测试
+
+        ```shell
+        yum -y install autoconf curl-devel expat-devel gcc git libnl3-devel libtool make openssl-devel svn systemd-devel tar tcl zlib-devel 
+        ```
