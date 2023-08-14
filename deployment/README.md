@@ -8,7 +8,7 @@
     1. NFS IP：172.25.25.5
     2. NFS 路径：/nfs
     3. 每个宿主机都需要安装 NFS
-3. 宿主机系统版本：AnolisOS-23.0
+3. 宿主机系统：Anolis OS release 23
 4. 资源配置、软件版本
 
 - 主节点：2C4G100H
