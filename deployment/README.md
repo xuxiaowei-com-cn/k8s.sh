@@ -182,10 +182,11 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
         ```
     2. 根据当前系统，选择所需的配置文件，上传至 `/etc/yum.repos.d/` 文件夹
 
-       | 系统名称   | 7                                                             |
-       |--------|---------------------------------------------------------------|
-       | CentOS | [aliyun-centos-7.repo](/etc/yum.repos.d/aliyun-centos-7.repo) |
-       | CentOS | [aliyun-centos-8.repo](/etc/yum.repos.d/aliyun-centos-8.repo) |
+       | 系统名称         | 系统版本 | 安装源类型 | 安装源配置文件                                                                                 |
+       |--------------|------|-------|-----------------------------------------------------------------------------------------|
+       | CentOS       | 7    | 默认    | [aliyun-centos-7.repo](/etc/yum.repos.d/aliyun-centos-7.repo)                           |
+       | CentOS       | 8    | 默认    | [aliyun-centos-8.repo](/etc/yum.repos.d/aliyun-centos-8.repo)                           |
+       | CentOS vault | 8    | 默认    | [aliyun-centos-vault-8.5.2111.repo](/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo) |
 
     3. 清理所有本地仓库
 
