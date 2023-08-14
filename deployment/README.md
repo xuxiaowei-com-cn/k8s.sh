@@ -39,13 +39,18 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
 
 1. 使用 MinIO S3 储存文件
 
-- apt
+### apt
 
 | Name       | Format | Type  | URL	                                              | APT Distribution | Proxy Remote storage      | Blob store |
 |------------|--------|-------|---------------------------------------------------|------------------|---------------------------|------------|
 | apt-aliyun | apt    | proxy | https://nexus.xuxiaowei.cn/repository/apt-aliyun/ | lunar            | http://mirrors.aliyun.com | apt-aliyun |
 
-- docker
+- 使用说明
+    1. apt-aliyun 代理整个阿里云镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：ubuntu、debian
+- 使用方式
+    1. 待更新
+
+### docker
 
 | Domain                        | Name             | Format | Type   | URL                                                     | Repository Connectors HTTP | Repository Connectors HTTPS | Allow anonymous docker pull | Enable Docker V1 API | Proxy Remote storage                 | Blob store       |
 |-------------------------------|------------------|--------|--------|---------------------------------------------------------|----------------------------|-----------------------------|-----------------------------|----------------------|--------------------------------------|------------------|
@@ -58,7 +63,12 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
 | io.docker.xuxiaowei.cn        | docker-io        | docker | proxy  | https://nexus.xuxiaowei.cn/repository/docker-io/        | 8002                       | 9002                        | ✅                           | ✅                    | https://registry-1.docker.io         | docker-io        |
 | jihulab.docker.xuxiaowei.cn   | docker-jihulab   | docker | proxy  | https://nexus.xuxiaowei.cn/repository/docker-jihulab/   | 8001                       | 9001                        | ✅                           | ✅                    | https://registry.jihulab.com         | docker-jihulab   |
 
-- maven
+- 使用说明
+    1. 此处拉取 docker 镜像时，使用不同的域名拉取不同的仓库
+- 使用方式
+    1. 待更新
+
+### maven
 
 | Name                 | Format | Type  | URL                                                         | Version policy | Proxy Remote storage                        | Blob store   |
 |----------------------|--------|-------|-------------------------------------------------------------|----------------|---------------------------------------------|--------------|
@@ -66,8 +76,14 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
 | maven-aliyun-public  | maven2 | proxy | https://nexus.xuxiaowei.cn/repository/maven-aliyun-public/  | Release        | https://maven.aliyun.com/repository/public  | maven-aliyun |
 | maven-group          | maven2 | group | https://nexus.xuxiaowei.cn/repository/maven-group/          | Release        |                                             | maven-group  |
 
-- yum
+- 使用方式
+    1. 待更新
+
+### yum
 
 | Name       | Format | Type  | URL                                               | Proxy Remote storage      | Blob store |
 |------------|--------|-------|---------------------------------------------------|---------------------------|------------|
 | yum-aliyun | yum    | proxy | https://nexus.xuxiaowei.cn/repository/yum-aliyun/ | http://mirrors.aliyun.com | yum-aliyun |
+
+- 使用方式
+    1. 待更新
