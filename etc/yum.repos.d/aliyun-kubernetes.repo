@@ -1,0 +1,10 @@
+[kubernetes]
+name=Kubernetes
+baseurl=http://nexus.xuxiaowei.cn/repository/yum-aliyun/kubernetes/yum/repos/kubernetes-el7-x86_64/
+# 是否开启本仓库
+enabled=1
+# 是否检查 gpg 签名文件
+gpgcheck=0
+# 是否检查 gpg 签名文件
+repo_gpgcheck=0
+gpgkey=http://nexus.xuxiaowei.cn/repository/yum-aliyun/kubernetes/yum/doc/yum-key.gpg http://nexus.xuxiaowei.cn/repository/yum-aliyun/kubernetes/yum/doc/rpm-package-key.gpg
