@@ -103,6 +103,6 @@ k8s-node-4            Ready    <none>          22h    v1.27.4   172.25.25.224   
 
 - 使用说明
     1. yum-aliyun 代理整个阿里云 yum 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：centos、centos-vault
-    2. yum-tencent 代理整个腾讯云 yum 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：
+    2. yum-tencent 代理整个腾讯云 yum 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：centos、centos-vault
 - 使用方式
     1. 待更新

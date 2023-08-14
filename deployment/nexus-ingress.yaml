@@ -16,6 +16,9 @@ kind: Ingress
 metadata:
   namespace: nexus
   name: nexus-xuxiaowei-cn
+  annotations:
+    # http 不强制跳转到 https（在 Linux 没有更新 ca-certificates 时，可能无法验证 SSL 证书）
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
 spec:
   ingressClassName: nginx
   rules:
@@ -83,7 +86,8 @@ metadata:
   namespace: nexus
   name: docker-xuxiaowei-cn
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "1024m"
+    # 防止推送较大 docker 镜像时异常
+    nginx.ingress.kubernetes.io/proxy-body-size: "10240m"
 spec:
   ingressClassName: nginx
   rules:
