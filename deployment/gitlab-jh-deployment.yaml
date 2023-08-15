@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: gitlab-jh
-          image: registry.gitlab.cn/omnibus/gitlab-jh:16.2.3
+          image: registry.gitlab.cn/omnibus/gitlab-jh:16.2.4
           ports:
             # kubectl -n gitlab port-forward svc/gitlab-jh 3800:80 --address 0.0.0.0
             - containerPort: 80

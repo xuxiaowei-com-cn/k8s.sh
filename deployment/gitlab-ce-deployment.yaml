@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: gitlab-ce
-          image: gitlab/gitlab-ce:16.2.3-ce.0
+          image: gitlab/gitlab-ce:16.2.4-ce.0
           ports:
             # kubectl -n gitlab port-forward svc/gitlab-ce 1800:80 --address 0.0.0.0
             - containerPort: 80
