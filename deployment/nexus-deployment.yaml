@@ -67,6 +67,10 @@ spec:
             - containerPort: 8008
             # docker 代理私库：https 端口，代理 https://docker.elastic.co
             - containerPort: 9008
+            # docker 代理私库：http 端口，代理 container-registry.oracle.com
+            - containerPort: 8009
+            # docker 代理私库：https 端口，代理 container-registry.oracle.com
+            - containerPort: 9009
           resources:
             requests:
               cpu: "4"
@@ -188,4 +192,12 @@ spec:
       nodePort: 31598
       port: 9008
       targetPort: 9008
+    - name: docker-oracle-http
+      nodePort: 31589
+      port: 8009
+      targetPort: 8009
+    - name: docker-oracle-https
+      nodePort: 31599
+      port: 9009
+      targetPort: 9009
   type: NodePort

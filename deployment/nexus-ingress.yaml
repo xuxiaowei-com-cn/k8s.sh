@@ -171,6 +171,16 @@ spec:
                   number: 8008
             path: /
             pathType: Prefix
+    - host: oracle.docker.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8009
+            path: /
+            pathType: Prefix
   tls:
     - secretName: docker.xuxiaowei.cn
       hosts:
@@ -182,3 +192,4 @@ spec:
         - group.docker.xuxiaowei.cn
         - aliyuncs.docker.xuxiaowei.cn
         - elastic.docker.xuxiaowei.cn
+        - oracle.docker.xuxiaowei.cn
