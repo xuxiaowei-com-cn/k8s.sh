@@ -114,6 +114,16 @@ nexus                  nexus-service                        NodePort       10.10
     1. 配置 nexus 域名、证书
     2. 主要用于 docker 私库域名证书的配置
 
+### jenkins
+
+1. [jenkins-deployment.yaml](jenkins-deployment.yaml)
+    1. 部署 jenkins
+    2. 文档
+        1. [GitHub](https://github.com/jenkinsci/docker/blob/master/README.md)
+        2. [JiHuLab](https://jihulab.com/mirrors-github/jenkinsci/jenkins/blob/master/README.md)
+2. [jenkins-ingress.yaml](jenkins-ingress.yaml)
+    1. 配置 jenkins 域名、证书
+
 ## GitLab
 
 | Name      | Version     | Domain                 |
@@ -153,7 +163,7 @@ nexus                  nexus-service                        NodePort       10.10
     2. 根据当前系统，选择所需的配置文件，上传至 `/etc/apt/` 或 `/etc/apt/sources.list.d` 文件夹
 
        | 系统名称   | 系统版本  | 安装源类型      | 代理镜像 | 安装源配置文件                                                                        |
-       |--------|-------|------------|------|--------------------------------------------------------------------------------|
+                                                                                                                |--------|-------|------------|------|--------------------------------------------------------------------------------|
        | Ubuntu | 22.10 | 默认 apt     | 阿里云  | [/etc/apt/22.10/aliyun-sources.list](/etc/apt/22.10/aliyun-sources.list)       |
        | Ubuntu | 22.10 | docker     | 阿里云  | [/etc/apt/22.10/aliyun-docker.list](/etc/apt/22.10/aliyun-docker.list)         |
        | Ubuntu | 22.10 | kubernetes | 阿里云  | [/etc/apt/22.10/aliyun-kubernetes.list](/etc/apt/22.10/aliyun-kubernetes.list) |
@@ -251,7 +261,7 @@ nexus                  nexus-service                        NodePort       10.10
     2. 根据当前系统，选择所需的配置文件，上传至 `/etc/yum.repos.d/` 文件夹
 
        | 系统名称         | 系统版本 | 安装源类型      | 代理镜像 | 安装源配置文件                                                                                                  |
-       |--------------|------|------------|------|----------------------------------------------------------------------------------------------------------|
+                                                                                                                |--------------|------|------------|------|----------------------------------------------------------------------------------------------------------|
        | CentOS       | 7    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-7.repo](/etc/yum.repos.d/aliyun-centos-7.repo)                           |
        | CentOS       | 8    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-8.repo](/etc/yum.repos.d/aliyun-centos-8.repo)                           |
        | CentOS vault | 8    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo](/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo) |
