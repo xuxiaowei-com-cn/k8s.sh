@@ -1,8 +1,10 @@
 stages:
   - images-list
   - images-sync
+  # 代码同步
+  - sync
 
-images-list:latest:
+images-list:1.28.0-0:
   stage: images-list
   image: openanolis/anolisos:7.9-x86_64
   before_script:
@@ -21,22 +23,29 @@ images-list:latest:
 
       EOF
   script:
-    - yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
-    - kubeadm config images list
-    - kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g'
-    - kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g'
+    - yum install -y kubelet-1.28.0-0 kubeadm-1.28.0-0 kubectl-1.28.0-0 --disableexcludes=kubernetes --nogpgcheck
+    - kubeadm config images list --kubernetes-version=v1.28.0
+    - kubeadm config images list --kubernetes-version=v1.28.0 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g'
+    - kubeadm config images list --kubernetes-version=v1.28.0 | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g'
     - |
       echo "" >images.sh
-      images=$(kubeadm config images list | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g')
+      images=$(kubeadm config images list --kubernetes-version=v1.28.0)
       for image in $images; do
-        echo "docker pull $image" >>images.sh
-        if echo "$image" | grep -q "coredns"; then
-          new_image="registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/coredns/$(basename $image)"
-          echo "docker tag $image $new_image" >>images.sh
+        aliyuncs_image=$(echo $image | sed 's|registry.k8s.io|registry.aliyuncs.com/google_containers|g' | sed 's|coredns/coredns|coredns|g')
+        echo "docker pull $aliyuncs_image" >>images.sh
+        if echo "$aliyuncs_image" | grep -q "coredns"; then
+          new_image="registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/coredns/$(basename $aliyuncs_image)"
+          echo "docker tag $aliyuncs_image $new_image" >>images.sh
+          echo "docker tag $aliyuncs_image $image" >>images.sh
           echo "docker push $new_image" >>images.sh
         fi
-        new_image="registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/$(basename $image)"
-        echo "docker tag $image $new_image" >>images.sh
+        new_image="registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/$(basename $aliyuncs_image)"
+        echo "docker tag $aliyuncs_image $new_image" >>images.sh
+        echo "docker tag $aliyuncs_image $image" >>images.sh
+      
+        [[ $image =~ (.+)/(.+):(.+) ]]
+        echo "docker save -o ${BASH_REMATCH[2]}-${BASH_REMATCH[3]}.tar $image" >>images.sh
+      
         echo "docker push $new_image" >>images.sh
       done
     - cat images.sh
@@ -45,16 +54,16 @@ images-list:latest:
     paths:
       - images.sh
   only:
-    - images-mirrors/latest
+    - images-mirrors/1.28.0-0
   tags:
     - jihulab
 
-images-sync:latest:
+images-sync:1.28.0-0:
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
   stage: images-sync
   needs:
-    - job: images-list:latest
+    - job: images-list:1.28.0-0
       artifacts: true
   image: docker:20.10.16
   services:
@@ -65,7 +74,17 @@ images-sync:latest:
   script:
     - cat images.sh
     - cat images.sh | sh
+    - ls
+  artifacts:
+    name: "${CI_JOB_NAME}"
+    paths:
+      - "*.tar"
   only:
-    - images-mirrors/latest
+    - images-mirrors/1.28.0-0
   tags:
     - jihulab
+
+# 嵌入
+include:
+  # 同步代码
+  - /sync.yml
