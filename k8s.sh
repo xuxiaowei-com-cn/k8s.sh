@@ -40,7 +40,7 @@ availability_haproxy_username=admin
 availability_haproxy_password=password
 
 # kubernetes 网络插件 calico 版本
-calico_version=3.25
+calico_version=3.26.1
 
 # 高可用 VIP keepalived 镜像
 keepalived_mirror=lettore/keepalived
@@ -916,7 +916,7 @@ function _calico_init() {
       curl -o calico.yaml "$calico_manifests_mirror"
     else
       echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用版本：${COLOR_RESET}${COLOR_GREEN}${calico_version}${COLOR_RESET}"
-      curl -o calico.yaml https://docs.tigera.io/archive/v"$calico_version"/manifests/calico.yaml
+      curl -o calico.yaml https://gitcode.net/mirrors/projectcalico/calico/-/raw/v"$calico_version"/manifests/calico.yaml
     fi
 
     # 网卡
