@@ -6,7 +6,7 @@ stages:
 images-sync:
   variables:
     DOCKER_TLS_CERTDIR: "/certs"
-    CALICO_VERSIONS: "v3.26.0 v3.25.0 v3.24.0 v3.23.0 v3.22.0 v3.21.0 v3.20.0 v3.19.0 v3.18.0 v3.17.0 v3.16.0 v3.15.0 v3.14.0 v3.13.0 v3.12.0"
+    CALICO_VERSIONS: "v3.26.1 v3.26.0 v3.25.0 v3.24.0 v3.23.0 v3.22.0 v3.21.0 v3.20.0 v3.19.0 v3.18.0 v3.17.0 v3.16.0 v3.15.0 v3.14.0 v3.13.0 v3.12.0"
   stage: images-sync
   image: docker:20.10.16
   services:
