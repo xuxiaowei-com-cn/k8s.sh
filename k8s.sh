@@ -376,7 +376,7 @@ _firewalld_stop() {
         echo -e "${COLOR_BLUE}防火墙 未关闭，正在进行关闭${COLOR_RESET}" && sudo systemctl stop firewalld.service && echo -e "${COLOR_BLUE}防火墙 已关闭${COLOR_RESET}"
       fi
 
-      if [[ $enabled_status == "enabled" || $enabled_status == "unknown" ]]; then
+      if [[ $enabled_status == "disabled" || $enabled_status == "unknown" ]]; then
         echo -e "${COLOR_BLUE}防火墙开机自启 已关闭，无需操作${COLOR_RESET}"
       else
         echo -e "${COLOR_BLUE}防火墙开机自启 未关闭，正在进行关闭${COLOR_RESET}" && sudo systemctl disable firewalld.service && echo -e "${COLOR_BLUE}防火墙开机自启 已关闭${COLOR_RESET}"
