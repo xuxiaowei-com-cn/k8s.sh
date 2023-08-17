@@ -71,6 +71,10 @@ spec:
             - containerPort: 8009
             # docker 代理私库：https 端口，代理 https://container-registry.oracle.com
             - containerPort: 9009
+            # docker 宿主私库：http 端口，pig
+            - containerPort: 8010
+            # docker 宿主私库：https 端口，pig
+            - containerPort: 9010
           resources:
             requests:
               cpu: "4"
@@ -200,4 +204,12 @@ spec:
       nodePort: 31599
       port: 9009
       targetPort: 9009
+    - name: docker-pig-http
+      nodePort: 31510
+      port: 8010
+      targetPort: 8010
+    - name: docker-pig-https
+      nodePort: 31520
+      port: 9010
+      targetPort: 9010
   type: NodePort
