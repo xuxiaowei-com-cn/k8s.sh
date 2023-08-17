@@ -115,7 +115,7 @@ nexus                  nexus-service                        NodePort       10.10
     1. 配置 nexus 域名、证书
     2. 主要用于 docker 私库域名证书的配置
 
-### jenkins
+### jenkins 命名空间
 
 1. [jenkins-deployment.yaml](jenkins-deployment.yaml)
     1. 部署 jenkins
@@ -125,7 +125,7 @@ nexus                  nexus-service                        NodePort       10.10
 2. [jenkins-ingress.yaml](jenkins-ingress.yaml)
     1. 配置 jenkins 域名、证书
 
-## GitLab
+## GitLab 配置
 
 | Name      | Version     | Domain                 |
 |-----------|-------------|------------------------|
@@ -133,7 +133,7 @@ nexus                  nexus-service                        NodePort       10.10
 | gitlab-ee | 16.2.4-ee.0 | gitlab.ee.xuxiaowei.cn |
 | gitlab-jh | 16.2.4      | gitlab.jh.xuxiaowei.cn |
 
-## Nexus
+## Nexus 私库配置
 
 1. 使用 MinIO S3 储存文件
 
@@ -205,7 +205,7 @@ nexus                  nexus-service                        NodePort       10.10
         sudo apt-get -y install kubelet kubeadm kubectl
         ```
 
-### docker
+### docker 私库配置
 
 | Domain                        | Name             | Format | Type   | URL                                                     | Repository Connectors HTTP | Repository Connectors HTTPS | Allow anonymous docker pull | Enable Docker V1 API | Proxy Remote storage                 | Blob store       |
 |-------------------------------|------------------|--------|--------|---------------------------------------------------------|----------------------------|-----------------------------|-----------------------------|----------------------|--------------------------------------|------------------|
@@ -227,7 +227,7 @@ nexus                  nexus-service                        NodePort       10.10
 - 使用方式
     1. 待更新
 
-### maven
+### maven 私库配置
 
 | Name                 | Format | Type  | URL                                                         | Version policy | Proxy Remote storage                                           | Blob store           |
 |----------------------|--------|-------|-------------------------------------------------------------|----------------|----------------------------------------------------------------|----------------------|
@@ -239,7 +239,7 @@ nexus                  nexus-service                        NodePort       10.10
 - 使用方式
     1. 待更新
 
-### yum
+### yum 私库配置
 
 | Name           | Format | Type  | URL                                                   | Proxy Remote storage             | Blob store     |
 |----------------|--------|-------|-------------------------------------------------------|----------------------------------|----------------|
