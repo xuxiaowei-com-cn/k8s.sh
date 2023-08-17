@@ -141,6 +141,8 @@
 13. 自动安装、配置 kubectl 命令自动补充
 14. 自动安装、配置 VIP（Virtual IP Address，虚拟 IP 地址）
 
+## [个人服务器配置](deployment/README.md)
+
 ## 环境变量说明
 
 | 镜像参数                  | 说明                                                                   | 原始镜像                                                                                        | 加速镜像使用示例                                                                     | 作者个人镜像                                                                                                   |

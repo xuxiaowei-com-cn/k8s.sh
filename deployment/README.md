@@ -2,19 +2,20 @@
 
 ## 说明
 
-1. 使用通配符域名证书，减少配置，申请参见：
+1. 使用通配符域名证书，减少配置，申请方法参见：
     1. [使用 acme.sh 生成证书](https://xuxiaowei-com-cn.gitee.io/gitlab-k8s/docs/ssl/acme.sh)
-2. 数据使用 NFS 储存
+2. 服务器配置：40C256G7440H
+3. 服务器系统：PVE 8.0-4
+4. 数据使用 NFS 储存在 PVE 中
     1. NFS IP：172.25.25.5
     2. NFS 路径：/nfs
-    3. 每个宿主机都需要安装 NFS
-3. 宿主机系统：Anolis OS release 23
-4. 资源配置、软件版本
-    1. PVE 8.0-2：40C256G7440H
-    2. k8s 主节点：2C4G100H
-    3. k8s 工作节点：8C16G100H
-    4. k8s 主节点 VIP：172.25.25.210
-    5. k8s 工作节点 VIP：172.25.25.220
+    3. 每个 k8s 节点都需要安装 NFS
+5. k8s 节点系统：Anolis OS release 23
+6. k8s 资源配置、软件版本
+    1. k8s 主节点：2C4G100H
+    2. k8s 工作节点：8C16G100H
+    3. k8s 主节点 VIP：172.25.25.210
+    4. k8s 工作节点 VIP：172.25.25.220
 
 ```shell
 [root@k8s-control-plane-1 ~]# kubectl get node -o wide
