@@ -128,9 +128,9 @@ nexus                  nexus-service                        NodePort       10.10
 
 | Name      | Version     | Domain                 |
 |-----------|-------------|------------------------|
-| gitlab-ce | 16.2.3-ce.0 | gitlab.ce.xuxiaowei.cn |
-| gitlab-ee | 16.2.3-ee.0 | gitlab.ee.xuxiaowei.cn |
-| gitlab-jh | 16.2.3      | gitlab.jh.xuxiaowei.cn |
+| gitlab-ce | 16.2.4-ce.0 | gitlab.ce.xuxiaowei.cn |
+| gitlab-ee | 16.2.4-ee.0 | gitlab.ee.xuxiaowei.cn |
+| gitlab-jh | 16.2.4      | gitlab.jh.xuxiaowei.cn |
 
 ## Nexus
 
