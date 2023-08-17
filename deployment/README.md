@@ -137,6 +137,12 @@ nexus                  nexus-service                        NodePort       10.10
 | apt-openkylin-archive-build | apt    | proxy | https://nexus.xuxiaowei.cn/repository/apt-openkylin-archive-build/ | yangtze          | http://archive.build.openkylin.top | apt-openkylin |
 | apt-openkylin-ppa-build     | apt    | proxy | https://nexus.xuxiaowei.cn/repository/apt-openkylin-ppa-build/     | yangtze          | http://ppa.build.openkylin.top     | apt-openkylin |
 
+| 系统名称   | 系统版本  | 安装源类型      | 代理镜像 | 安装源配置文件                                                                        |
+|--------|-------|------------|------|--------------------------------------------------------------------------------|
+| Ubuntu | 22.10 | 默认 apt     | 阿里云  | [/etc/apt/22.10/aliyun-sources.list](/etc/apt/22.10/aliyun-sources.list)       |
+| Ubuntu | 22.10 | docker     | 阿里云  | [/etc/apt/22.10/aliyun-docker.list](/etc/apt/22.10/aliyun-docker.list)         |
+| Ubuntu | 22.10 | kubernetes | 阿里云  | [/etc/apt/22.10/aliyun-kubernetes.list](/etc/apt/22.10/aliyun-kubernetes.list) |
+
 - 使用说明
     1. apt-aliyun 代理整个阿里云 apt 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：ubuntu、debian
     2. apt-tencent 代理整个腾讯云 apt 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：ubuntu、debian
@@ -151,12 +157,6 @@ nexus                  nexus-service                        NodePort       10.10
         ll
         ```
     2. 根据当前系统，选择所需的配置文件，上传至 `/etc/apt/` 或 `/etc/apt/sources.list.d` 文件夹
-
-       | 系统名称   | 系统版本  | 安装源类型      | 代理镜像 | 安装源配置文件                                                                        |
-       |--------|-------|------------|------|--------------------------------------------------------------------------------|
-       | Ubuntu | 22.10 | 默认 apt     | 阿里云  | [/etc/apt/22.10/aliyun-sources.list](/etc/apt/22.10/aliyun-sources.list)       |
-       | Ubuntu | 22.10 | docker     | 阿里云  | [/etc/apt/22.10/aliyun-docker.list](/etc/apt/22.10/aliyun-docker.list)         |
-       | Ubuntu | 22.10 | kubernetes | 阿里云  | [/etc/apt/22.10/aliyun-kubernetes.list](/etc/apt/22.10/aliyun-kubernetes.list) |
 
     3. 清理所有本地仓库
 
@@ -237,6 +237,14 @@ nexus                  nexus-service                        NodePort       10.10
 | yum-docker     | yum    | proxy | https://nexus.xuxiaowei.cn/repository/yum-docker/     | https://download.docker.com      | yum-docker     |
 | yum-openanolis | yum    | proxy | https://nexus.xuxiaowei.cn/repository/yum-openanolis/ | https://mirrors.openanolis.cn    | yum-openanolis |
 
+| 系统名称         | 系统版本 | 安装源类型      | 代理镜像 | 安装源配置文件                                                                                                  |
+|--------------|------|------------|------|----------------------------------------------------------------------------------------------------------|
+| CentOS       | 7    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-7.repo](/etc/yum.repos.d/aliyun-centos-7.repo)                           |
+| CentOS       | 8    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-8.repo](/etc/yum.repos.d/aliyun-centos-8.repo)                           |
+| CentOS vault | 8    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo](/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo) |
+| CentOS       | 7/8  | docker     | 阿里云  | [/etc/yum.repos.d/aliyun-docker-ce.repo](/etc/yum.repos.d/aliyun-docker-ce.repo)                         |
+| CentOS       | 7/8  | kubernetes | 阿里云  | [/etc/yum.repos.d/aliyun-kubernetes.repo](/etc/yum.repos.d/aliyun-kubernetes.repo)                       |
+
 - 使用说明
     1. yum-aliyun 代理整个阿里云 yum 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：centos、centos-vault
     2. yum-tencent 代理整个腾讯云 yum 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：centos、centos-vault
@@ -249,14 +257,6 @@ nexus                  nexus-service                        NodePort       10.10
         ll
         ```
     2. 根据当前系统，选择所需的配置文件，上传至 `/etc/yum.repos.d/` 文件夹
-
-       | 系统名称         | 系统版本 | 安装源类型      | 代理镜像 | 安装源配置文件                                                                                                  |
-       |--------------|------|------------|------|----------------------------------------------------------------------------------------------------------|
-       | CentOS       | 7    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-7.repo](/etc/yum.repos.d/aliyun-centos-7.repo)                           |
-       | CentOS       | 8    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-8.repo](/etc/yum.repos.d/aliyun-centos-8.repo)                           |
-       | CentOS vault | 8    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo](/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo) |
-       | CentOS       | 7/8  | docker     | 阿里云  | [/etc/yum.repos.d/aliyun-docker-ce.repo](/etc/yum.repos.d/aliyun-docker-ce.repo)                         |
-       | CentOS       | 7/8  | kubernetes | 阿里云  | [/etc/yum.repos.d/aliyun-kubernetes.repo](/etc/yum.repos.d/aliyun-kubernetes.repo)                       |
 
     3. 清理所有本地仓库
 
