@@ -135,7 +135,8 @@ nexus                  nexus-service                        NodePort       10.10
 
 ## Nexus 私库配置
 
-1. 使用 MinIO S3 储存文件
+1. 使用 MinIO（S3协议）储存文件
+2. 原则上 `每个仓库类型` + `每个代理地址` 使用独立的 MinIO 桶储存文件/数据
 
 ### apt 私库配置
 
