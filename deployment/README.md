@@ -114,6 +114,16 @@ nexus                  nexus-service                        NodePort       10.10
     1. 配置 nexus 域名、证书
     2. 主要用于 docker 私库域名证书的配置
 
+### jenkins
+
+1. [jenkins-deployment.yaml](jenkins-deployment.yaml)
+    1. 部署 jenkins
+    2. 文档
+        1. [GitHub](https://github.com/jenkinsci/docker/blob/master/README.md)
+        2. [JiHuLab](https://jihulab.com/mirrors-github/jenkinsci/jenkins/blob/master/README.md)
+2. [jenkins-ingress.yaml](jenkins-ingress.yaml)
+    1. 配置 jenkins 域名、证书
+
 ## GitLab
 
 | Name      | Version     | Domain                 |
