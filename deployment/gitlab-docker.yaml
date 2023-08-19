@@ -39,10 +39,16 @@ spec:
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
+            - name: docker-certs
+              mountPath: /etc/docker/certs.d/
       volumes:
         - name: localtime
           hostPath:
             path: /etc/localtime
+        - name: docker-certs
+          nfs:
+            path: /nfs/gitlab/docker/etc/docker/certs.d/
+            server: 172.25.25.5
 
 ---
 
