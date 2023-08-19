@@ -40,6 +40,11 @@ spec:
             - name: localtime
               mountPath: /etc/localtime
             - name: docker-certs
+              # 信任域名证书的配置
+              # 例如信任 pig.docker.xuxiaowei.cn 域名证书时，
+              # 配置的路径为 /etc/docker/certs.d/pig.docker.xuxiaowei.cn/ca.crt，
+              # 其中 ca.crt 文件为信任的域名证书，访问域名即可得到。
+              # 说明：有端口时，记得文件夹要保留端口
               mountPath: /etc/docker/certs.d/
       volumes:
         - name: localtime
