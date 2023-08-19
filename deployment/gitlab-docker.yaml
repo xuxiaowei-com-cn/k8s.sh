@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: docker
-          image: registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/docker:24.0.5-dind
+          image: docker:24.0.5-dind
           securityContext:
             privileged: true
           env:
