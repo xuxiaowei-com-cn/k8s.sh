@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gitlab
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: gitlab
+  name: docker-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: docker
+  template:
+    metadata:
+      labels:
+        app: docker
+    spec:
+      containers:
+        - name: docker
+          image: registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/docker:24.0.5-dind
+          securityContext:
+            privileged: true
+          env:
+            # 关闭 TLS（仅使用 http）
+            - name: DOCKER_TLS_CERTDIR
+              value: ""
+          ports:
+            - containerPort: 2375
+            - containerPort: 2376
+          volumeMounts:
+            - name: localtime
+              mountPath: /etc/localtime
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: gitlab
+  name: docker-service
+spec:
+  selector:
+    app: docker
+  ports:
+    - name: "2375"
+      nodePort: 30375
+      port: 2375
+      targetPort: 2375
+    - name: "2376"
+      nodePort: 30376
+      port: 2376
+      targetPort: 2376
+  type: NodePort
