@@ -20,6 +20,10 @@ spec:
       labels:
         app: docker
     spec:
+      hostAliases:
+        - ip: "172.25.25.220"
+          hostnames:
+            - "pig.docker.xuxiaowei.cn"
       containers:
         - name: docker
           image: docker:24.0.5-dind
