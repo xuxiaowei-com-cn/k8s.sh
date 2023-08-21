@@ -256,6 +256,7 @@ nexus                  nexus-service                        NodePort       10.10
 | CentOS vault | 8    | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo](/etc/yum.repos.d/aliyun-centos-vault-8.5.2111.repo) |
 | CentOS       | 7/8  | docker     | 阿里云  | [/etc/yum.repos.d/aliyun-docker-ce.repo](/etc/yum.repos.d/aliyun-docker-ce.repo)                         |
 | CentOS       | 7/8  | kubernetes | 阿里云  | [/etc/yum.repos.d/aliyun-kubernetes.repo](/etc/yum.repos.d/aliyun-kubernetes.repo)                       |
+| AnolisOS     | all  | 默认 yum     | 阿里云  | [/etc/yum.repos.d/aliyun-anolis.repo](/etc/yum.repos.d/aliyun-anolis.repo)                               |
 
 - 使用说明
     1. yum-aliyun 代理整个阿里云 yum 镜像的域名，通过 URL 后面不同的路径，可直接使用不同的源，如：centos、centos-vault
@@ -305,3 +306,11 @@ nexus                  nexus-service                        NodePort       10.10
         # yum --showduplicates list kubelet
         yum -y install kubelet kubeadm kubectl --disableexcludes=kubernetes --nogpgcheck
         ```
+
+    8. AnolisOS 安装依赖测试
+
+       ```shell
+       # 可使用搜索进行测试
+       # yum --showduplicates list autoconf
+       yum -y install autoconf bash-completion curl-devel expat-devel gcc git libnl3-devel libtool make openssl-devel svn systemd-devel tar tcl vim wget zlib-devel
+       ```

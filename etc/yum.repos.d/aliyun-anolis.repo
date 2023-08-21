@@ -1,0 +1,20 @@
+[os]
+name=AnolisOS-$releasever - os
+baseurl=http://nexus.xuxiaowei.cn/repository/yum-aliyun/anolis/$releasever/os/$basearch/os
+enabled=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ANOLIS
+gpgcheck=1
+
+[updates]
+name=AnolisOS-$releasever - updates
+baseurl=http://nexus.xuxiaowei.cn/repository/yum-aliyun/anolis/$releasever/updates/$basearch/os
+enabled=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ANOLIS
+gpgcheck=1
+
+[kernel-6]
+name=AnolisOS-$releasever - kernel-6
+baseurl=http://nexus.xuxiaowei.cn/repository/yum-aliyun/anolis/$releasever/kernel-6/$basearch/os
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ANOLIS
+gpgcheck=1
