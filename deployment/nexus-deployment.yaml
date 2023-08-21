@@ -80,24 +80,24 @@ spec:
               cpu: "4"
             limits:
               cpu: "4"
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 8081
-            initialDelaySeconds: 240
-            periodSeconds: 10
-            timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 3
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 8081
-            initialDelaySeconds: 240
-            periodSeconds: 20
-            timeoutSeconds: 5
-            successThreshold: 1
-            failureThreshold: 3
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 8081
+          #   initialDelaySeconds: 240
+          #   periodSeconds: 10
+          #   timeoutSeconds: 5
+          #   successThreshold: 1
+          #   failureThreshold: 3
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: 8081
+          #   initialDelaySeconds: 240
+          #   periodSeconds: 20
+          #   timeoutSeconds: 5
+          #   successThreshold: 1
+          #   failureThreshold: 3
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
