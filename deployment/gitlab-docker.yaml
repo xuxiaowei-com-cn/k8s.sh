@@ -41,8 +41,9 @@ spec:
               # 说明：有端口时，记得文件夹要保留端口
               mountPath: /etc/docker/certs.d/
             # docker 数据储存位置
-            - name: docker-data
-              mountPath: /var/lib/docker
+            # 注意：不能使用 NFS，否则拉取镜像等操作非常慢
+            #- name: docker-data
+            #  mountPath: /var/lib/docker
       volumes:
         - name: localtime
           hostPath:
@@ -51,10 +52,10 @@ spec:
           nfs:
             path: /nfs/gitlab/docker/etc/docker/certs.d/
             server: 172.25.25.5
-        - name: docker-data
-          nfs:
-            path: /nfs/gitlab/docker/var/lib/docker
-            server: 172.25.25.5
+        #- name: docker-data
+        #  nfs:
+        #    path: /nfs/gitlab/docker/var/lib/docker
+        #    server: 172.25.25.5
 
 ---
 
