@@ -32,6 +32,7 @@ spec:
           volumeMounts:
             - name: localtime
               mountPath: /etc/localtime
+              readOnly: true
             - name: docker-certs
               # 信任域名证书的配置
               # 例如信任 pig.docker.xuxiaowei.cn 域名证书时，
