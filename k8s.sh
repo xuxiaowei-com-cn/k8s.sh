@@ -670,7 +670,7 @@ EOF
 _hostname() {
   ETC_HOSTNAME=$(cat /etc/hostname)
   CMD_HOSTNAME=$(hostname)
-  if [[ $CMD_HOSTNAME =~ ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$ ]]; then
+  if [[ $CMD_HOSTNAME =~ ^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$ ]]; then
     if ! [ "$ETC_HOSTNAME" ]; then
       echo -e "${COLOR_BLUE}主机名符合要求${COLOR_RESET}"
     elif [ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]; then
