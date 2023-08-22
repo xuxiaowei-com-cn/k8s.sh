@@ -232,7 +232,7 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
-    ./k8s.sh kubernetes-taint
+    sudo ./k8s.sh kubernetes-taint
     ```
 
 2. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 k8s 指定版本
@@ -246,7 +246,7 @@
     # 指定 k8s 版本号（版本号不带字母）
     # 在 GitHub 查看 k8s 发布的版本：https://github.com/kubernetes/kubernetes/tags
     # 在 GitCode 查看 k8s 发布的版本：https://gitcode.net/mirrors/kubernetes/kubernetes/-/tags
-    ./k8s.sh kubernetes-taint kubernetes-version=1.26.0
+    sudo ./k8s.sh kubernetes-taint kubernetes-version=1.26.0
     ```
 
 3. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），不安装 docker-ce（k8s 使用 containerd）
@@ -257,7 +257,7 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
-    ./k8s.sh kubernetes-taint docker-ce-install-skip
+    sudo ./k8s.sh kubernetes-taint docker-ce-install-skip
     ```
 
 4. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装，不进行初始化
@@ -268,7 +268,7 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令，仅安装，不进行初始化
-    ./k8s.sh kubernetes-taint kubernetes-init-skip calico-init-skip
+    sudo ./k8s.sh kubernetes-taint kubernetes-init-skip calico-init-skip
     ```
 
 5. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装、拉取镜像，不进行初始化
@@ -279,7 +279,7 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令，仅安装、拉取镜像，不进行初始化
-    ./k8s.sh kubernetes-taint kubernetes-init-skip calico-init-skip kubernetes-images-pull
+    sudo ./k8s.sh kubernetes-taint kubernetes-init-skip calico-init-skip kubernetes-images-pull
     ```
 
 6. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 指定版本
@@ -293,7 +293,7 @@
     # 指定 calico 版本号（版本号不带字母）
     # 查看 calico 发布的版本：https://docs.tigera.io/archive/
     # 查看 calico 发布的版本（GitCode 镜像）：https://gitcode.net/mirrors/projectcalico/calico/-/tags
-    ./k8s.sh kubernetes-taint calico-version=3.26.1
+    sudo ./k8s.sh kubernetes-taint calico-version=3.26.1
     ```
 
 7. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 网络组件的加速镜像
@@ -308,7 +308,7 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
-    ./k8s.sh kubernetes-taint calico-mirrors=hub-mirror.c.163.com
+    sudo ./k8s.sh kubernetes-taint calico-mirrors=hub-mirror.c.163.com
     ```
 
 8. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），安装 Metrics Server 插件
@@ -319,19 +319,19 @@
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
-    ./k8s.sh kubernetes-taint metrics-server-install
+    sudo ./k8s.sh kubernetes-taint metrics-server-install
     
     # 执行安装命令：自定义版本
-    # ./k8s.sh kubernetes-taint metrics-server-install metrics-server-version=0.6.2
+    # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-version=0.6.2
     
     # 执行安装命令：使用高可用
-    # ./k8s.sh kubernetes-taint metrics-server-install metrics-server-availability
+    # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-availability
     
     # 执行安装命令：自定义版本、使用高可用
-    # ./k8s.sh kubernetes-taint metrics-server-install metrics-server-version=0.6.2 metrics-server-availability
+    # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-version=0.6.2 metrics-server-availability
     
     # 执行安装命令：自定义下载配置文件（优先级高于 metrics-server-version、metrics-server-availability，可指定高可用）
-    # ./k8s.sh kubernetes-taint metrics-server-install metrics-server-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml
+    # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml
     ```
 
 9. k8s 集群（一主多从，无高可用，仅用于学习、测试）
@@ -344,7 +344,7 @@
         # 授权
         chmod +x k8s.sh
         # 执行安装命令
-        ./k8s.sh
+        sudo ./k8s.sh
         
         
         # 暂存初始化完成后控制台打印的工作节点加入集群的命令，例如：
@@ -365,7 +365,7 @@
         # 授权
         chmod +x k8s.sh
         # 执行安装命令，仅安装、拉取镜像，不进行初始化
-        ./k8s.sh kubernetes-init-skip calico-init-skip
+        sudo ./k8s.sh kubernetes-init-skip calico-init-skip
         
         
         # 执行在主节点得到的工作加入集群的命令，例如：
@@ -388,7 +388,7 @@
         chmod +x k8s.sh
         
         # 第 1 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 availability-vip-no 不同，必须存在一个值为 1）
-        ./k8s.sh availability-vip-install \
+        sudo ./k8s.sh availability-vip-install \
           availability-vip=192.168.80.100 \
           interface-name=ens33 \
           availability-master=k8s-master1@192.168.80.81:6443 \
@@ -397,7 +397,7 @@
           availability-vip-no=1
         
         # 第 2 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 availability-vip-no 不同，必须存在一个值为 1）
-        ./k8s.sh availability-vip-install \
+        sudo ./k8s.sh availability-vip-install \
           availability-vip=192.168.80.100 \
           interface-name=ens33 \
           availability-master=k8s-master1@192.168.80.81:6443 \
@@ -406,7 +406,7 @@
           availability-vip-no=2
         
         # 第 3 个 VIP 宿主机：执行安装命令（与其他 VIP 命令中的 availability-vip-no 不同，必须存在一个值为 1）
-        ./k8s.sh availability-vip-install \
+        sudo ./k8s.sh availability-vip-install \
           availability-vip=192.168.80.100 \
           interface-name=ens33 \
           availability-master=k8s-master1@192.168.80.81:6443 \
@@ -424,10 +424,10 @@
         chmod +x k8s.sh
         
         # 指定 VIP 进行 k8s 集群 第一个主节点 初始化
-        ./k8s.sh availability-vip=192.168.80.100
+        sudo ./k8s.sh availability-vip=192.168.80.100
         
         # 安装 Metrics Server 插件（仅第一个主节点执行即可）
-        # ./k8s.sh availability-vip=192.168.80.100 metrics-server-install metrics-server-availability
+        # sudo ./k8s.sh availability-vip=192.168.80.100 metrics-server-install metrics-server-availability
         ```
 
     3. 主节点：***其余机器***：安装软件、使用主节点角色加入集群
@@ -439,7 +439,7 @@
         chmod +x k8s.sh
         
         # 执行安装命令，仅安装，不进行初始化
-        ./k8s.sh kubernetes-init-skip calico-init-skip
+        sudo ./k8s.sh kubernetes-init-skip calico-init-skip
         
         # 运行 k8s 集群 第一个主节点 初始化完成后 使用主节点角色加入集群的命令，例如：
         # kubeadm join 192.168.80.100:9443 --token ykrnfh.i4qwth17fopc0gtx \
@@ -478,7 +478,7 @@
         chmod +x k8s.sh
         
         # 执行安装命令，仅安装，不进行初始化
-        ./k8s.sh kubernetes-init-skip calico-init-skip
+        sudo ./k8s.sh kubernetes-init-skip calico-init-skip
         
         # 执行在主节点得到的工作加入集群的命令，例如：
         # kubeadm join 192.168.80.100:9443 --token ykrnfh.i4qwth17fopc0gtx --discovery-token-ca-cert-hash sha256:9e81fa0b04a57517feb1c9e34edc0aa6563b64db54887fc072a08d7d1235861d
