@@ -635,8 +635,12 @@ overlay
 br_netfilter
 EOF
 
-    echo -e "${COLOR_BLUE}kubernetes 配置：加载 br_netfilter${COLOR_RESET}" && sudo modprobe br_netfilter
-    echo -e "${COLOR_BLUE}kubernetes 配置：加载 overlay${COLOR_RESET}" && sudo modprobe overlay
+    if grep -qi "Microsoft" /proc/version || grep -qi "WSL" /proc/version; then
+      echo "Running on WSL"
+    else
+      echo -e "${COLOR_BLUE}kubernetes 配置：加载 br_netfilter${COLOR_RESET}" && sudo modprobe br_netfilter
+      echo -e "${COLOR_BLUE}kubernetes 配置：加载 overlay${COLOR_RESET}" && sudo modprobe overlay
+    fi
 
     # 设置所需的 sysctl 参数，参数在重新启动后保持不变
 
@@ -652,8 +656,13 @@ EOF
 
     # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
     # 通过运行以下指令确认 br_netfilter 和 overlay 模块被加载：
-    echo -e "${COLOR_BLUE}kubernetes 配置：确认加载 br_netfilter${COLOR_RESET}" && lsmod | grep br_netfilter
-    echo -e "${COLOR_BLUE}kubernetes 配置：确认加载 overlay${COLOR_RESET}" && lsmod | grep overlay
+
+    if grep -qi "Microsoft" /proc/version || grep -qi "WSL" /proc/version; then
+      echo "Running on WSL"
+    else
+      echo -e "${COLOR_BLUE}kubernetes 配置：确认加载 br_netfilter${COLOR_RESET}" && lsmod | grep br_netfilter
+      echo -e "${COLOR_BLUE}kubernetes 配置：确认加载 overlay${COLOR_RESET}" && lsmod | grep overlay
+    fi
 
     # https://kubernetes.io/zh-cn/docs/setup/production-environment/container-runtimes/
     # 通过运行以下指令确认 net.bridge.bridge-nf-call-iptables、net.bridge.bridge-nf-call-ip6tables 和 net.ipv4.ip_forward 系统变量在你的 sysctl 配置中被设置为 1：
