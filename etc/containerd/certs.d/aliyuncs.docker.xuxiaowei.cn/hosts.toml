@@ -2,7 +2,7 @@ server = "https://aliyuncs.docker.xuxiaowei.cn"
 
 # 填写真实能访问的 IP、端口
 # 其中 10.107.234.44 是 nexus-service 的 IP，仅能在集群内部能访问
-# 其中 8001 是 nexus 中设置的端口
+# 其中 8007 是 nexus 中设置的端口
 # 如果要在集群外部访问，请使用集群的 VIP
 [host."http://10.107.234.44:8007"]
   capabilities = [ "pull", "resolve" ]
