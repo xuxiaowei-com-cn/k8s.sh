@@ -25,6 +25,50 @@ data:
 
 ---
 
+#apiVersion: v1
+#kind: PersistentVolume
+#metadata:
+#  name: gitlab-docker-data-pv
+#spec:
+#  accessModes:
+#    - ReadWriteOnce
+#    - ReadWriteMany
+#  capacity:
+#    storage: 50Gi
+#  claimRef:
+#    apiVersion: v1
+#    kind: PersistentVolumeClaim
+#    name: gitlab-docker-data-pvc
+#    namespace: gitlab
+#  mountOptions:
+#    - hard
+#    - nfsvers=4.1
+#  nfs:
+#    # 需要事先创建此文件夹
+#    path: /nfs/gitlab/docker/var/lib/docker
+#    server: 172.25.25.5
+#  persistentVolumeReclaimPolicy: Retain
+#  volumeMode: Filesystem
+
+---
+
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: gitlab-docker-data-pvc
+#  namespace: gitlab
+#spec:
+#  accessModes:
+#    - ReadWriteOnce
+#    - ReadWriteMany
+#  resources:
+#    requests:
+#      storage: 50Gi
+#  volumeMode: Filesystem
+#  volumeName: gitlab-docker-data-pv
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -101,9 +145,8 @@ spec:
             name: daemon-json
           name: daemon-json
         #- name: docker-data
-        #  nfs:
-        #    path: /nfs/gitlab/docker/var/lib/docker
-        #    server: 172.25.25.5
+        #  persistentVolumeClaim:
+        #    claimName: gitlab-docker-data-pvc
 
 ---
 
