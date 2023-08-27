@@ -65,8 +65,8 @@ spec:
             # 或者使用 daemon.json 配置信任域名
             - mountPath: /etc/docker/certs.d/
               name: docker-certs
-            - name: daemon-json
-              mountPath: /etc/docker/
+            - mountPath: /etc/docker/
+              name: daemon-json
             # docker 数据储存位置
             # 注意：不能使用 NFS，否则拉取镜像等操作非常慢
             #- name: docker-data
@@ -94,12 +94,12 @@ spec:
           nfs:
             path: /nfs/gitlab/docker/etc/docker/certs.d/
             server: 172.25.25.5
-        - name: daemon-json
-          configMap:
-            name: daemon-json
+        - configMap:
             items:
               - key: daemon.json
                 path: daemon.json
+            name: daemon-json
+          name: daemon-json
         #- name: docker-data
         #  nfs:
         #    path: /nfs/gitlab/docker/var/lib/docker
