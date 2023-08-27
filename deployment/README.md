@@ -131,7 +131,7 @@ nexus                  nexus-service                        NodePort       10.10
 |-----------|-------------|------------------------|
 | gitlab-ce | 16.3.0-ce.0 | gitlab.ce.xuxiaowei.cn |
 | gitlab-ee | 16.3.0-ee.0 | gitlab.ee.xuxiaowei.cn |
-| gitlab-jh | 16.2.4      | gitlab.jh.xuxiaowei.cn |
+| gitlab-jh | 16.3.0      | gitlab.jh.xuxiaowei.cn |
 
 ## Nexus 私库配置
 
