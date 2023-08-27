@@ -43,7 +43,17 @@ spec:
             #  mountPath: /var/lib/docker
       hostAliases:
         - hostnames:
+            - jihulab.docker.xuxiaowei.cn
+            - io.docker.xuxiaowei.cn
+            - gitlab-jh.docker.xuxiaowei.cn
+            - hosted.docker.xuxiaowei.cn
+            - 163.docker.xuxiaowei.cn
+            - group.docker.xuxiaowei.cn
+            - aliyuncs.docker.xuxiaowei.cn
+            - elastic.docker.xuxiaowei.cn
+            - oracle.docker.xuxiaowei.cn
             - pig.docker.xuxiaowei.cn
+            - jihulab-proxy.docker.xuxiaowei.cn
           ip: 172.25.25.220
       restartPolicy: Always
       volumes:
