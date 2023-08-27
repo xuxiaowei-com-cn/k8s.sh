@@ -1,3 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: daemon-json
+  namespace: gitlab
+data:
+  # 信任域名证书的配置
+  # 或者使用 /etc/docker/certs.d/ 文件夹进行配置
+  daemon.json: |
+    {
+      "insecure-registries": [
+        "jihulab.docker.xuxiaowei.cn",
+        "io.docker.xuxiaowei.cn",
+        "gitlab-jh.docker.xuxiaowei.cn",
+        "hosted.docker.xuxiaowei.cn",
+        "163.docker.xuxiaowei.cn",
+        "group.docker.xuxiaowei.cn",
+        "aliyuncs.docker.xuxiaowei.cn",
+        "elastic.docker.xuxiaowei.cn",
+        "oracle.docker.xuxiaowei.cn",
+        "pig.docker.xuxiaowei.cn",
+        "jihulab-proxy.docker.xuxiaowei.cn"
+      ]
+    }
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,8 +62,11 @@ spec:
             # 配置的路径为 /etc/docker/certs.d/pig.docker.xuxiaowei.cn/ca.crt，
             # 其中 ca.crt 文件为信任的域名证书，访问域名即可得到。
             # 说明：有端口时，记得文件夹要保留端口
+            # 或者使用 daemon.json 配置信任域名
             - mountPath: /etc/docker/certs.d/
               name: docker-certs
+            - name: daemon-json
+              mountPath: /etc/docker/
             # docker 数据储存位置
             # 注意：不能使用 NFS，否则拉取镜像等操作非常慢
             #- name: docker-data
@@ -64,6 +94,12 @@ spec:
           nfs:
             path: /nfs/gitlab/docker/etc/docker/certs.d/
             server: 172.25.25.5
+        - name: daemon-json
+          configMap:
+            name: daemon-json
+            items:
+              - key: daemon.json
+                path: daemon.json
         #- name: docker-data
         #  nfs:
         #    path: /nfs/gitlab/docker/var/lib/docker
