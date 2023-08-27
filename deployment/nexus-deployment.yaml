@@ -75,6 +75,10 @@ spec:
             - containerPort: 8010
             # docker 宿主私库：https 端口，pig
             - containerPort: 9010
+            # docker 代理私库：https 端口，代理 https://jihulab.com
+            - containerPort: 9011
+            # docker 代理私库：http 端口，代理 https://jihulab.com
+            - containerPort: 8011
           resources:
             requests:
               cpu: "4"
@@ -212,4 +216,12 @@ spec:
       nodePort: 31520
       port: 9010
       targetPort: 9010
+    - name: docker-jihulab-proxy-http
+      nodePort: 31511
+      port: 8011
+      targetPort: 8011
+    - name: docker-jihulab-proxy-https
+      nodePort: 31521
+      port: 9011
+      targetPort: 9011
   type: NodePort

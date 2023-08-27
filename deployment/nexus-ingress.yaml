@@ -191,6 +191,16 @@ spec:
                   number: 8010
             path: /
             pathType: Prefix
+    - host: jihulab-proxy.docker.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8011
+            path: /
+            pathType: Prefix
   tls:
     - secretName: docker.xuxiaowei.cn
       hosts:
@@ -204,3 +214,4 @@ spec:
         - elastic.docker.xuxiaowei.cn
         - oracle.docker.xuxiaowei.cn
         - pig.docker.xuxiaowei.cn
+        - jihulab-proxy.docker.xuxiaowei.cn
