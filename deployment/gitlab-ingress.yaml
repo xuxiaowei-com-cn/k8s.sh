@@ -16,6 +16,9 @@ kind: Ingress
 metadata:
   namespace: gitlab
   name: gitlab-ce-xuxiaowei-cn
+  annotations:
+    # 防止推送/上传较大文件时异常
+    nginx.ingress.kubernetes.io/proxy-body-size: "10240m"
 spec:
   ingressClassName: nginx
   rules:
@@ -51,6 +54,9 @@ kind: Ingress
 metadata:
   namespace: gitlab
   name: gitlab-ee-xuxiaowei-cn
+  annotations:
+    # 防止推送/上传较大文件时异常
+    nginx.ingress.kubernetes.io/proxy-body-size: "10240m"
 spec:
   ingressClassName: nginx
   rules:
@@ -85,7 +91,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: gitlab
-  name: jh-xuxiaowei-cn
+  name: gitlab-jh-xuxiaowei-cn
+  annotations:
+    # 防止推送/上传较大文件时异常
+    nginx.ingress.kubernetes.io/proxy-body-size: "10240m"
 spec:
   ingressClassName: nginx
   rules:
