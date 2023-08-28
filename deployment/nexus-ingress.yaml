@@ -19,6 +19,8 @@ metadata:
   annotations:
     # http 不强制跳转到 https（在 Linux 没有更新 ca-certificates 时，可能无法验证 SSL 证书，请使用浏览器“无痕模式”测试）
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # 防止上传较大文件时异常
+    nginx.ingress.kubernetes.io/proxy-body-size: "10240m"
 spec:
   ingressClassName: nginx
   rules:
@@ -52,6 +54,9 @@ kind: Ingress
 metadata:
   namespace: nexus
   name: nexus-minio-xuxiaowei-cn
+  annotations:
+    # 防止上传较大文件时异常
+    nginx.ingress.kubernetes.io/proxy-body-size: "10240m"
 spec:
   ingressClassName: nginx
   rules:
