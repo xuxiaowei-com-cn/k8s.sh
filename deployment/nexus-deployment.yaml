@@ -76,9 +76,13 @@ spec:
             # docker 宿主私库：https 端口，pig
             - containerPort: 9010
             # docker 代理私库：https 端口，代理 https://jihulab.com
-            - containerPort: 9011
-            # docker 代理私库：http 端口，代理 https://jihulab.com
             - containerPort: 8011
+            # docker 代理私库：http 端口，代理 https://jihulab.com
+            - containerPort: 9011
+            # docker 宿主私库：http 端口，jeecg
+            - containerPort: 8012
+            # docker 宿主私库：https 端口，jeecg
+            - containerPort: 9012
           resources:
             requests:
               cpu: "4"
@@ -224,4 +228,12 @@ spec:
       nodePort: 31521
       port: 9011
       targetPort: 9011
+    - name: docker-jeecg-http
+      nodePort: 31512
+      port: 8012
+      targetPort: 8012
+    - name: docker-jeecg-https
+      nodePort: 31522
+      port: 9012
+      targetPort: 9012
   type: NodePort
