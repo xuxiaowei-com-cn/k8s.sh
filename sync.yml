@@ -171,3 +171,35 @@ sync-github:
   retry: 2
   # 允许失败
   allow_failure: true
+
+sync-jihulab:
+  stage: sync
+  variables:
+    GIT_DEPTH: 0 # 取消浅层克隆
+  image: bitnami/git:2.40.1
+  script:
+    - git config --global user.email $GITLAB_USER_EMAIL
+    - git config --global user.name $GITLAB_USER_NAME
+    - git config --global user.email
+    - git config --global user.name
+    - git remote add jihulab https://xuxiaowei-com-cn:$JIHULAB_PRIVATE_TOKEN@jihulab.com/$CI_PROJECT_PATH.git
+    - echo 当前分支：$CI_COMMIT_BRANCH
+    - echo 当前标签：$CI_COMMIT_TAG
+    - if [ "$CI_COMMIT_BRANCH" ]; then
+      git checkout -b $CI_COMMIT_BRANCH;
+      git pull --progress -v --no-rebase jihulab $CI_COMMIT_BRANCH || echo 远端不存在$CI_COMMIT_BRANCH分支;
+      git push -u jihulab $CI_COMMIT_BRANCH;
+      fi
+    - if [ "$CI_COMMIT_TAG" ]; then
+      git push -u jihulab $CI_COMMIT_TAG;
+      fi
+  rules:
+    # 匹配以 dependabot 开头的分支
+    - if: $CI_COMMIT_BRANCH =~ /^dependabot*/
+      # 不执行
+      when: never
+    # 非 PR 时触发
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == null
+  retry: 2
+  # 允许失败
+  allow_failure: true
