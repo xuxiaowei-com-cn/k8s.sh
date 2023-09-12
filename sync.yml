@@ -195,11 +195,11 @@ sync-jihulab:
       fi
   rules:
     # 匹配以 dependabot 开头的分支
-    - if: $CI_COMMIT_BRANCH =~ /^dependabot*/
+    - if: $CI_SERVER_HOST == 'gitlab.helm.xuxiaowei.cn' && $CI_COMMIT_BRANCH =~ /^dependabot*/
       # 不执行
       when: never
     # 非 PR 时触发
-    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == null
+    - if: $CI_SERVER_HOST == 'gitlab.helm.xuxiaowei.cn' && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == null
   retry: 2
   # 允许失败
   allow_failure: true
