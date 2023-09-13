@@ -1,0 +1,7 @@
+server = "https://quay.io"
+
+# 使用 quay.docker.xuxiaowei.cn
+[host."http://10.107.234.44:8013"]
+  capabilities = [ "pull", "resolve" ]
+  # 跳过证书验证
+  skip_verify = true
