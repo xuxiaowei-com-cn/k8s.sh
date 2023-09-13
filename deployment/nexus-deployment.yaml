@@ -83,9 +83,9 @@ spec:
             - containerPort: 8012
             # docker 宿主私库：https 端口，jeecg
             - containerPort: 9012
-            # docker 代理私库：https 端口，代理 https://quay.io
-            - containerPort: 8013
             # docker 代理私库：http 端口，代理 https://quay.io
+            - containerPort: 8013
+            # docker 代理私库：https 端口，代理 https://quay.io
             - containerPort: 9013
           resources:
             requests:
