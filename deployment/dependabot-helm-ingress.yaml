@@ -1,0 +1,34 @@
+# KEY_FILE=dependabot.helm.xuxiaowei.cn.key
+# CERT_FILE=dependabot.helm.xuxiaowei.cn.pem
+# CERT_NAME=dependabot.helm.xuxiaowei.cn
+# kubectl -n dependabot-helm create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
+
+# kubectl -n dependabot-helm get secret dependabot.helm.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode | openssl x509 -text
+
+# kubectl -n dependabot-helm get secret dependabot.helm.xuxiaowei.cn -o jsonpath='{.data.tls\.crt}' | base64 --decode > tls.crt
+# kubectl -n dependabot-helm get secret dependabot.helm.xuxiaowei.cn -o jsonpath='{.data.tls\.key}' | base64 --decode > tls.key
+
+# kubectl -n dependabot-helm get ingress dependabot-helm-xuxiaowei-cn
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: dependabot-helm
+  name: dependabot-helm-xuxiaowei-cn
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: dependabot.helm.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: dependabot-helm-dependabot-gitlab
+                port:
+                  number: 3000
+            path: /
+            pathType: Prefix
+  tls:
+    - secretName: dependabot.helm.xuxiaowei.cn
+      hosts:
+        - dependabot.helm.xuxiaowei.cn
