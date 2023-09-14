@@ -130,11 +130,14 @@ nexus                  nexus-service                        NodePort       10.10
 
 ## GitLab 配置
 
+- 此配置仅供研究使用，已使用 helm gitlab
+  替换，文档：[使用 helm 安装 gitlab](https://gitlab-k8s.xuxiaowei.com.cn/gitlab-k8s/docs/helm/gitlab/install/)
+
 | Name      | Version     | Domain                 |
 |-----------|-------------|------------------------|
 | gitlab-ce | 16.3.2-ce.0 | gitlab.ce.xuxiaowei.cn |
 | gitlab-ee | 16.3.2-ee.0 | gitlab.ee.xuxiaowei.cn |
-| gitlab-jh | 16.3.1      | gitlab.jh.xuxiaowei.cn |
+| gitlab-jh | 16.3.2      | gitlab.jh.xuxiaowei.cn |
 
 ## Nexus 私库配置
 
