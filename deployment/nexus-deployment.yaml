@@ -87,6 +87,10 @@ spec:
             - containerPort: 8013
             # docker 代理私库：https 端口，代理 https://quay.io
             - containerPort: 9013
+            # docker 代理私库：http 端口，代理 https://registry.gitlab.com
+            - containerPort: 8014
+            # docker 代理私库：https 端口，代理 https://registry.gitlab.com
+            - containerPort: 9014
           resources:
             requests:
               cpu: "4"
@@ -248,4 +252,12 @@ spec:
       nodePort: 31523
       port: 9013
       targetPort: 9013
+    - name: docker-gitlab-http
+      nodePort: 31514
+      port: 8014
+      targetPort: 8014
+    - name: docker-gitlab-https
+      nodePort: 31524
+      port: 9014
+      targetPort: 9014
   type: NodePort

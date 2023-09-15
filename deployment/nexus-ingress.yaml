@@ -226,6 +226,16 @@ spec:
                   number: 8013
             path: /
             pathType: Prefix
+    - host: gitlab.docker.xuxiaowei.cn
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8014
+            path: /
+            pathType: Prefix
   tls:
     - secretName: docker.xuxiaowei.cn
       hosts:
@@ -241,3 +251,4 @@ spec:
         - pig.docker.xuxiaowei.cn
         - jeecg.docker.xuxiaowei.cn
         - quay.docker.xuxiaowei.cn
+        - gitlab.docker.xuxiaowei.cn

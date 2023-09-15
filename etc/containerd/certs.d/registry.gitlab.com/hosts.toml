@@ -1,0 +1,7 @@
+server = "https://registry.gitlab.com"
+
+# 使用 gitlab.docker.xuxiaowei.cn
+[host."http://10.107.234.44:8014"]
+  capabilities = [ "pull", "resolve" ]
+  # 跳过证书验证
+  skip_verify = true
