@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: nexus
-          image: sonatype/nexus3:3.59.0
+          image: sonatype/nexus3:3.60.0
           # 这里准备的 https 的端口没有使用，实际上使用的是 Ingress 配置的 https
           ports:
             # kubectl -n nexus port-forward svc/nexus 4800:8081 --address 0.0.0.0
