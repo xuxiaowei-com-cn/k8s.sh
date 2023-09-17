@@ -66,15 +66,15 @@ spec:
     app: gitlab-ce
   ports:
     - name: http
-      nodePort: 31101
+      nodePort: 31111
       port: 80
       targetPort: 80
     - name: https
-      nodePort: 31102
+      nodePort: 31112
       port: 443
       targetPort: 443
     - name: ssh
-      nodePort: 31103
+      nodePort: 31113
       port: 22
       targetPort: 22
   type: NodePort
