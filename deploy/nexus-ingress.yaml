@@ -85,6 +85,16 @@ spec:
 # CERT_NAME=docker.xuxiaowei.cn
 # kubectl -n nexus create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
 
+# KEY_FILE=registry.docker.example.xuxiaowei.cloud.key
+# CERT_FILE=registry.docker.example.xuxiaowei.cloud.pem
+# CERT_NAME=registry.docker.example.xuxiaowei.cloud
+# kubectl -n nexus create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
+
+# KEY_FILE=registry.docker.example.next.xuxiaowei.cloud.key
+# CERT_FILE=registry.docker.example.next.xuxiaowei.cloud.pem
+# CERT_NAME=registry.docker.example.next.xuxiaowei.cloud
+# kubectl -n nexus create secret tls ${CERT_NAME} --key ${KEY_FILE} --cert ${CERT_FILE}
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -236,6 +246,26 @@ spec:
                   number: 8014
             path: /
             pathType: Prefix
+    - host: registry.docker.example.xuxiaowei.cloud
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8015
+            path: /
+            pathType: Prefix
+    - host: registry.docker.example.next.xuxiaowei.cloud
+      http:
+        paths:
+          - backend:
+              service:
+                name: nexus-service
+                port:
+                  number: 8016
+            path: /
+            pathType: Prefix
   tls:
     - secretName: docker.xuxiaowei.cn
       hosts:
@@ -252,3 +282,9 @@ spec:
         - jeecg.docker.xuxiaowei.cn
         - quay.docker.xuxiaowei.cn
         - gitlab.docker.xuxiaowei.cn
+    - secretName: registry.docker.example.xuxiaowei.cloud
+      hosts:
+        - registry.docker.example.xuxiaowei.cloud
+    - secretName: registry.docker.example.next.xuxiaowei.cloud
+      hosts:
+        - registry.docker.example.next.xuxiaowei.cloud

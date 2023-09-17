@@ -91,6 +91,14 @@ spec:
             - containerPort: 8014
             # docker 代理私库：https 端口，代理 https://registry.gitlab.com
             - containerPort: 9014
+            # docker 宿主私库：http 端口，xuxiaowei-cloud
+            - containerPort: 8015
+            # docker 宿主私库：https 端口，xuxiaowei-cloud
+            - containerPort: 9015
+            # docker 宿主私库：http 端口，xuxiaowei-cloud-next
+            - containerPort: 8016
+            # docker 宿主私库：https 端口，xuxiaowei-cloud-next
+            - containerPort: 9016
           resources:
             requests:
               cpu: "4"
@@ -260,4 +268,20 @@ spec:
       nodePort: 31524
       port: 9014
       targetPort: 9014
+    - name: docker-cloud-http
+      nodePort: 31515
+      port: 8015
+      targetPort: 8015
+    - name: docker-cloud-https
+      nodePort: 31525
+      port: 9015
+      targetPort: 9015
+    - name: docker-cloud-next-http
+      nodePort: 31516
+      port: 8016
+      targetPort: 8016
+    - name: docker-cloud-next-https
+      nodePort: 31526
+      port: 9016
+      targetPort: 9016
   type: NodePort
