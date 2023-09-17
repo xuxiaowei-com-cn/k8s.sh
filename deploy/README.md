@@ -56,11 +56,11 @@ nexus                  nexus-service                        NodePort       10.10
 
 ### gitlab 命名空间
 
-1. [gitlab-ce-deployment.yaml](gitlab-ce-deployment.yaml)
+1. [gitlab-ce.yaml](gitlab-ce.yaml)
     1. 部署 gitlab-ce（社区版）
-2. [gitlab-ee-deployment.yaml](gitlab-ee-deployment.yaml)
+2. [gitlab-ee.yaml](gitlab-ee.yaml)
     1. 部署 gitlab-ee（企业版）
-3. [gitlab-jh-deployment.yaml](gitlab-jh-deployment.yaml)
+3. [gitlab-jh.yaml](gitlab-jh.yaml)
     1. 部署 gitlab-jh（极狐版）
 4. [gitlab-ingress.yaml](gitlab-ingress.yaml)
     1. 配置 gitlab 域名、证书
@@ -68,7 +68,7 @@ nexus                  nexus-service                        NodePort       10.10
 
 ### nexus 命名空间
 
-1. [nexus-deployment.yaml](nexus-deployment.yaml)
+1. [nexus.yaml](nexus.yaml)
     1. 部署 nexus，搭建个人私库
     2. 支持的私库类型（其中 hosted 代表宿主仓库，可以自己上传；proxy 代表代理仓库；group 代表分组仓库，可以将多个仓库聚合成一个仓库）：
         1. apt (hosted)
@@ -112,7 +112,7 @@ nexus                  nexus-service                        NodePort       10.10
         39. yum (group)
         40. yum (hosted)
         41. yum (proxy)
-2. [minio-deployment.yaml](minio-deployment.yaml)
+2. [minio.yaml](minio.yaml)
     1. MinIO（支持 S3 协议），用户储存 nexus 文件/数据
 3. [nexus-ingress.yaml](nexus-ingress.yaml)
     1. 配置 nexus 域名、证书
@@ -120,7 +120,7 @@ nexus                  nexus-service                        NodePort       10.10
 
 ### jenkins 命名空间
 
-1. [jenkins-deployment.yaml](jenkins-deployment.yaml)
+1. [jenkins.yaml](jenkins.yaml)
     1. 部署 jenkins
     2. 文档
         1. [GitHub](https://github.com/jenkinsci/docker/blob/master/README.md)
