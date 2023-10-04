@@ -555,7 +555,9 @@ _docker_ce_install() {
       sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     fi
 
-    echo -e "${COLOR_BLUE}docker-ce 停止${COLOR_RESET}" && sudo systemctl stop docker.service
+    echo -e "${COLOR_BLUE}docker-ce 停止${COLOR_RESET}"
+    sudo systemctl stop docker.socket
+    sudo systemctl stop docker.service
     echo -e "${COLOR_BLUE}docker-ce 创建 配置文件的文件夹${COLOR_RESET}" && sudo mkdir -p /etc/docker
     echo -e "${COLOR_BLUE}docker-ce 修改 配置文件的文件夹 权限${COLOR_RESET}" && sudo chmod o+w /etc/docker
     echo -e "${COLOR_BLUE}docker-ce 创建 配置文件${COLOR_RESET}"
@@ -569,10 +571,10 @@ EOF
     echo -e "${COLOR_BLUE}docker-ce 配置文件${COLOR_RESET}" && cat /etc/docker/daemon.json
     echo -e "${COLOR_BLUE}docker-ce 重启${COLOR_RESET}"
     # 需要先停止，在启动，否则在 openkylin 中将存在问题（原因是 openkylin 中原来存在 docker 软件）
-    sudo systemctl stop docker.service
     sudo systemctl stop docker.socket
-    sudo systemctl restart docker.service
+    sudo systemctl stop docker.service
     sudo systemctl restart docker.socket
+    sudo systemctl restart docker.service
     echo -e "${COLOR_BLUE}docker-ce 状态${COLOR_RESET}" && sudo systemctl status docker.service --no-pager || true
     echo -e "${COLOR_BLUE}docker-ce 设置开机自启${COLOR_RESET}" && sudo systemctl enable docker.service
 
