@@ -62,6 +62,10 @@ uos_fuse_overlayfs_mirror=https://mirrors.aliyun.com/centos/8.5.2111/AppStream/x
 # 统信 slirp4netns 镜像
 uos_slirp4netns_mirror=https://mirrors.aliyun.com/centos/8.5.2111/AppStream/x86_64/os/Packages/slirp4netns-0.4.2-3.git21fdece.module_el8.5.0+1004+c00a74f5.x86_64.rpm
 
+# docker 仓库类型
+# 可使用：空（官方，默认）、aliyun（阿里云）、tencent（腾讯云）
+docker_repo_type=
+
 # 检查 kubernetes 版本号
 _check_kubernetes_version_range() {
   local version=$1
@@ -408,7 +412,15 @@ _docker_repo() {
 
       echo -e "${COLOR_BLUE}安装/更新 curl${COLOR_RESET}" && sudo yum install -y curl
       echo -e "${COLOR_BLUE}增加 docker 仓库${COLOR_RESET}"
-      sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
+
+      # 空（官方，默认）、aliyun（阿里云）、tencent（腾讯云）
+      if [[ $docker_repo_type == aliyun ]]; then
+        sudo curl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+      elif [ $docker_repo_type == tencent ]; then
+        sudo curl -o /etc/yum.repos.d/docker-ce.repo http://mirrors.cloud.tencent.com/docker-ce/linux/centos/docker-ce.repo
+      else
+        sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
+      fi
 
       if [[ $ID == uos ]]; then
         echo -e "${COLOR_BLUE}兼容 uos${COLOR_RESET}" && sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
@@ -436,24 +448,64 @@ _docker_repo() {
 
       echo -e "${COLOR_BLUE}添加 docker 仓库 gpg 秘钥${COLOR_RESET}"
       if [[ $ID == openkylin ]]; then
-        curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        # 空（官方，默认）、aliyun（阿里云）、tencent（腾讯云）
+        if [[ $docker_repo_type == aliyun ]]; then
+          curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        elif [ $docker_repo_type == tencent ]; then
+          curl -fsSL http://mirrors.cloud.tencent.com/docker-ce/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        else
+          curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        fi
       else
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        # 空（官方，默认）、aliyun（阿里云）、tencent（腾讯云）
+        if [[ $docker_repo_type == aliyun ]]; then
+          curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        elif [ $docker_repo_type == tencent ]; then
+          curl -fsSL http://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        else
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+        fi
       fi
       echo -e "${COLOR_BLUE}修改 docker 仓库 gpg 秘钥文件权限${COLOR_RESET}" && sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
       echo -e "${COLOR_BLUE}添加 docker 仓库${COLOR_RESET}"
 
       if [[ $ID == openkylin ]]; then
-        echo \
-          "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
-          buster stable" |
-          sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+        # 空（官方，默认）、aliyun（阿里云）、tencent（腾讯云）
+        if [[ $docker_repo_type == aliyun ]]; then
+          echo \
+            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.aliyun.com/docker-ce/linux/debian \
+            buster stable" |
+            sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+        elif [ $docker_repo_type == tencent ]; then
+          echo \
+            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] http://mirrors.cloud.tencent.com/docker-ce/linux/debian/ \
+            buster stable" |
+            sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+        else
+          echo \
+            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+            buster stable" |
+            sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+        fi
       else
-        echo \
-          "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-          "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" |
-          sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+        # 空（官方，默认）、aliyun（阿里云）、tencent（腾讯云）
+        if [[ $docker_repo_type == aliyun ]]; then
+          echo \
+            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] http://mirrors.aliyun.com/docker-ce/linux/ubuntu \
+            "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" |
+            sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+        elif [ $docker_repo_type == tencent ]; then
+          echo \
+            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] http://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu/ \
+            "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" |
+            sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+        else
+          echo \
+            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+            "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" |
+            sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+        fi
       fi
 
       echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/apt/sources.list.d/docker.list
@@ -1243,6 +1295,10 @@ while [[ $# -gt 0 ]]; do
 
   swap-off-skip | -swap-off-skip | --swap-off-skip)
     swap_off_skip=true
+    ;;
+
+  docker-repo-type=* | -docker-repo-type=* | --docker-repo-type=*)
+    docker_repo_type="${1#*=}"
     ;;
 
   docker-repo-skip | -docker-repo-skip | --docker-repo-skip)
