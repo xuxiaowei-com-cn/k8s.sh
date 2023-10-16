@@ -1358,6 +1358,10 @@ while [[ $# -gt 0 ]]; do
     metrics_server_manifests_mirror=true
     ;;
 
+  metrics-server-mirror=* | -metrics-server-mirror=* | --metrics-server-mirror=*)
+    metrics_server_mirror="${1#*=}"
+    ;;
+
   interface-name=* | -interface-name=* | --interface-name=*)
     interface_name="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 指定网卡名：${COLOR_RESET}${COLOR_GREEN}${interface_name}${COLOR_RESET}"
