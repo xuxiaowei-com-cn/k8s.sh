@@ -1354,8 +1354,8 @@ while [[ $# -gt 0 ]]; do
     metrics_server_availability=true
     ;;
 
-  metrics-server-manifests-mirror | -metrics-server-manifests-mirror | --metrics-server-manifests-mirror)
-    metrics_server_manifests_mirror=true
+  metrics-server-manifests-mirror=* | -metrics-server-manifests-mirror=* | --metrics-server-manifests-mirror=*)
+    metrics_server_manifests_mirror="${1#*=}"
     ;;
 
   metrics-server-mirror=* | -metrics-server-mirror=* | --metrics-server-mirror=*)
