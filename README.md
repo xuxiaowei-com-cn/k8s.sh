@@ -185,6 +185,7 @@
 | ingress-nginx-version                     | 指定 Ingress Nginx 版本                                                                                                                                                           | 1.8.0                                                                                                                                          | ingress-nginx-version=1.9.0                                                                                                                                           |
 | ingress-nginx-controller-mirror           | 自定义镜像，用于替换国内不可访问的 registry.k8s.io/ingress-nginx/controller 镜像，支持 Ingress Nginx 1.8.0/1.8.1/1.8.2/1.8.4/1.9.0/1.9.1/1.9.3 版本的镜像加速下载                                            | xuxiaoweicomcn/ingress-nginx-controller                                                                                                        | ingress-nginx-controller-mirror=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/ingress-nginx/controller                                                         |
 | ingress-nginx-kube-webhook-certgen-mirror | 自定义镜像，用于替换国内不可访问的 registry.k8s.io/ingress-nginx/kube-webhook-certgen 镜像，支持 Ingress Nginx 1.8.0/1.8.1/1.8.2/1.8.4/1.9.0/1.9.1/1.9.3 版本的镜像加速下载                                  | xuxiaoweicomcn/ingress-nginx-kube-webhook-certgen                                                                                              | ingress-nginx-kube-webhook-certgen-mirror=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/ingress-nginx/kube-webhook-certgen                                     |
+| ingress-nginx-host-network                | 配置 Ingress Nginx 为 hostNetwork                                                                                                                                                | false                                                                                                                                          | ingress-nginx-host-network                                                                                                                                            |
 | availability-vip-install                  | 开启高可用 VIP 安装                                                                                                                                                                  | false                                                                                                                                          | availability-vip-install                                                                                                                                              |
 | availability-vip                          | 高可用 VIP 地址（Virtual IP Address，虚拟 IP 地址）                                                                                                                                       | 无                                                                                                                                              | availability-vip=192.168.80.100                                                                                                                                       |
 | availability-vip-no                       | 高可用 VIP 编号，整数数字类型，其中 1 代表主，其余为备用，不可重复，创建 VIP 时必填，VIP 节点中必须存在一个 1                                                                                                              | 无                                                                                                                                              | availability-vip-no=1                                                                                                                                                 |
@@ -240,7 +241,7 @@
     sudo ./k8s.sh kubernetes-taint
     
     # 安装 ingress nginx
-    # sudo ./k8s.sh kubernetes-taint ingress-nginx-install
+    # sudo ./k8s.sh kubernetes-taint ingress-nginx-install ingress-nginx-host-network
     ```
 
 2. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 k8s 指定版本
@@ -257,7 +258,7 @@
     sudo ./k8s.sh kubernetes-taint kubernetes-version=1.26.0
     
     # 安装 ingress nginx
-    # sudo ./k8s.sh kubernetes-taint kubernetes-version=1.26.0 ingress-nginx-install
+    # sudo ./k8s.sh kubernetes-taint kubernetes-version=1.26.0 ingress-nginx-install ingress-nginx-host-network
     ```
 
 3. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），不安装 docker-ce（k8s 使用 containerd）
@@ -271,7 +272,7 @@
     sudo ./k8s.sh kubernetes-taint docker-ce-install-skip
     
     # 安装 ingress nginx
-    # sudo ./k8s.sh kubernetes-taint docker-ce-install-skip ingress-nginx-install
+    # sudo ./k8s.sh kubernetes-taint docker-ce-install-skip ingress-nginx-install ingress-nginx-host-network
     ```
 
 4. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），仅安装，不进行初始化
@@ -361,7 +362,7 @@
         sudo ./k8s.sh
         
         # 安装 ingress nginx
-        # sudo ./k8s.sh ingress-nginx-install
+        # sudo ./k8s.sh ingress-nginx-install ingress-nginx-host-network
         
         # 暂存初始化完成后控制台打印的工作节点加入集群的命令，例如：
         # kubeadm join 192.168.61.147:6443 --token ykrnfh.i4qwth17fopc0gtx \
@@ -440,7 +441,7 @@
         chmod +x k8s.sh
         
         # 安装 ingress nginx
-        # sudo ./k8s.sh ingress-nginx-install 
+        # sudo ./k8s.sh ingress-nginx-install ingress-nginx-host-network
         
         # 指定 VIP 进行 k8s 集群 第一个主节点 初始化
         sudo ./k8s.sh availability-vip=192.168.80.100

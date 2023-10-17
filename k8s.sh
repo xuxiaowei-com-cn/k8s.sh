@@ -74,6 +74,8 @@ ingress_nginx_version=1.8.0
 ingress_nginx_controller_mirror=xuxiaoweicomcn/ingress-nginx-controller
 # 用于替换国内不可访问的 registry.k8s.io/ingress-nginx/kube-webhook-certgen
 ingress_nginx_kube_webhook_certgen_mirror=xuxiaoweicomcn/ingress-nginx-kube-webhook-certgen
+# hostNetwork 配置
+ingress_nginx_host_network=false
 
 # 检查 kubernetes 版本号
 _check_kubernetes_version_range() {
@@ -1087,6 +1089,14 @@ _ingress_nginx_install() {
   fi
 }
 
+_ingress_nginx_host_network(){
+  if [ "$ingress_nginx_host_network" == true ]; then
+    echo -e "${COLOR_BLUE}Ingress Nginx 插件 配置 hostNetwork 开始${COLOR_RESET}"
+    sudo kubectl --kubeconfig=/etc/kubernetes/admin.conf -n ingress-nginx patch deployment ingress-nginx-controller --patch '{"spec": {"template": {"spec": {"hostNetwork": true}}}}'
+    echo -e "${COLOR_BLUE}Ingress Nginx 插件 配置 hostNetwork 结束${COLOR_RESET}"
+  fi
+}
+
 # 高可用 VIP haproxy 安装
 _availability_haproxy_install() {
 
@@ -1414,6 +1424,10 @@ while [[ $# -gt 0 ]]; do
     ingress_nginx_kube_webhook_certgen_mirror="${1#*=}"
     ;;
 
+  ingress-nginx-host-network | -ingress-nginx-host-network | --ingress-nginx-host-network)
+    ingress_nginx_host_network=true
+    ;;
+
   interface-name=* | -interface-name=* | --interface-name=*)
     interface_name="${1#*=}"
     echo -e "${COLOR_BLUE}kubernetes 指定网卡名：${COLOR_RESET}${COLOR_GREEN}${interface_name}${COLOR_RESET}"
@@ -1582,3 +1596,6 @@ _metrics_server_install
 
 # Ingress Nginx 安装
 _ingress_nginx_install
+
+# Ingress Nginx hostNetwork
+_ingress_nginx_host_network
