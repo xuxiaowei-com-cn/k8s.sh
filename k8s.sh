@@ -6,7 +6,9 @@
 # 版本：SNAPSHOT/0.2.0
 # 如果发现脚本不能正常运行，可尝试执行：sed -i 's/\r$//' k8s.sh
 # 代码格式使用：https://github.com/mvdan/sh
-# 代码格式化命令：shfmt -l -w -i 2 .\k8s.sh
+# 代码格式化命令：
+# shfmt -l -w -i 2 .\k8s.sh
+# shfmt -l -w -i 2 k8s.sh
 #
 
 # 一旦有命令返回非零值，立即退出脚本
@@ -1100,7 +1102,7 @@ _ingress_nginx_install() {
   fi
 }
 
-_ingress_nginx_host_network(){
+_ingress_nginx_host_network() {
   if [ "$ingress_nginx_host_network" == true ]; then
     echo -e "${COLOR_BLUE}Ingress Nginx 插件 配置 hostNetwork 开始${COLOR_RESET}"
     sudo kubectl --kubeconfig=/etc/kubernetes/admin.conf -n ingress-nginx patch deployment ingress-nginx-controller --patch '{"spec": {"template": {"spec": {"hostNetwork": true}}}}'
