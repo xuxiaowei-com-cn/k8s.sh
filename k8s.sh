@@ -931,11 +931,6 @@ _kubernetes_init() {
     echo -e "${COLOR_BLUE}kubernetes 初始化结束${COLOR_RESET}"
 
     echo ""
-
-    echo -e "${COLOR_BLUE}SSH 重新连接或者执行 source /etc/profile && source ~/.bashrc 命令，使配置文件生效，即可执行 kubectl 命令${COLOR_RESET}"
-    echo -e "${COLOR_BLUE}kubectl get pod --all-namespaces -o wide${COLOR_RESET}"
-
-    echo ""
   fi
 }
 
@@ -1599,3 +1594,8 @@ _ingress_nginx_install
 
 # Ingress Nginx hostNetwork
 _ingress_nginx_host_network
+
+echo ""
+echo -e '\e[5;34mSSH 重新连接或者执行 source /etc/profile && source ~/.bashrc 命令，使配置文件生效，即可执行 kubectl 命令\e[0m'
+echo -e '\e[5;34mkubectl get pod --all-namespaces -o wide\e[0m'
+echo ""
