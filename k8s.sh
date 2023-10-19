@@ -900,7 +900,7 @@ _kubernetes_init() {
     fi
 
     if [[ $pod_network_cidr ]]; then
-      init_pod_network_cidr="--service-cidr=$pod_network_cidr"
+      init_pod_network_cidr="--pod-network-cidr=$pod_network_cidr"
     fi
 
     if [[ $availability_vip ]]; then
