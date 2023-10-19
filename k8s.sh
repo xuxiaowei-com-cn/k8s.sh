@@ -899,27 +899,31 @@ _kubernetes_init() {
       init_service_cidr="--service-cidr=$service_cidr"
     fi
 
+    if [[ $pod_network_cidr ]]; then
+      init_pod_network_cidr="--service-cidr=$pod_network_cidr"
+    fi
+
     if [[ $availability_vip ]]; then
       if [ "$kubernetes_version" ]; then
         echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${COLOR_RESET}${COLOR_GREEN}${availability_vip}${COLOR_RESET}${COLOR_BLUE} 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
         # 此处的 $init_ 开头的参数不能带引号
-        kubeadm init $init_v $init_api_address $init_api_port $init_node_name $init_service_cidr --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version" --control-plane-endpoint "$availability_vip:9443" --upload-certs
+        kubeadm init $init_v $init_api_address $init_api_port $init_node_name $init_service_cidr $init_pod_network_cidr --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version" --control-plane-endpoint "$availability_vip:9443" --upload-certs
       else
         # https://cdn.dl.k8s.io/release/stable-1.txt
         echo -e "${COLOR_BLUE}kubernetes 高可用 VIP ${COLOR_RESET}${COLOR_GREEN}${availability_vip}${COLOR_RESET}${COLOR_BLUE} 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
         # 此处的 $init_ 开头的参数不能带引号
-        kubeadm init $init_v $init_api_address $init_api_port $init_node_name $init_service_cidr --image-repository=registry.aliyuncs.com/google_containers --control-plane-endpoint "$availability_vip:9443" --upload-certs
+        kubeadm init $init_v $init_api_address $init_api_port $init_node_name $init_service_cidr $init_pod_network_cidr --image-repository=registry.aliyuncs.com/google_containers --control-plane-endpoint "$availability_vip:9443" --upload-certs
       fi
     else
       if [ "$kubernetes_version" ]; then
         echo -e "${COLOR_BLUE}kubernetes 初始化时使用的镜像版本 ${COLOR_RESET}${COLOR_GREEN}${kubernetes_version}${COLOR_RESET}"
         # 此处的 $init_ 开头的参数不能带引号
-        kubeadm init $init_v $init_api_address $init_api_port $init_node_name $init_service_cidr --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
+        kubeadm init $init_v $init_api_address $init_api_port $init_node_name $init_service_cidr $init_pod_network_cidr --image-repository=registry.aliyuncs.com/google_containers --kubernetes-version=v"$kubernetes_version"
       else
         # https://cdn.dl.k8s.io/release/stable-1.txt
         echo -e "${COLOR_BLUE}kubernetes 初始化时使用当前次级版本最新镜像（自动联网获取版本号）${COLOR_RESET}"
         # 此处的 $init_ 开头的参数不能带引号
-        kubeadm init $init_v $init_api_address $init_api_port $init_node_name $init_service_cidr --image-repository=registry.aliyuncs.com/google_containers
+        kubeadm init $init_v $init_api_address $init_api_port $init_node_name $init_service_cidr $init_pod_network_cidr --image-repository=registry.aliyuncs.com/google_containers
       fi
     fi
 
@@ -1333,6 +1337,10 @@ while [[ $# -gt 0 ]]; do
 
   service-cidr=* | -service-cidr=* | --service-cidr=*)
     service_cidr="${1#*=}"
+    ;;
+
+  pod-network-cidr=* | -pod-network-cidr=* | --pod-network-cidr=*)
+    pod_network_cidr="${1#*=}"
     ;;
 
   calico-version=* | -calico-version=* | --calico-version=*)
