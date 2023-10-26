@@ -1089,6 +1089,7 @@ _ingress_nginx_install() {
     curl -o deploy.yaml https://jihulab.com/mirrors-github/kubernetes/ingress-nginx/-/raw/controller-v$ingress_nginx_version/deploy/static/provider/cloud/deploy.yaml
 
     echo -e "${COLOR_BLUE}Ingress Nginx 插件 修改镜像${COLOR_RESET}"
+    sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.9.4@sha256:5b161f051d017e55d358435f295f5e9a297e66158f136321d9b04520ec6c48a3#$ingress_nginx_controller_mirror:v1.9.4#g" deploy.yaml
     sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.9.3@sha256:8fd21d59428507671ce0fb47f818b1d859c92d2ad07bb7c947268d433030ba98#$ingress_nginx_controller_mirror:v1.9.3#g" deploy.yaml
     sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.9.1@sha256:605a737877de78969493a4b1213b21de4ee425d2926906857b98050f57a95b25#$ingress_nginx_controller_mirror:v1.9.1#g" deploy.yaml
     sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.9.0@sha256:c15d1a617858d90fb8f8a2dd60b0676f2bb85c54e3ed11511794b86ec30c8c60#$ingress_nginx_controller_mirror:v1.9.0#g" deploy.yaml
