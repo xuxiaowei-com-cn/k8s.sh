@@ -260,9 +260,9 @@ _ntp_install() {
         echo -e "${COLOR_BLUE}NTP 完成创建配置文件 ${ntp_conf}${COLOR_RESET}"
         echo -e "${COLOR_BLUE}NTP 查看配置文件 ${ntp_conf} 内容${COLOR_RESET}" && cat $ntp_conf
 
-        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntpdate || echo -e "${COLOR_YELLOW}NTP 未正常运行${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntpdate --no-pager || echo -e "${COLOR_YELLOW}NTP 未正常运行${COLOR_RESET}"
         echo -e "${COLOR_BLUE}NTP 重启${COLOR_RESET}" && sudo systemctl restart ntpdate
-        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntpdate
+        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntpdate --no-pager
         echo -e "${COLOR_BLUE}NTP 设置开机启动${COLOR_RESET}" && sudo systemctl enable ntpdate
       elif [[ $VERSION == 8* || $VERSION == 23* ]]; then
 
@@ -306,9 +306,9 @@ _ntp_install() {
         echo -e "${COLOR_BLUE}NTP 完成修改配置文件 ${ntp_conf}${COLOR_RESET}"
         echo -e "${COLOR_BLUE}NTP 查看配置文件 ${ntp_conf} 内容${COLOR_RESET}" && cat $ntp_conf
 
-        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntp || echo -e "${COLOR_YELLOW}NTP 未正常运行${COLOR_RESET}"
+        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntp --no-pager || echo -e "${COLOR_YELLOW}NTP 未正常运行${COLOR_RESET}"
         echo -e "${COLOR_BLUE}NTP 重启${COLOR_RESET}" && sudo systemctl restart ntp
-        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntp
+        echo -e "${COLOR_BLUE}NTP 查看状态${COLOR_RESET}" && sudo systemctl status ntp --no-pager
         echo -e "${COLOR_BLUE}NTP 设置开机启动${COLOR_RESET}" && sudo systemctl enable ntp
       elif [[ $VERSION == 22* ]]; then
         echo -e "${COLOR_YELLOW}Ubuntu 22 NTP 安装已忽略${COLOR_RESET}"
