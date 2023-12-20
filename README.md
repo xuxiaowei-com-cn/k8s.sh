@@ -101,7 +101,7 @@
 
 <p></p>
 
-1. 支持 CentOS 7/8、Anolis 7/8/23 系统主流版本，[点击查看详情](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/12)
+1. 支持 CentOS 7/8、Anolis 7/8/23 系统主流版本，[点击查看详情](https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/issues/12)
     1. [CentOS 7.3 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.3%2Flatest)
     2. [CentOS 7.4 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.4%2Flatest)
     3. [CentOS 7.5 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.5%2Flatest)
@@ -121,15 +121,15 @@
     17. [Anolis 8.6 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.6%2Flatest)
     18. [Anolis 8.8 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.8%2Flatest)
     19. [Anolis 23 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-23%2Flatest)
-2. 支持 UOS 统信 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/26
+2. 支持 UOS 统信 系统主流版本，详情见：https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/issues/26
     1. [UOS 20-1060e 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fuos-20-1060e%2Flatest)
-3. 支持 openEuler 欧拉 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/24
+3. 支持 openEuler 欧拉 系统主流版本，详情见：https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/issues/24
     1. openEuler 23.03
-4. 支持 Ubuntu 乌班图 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/21
+4. 支持 Ubuntu 乌班图 系统主流版本，详情见：https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/issues/21
     1. Ubuntu 20.04 Focal Fossa
     2. Ubuntu 22.10 Kinetic Kudu
     3. [Ubuntu 23.04 Lunar Lobster 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fubuntu-23.04%2Flatest)
-5. 支持 openKylin 开放麒麟 系统主流版本，详情见：https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/issues/25
+5. 支持 openKylin 开放麒麟 系统主流版本，详情见：https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/issues/25
     1. [openKylin 1.0 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2FopenKylin-1.0%2Flatest)
 6. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
 7. 一键支持 单机集群
@@ -239,7 +239,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -253,7 +253,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -270,7 +270,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -284,7 +284,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令，仅安装，不进行初始化
@@ -295,7 +295,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令，仅安装、拉取镜像，不进行初始化
@@ -306,7 +306,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -324,7 +324,7 @@
     # 作者个人镜像仓库：calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud
     
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -335,7 +335,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -360,7 +360,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         # 执行安装命令
@@ -383,7 +383,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         # 执行安装命令，仅安装、拉取镜像，不进行初始化
@@ -405,7 +405,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
@@ -441,7 +441,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
@@ -459,7 +459,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
@@ -498,7 +498,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
