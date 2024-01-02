@@ -5,6 +5,51 @@ metadata:
 
 ---
 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-config-pvc
+  namespace: gitlab
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  volumeMode: Filesystem
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-logs-pvc
+  namespace: gitlab
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  volumeMode: Filesystem
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: gitlab-data-pvc
+  namespace: gitlab
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  volumeMode: Filesystem
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -40,19 +85,18 @@ spec:
               mountPath: /var/log/gitlab
             - name: gitlab-ce-data
               mountPath: /var/opt/gitlab
+      # https://kubernetes.io/zh-cn/docs/concepts/storage/volumes/
+      # 配置挂载的数据卷
       volumes:
         - name: gitlab-ce-config
-          nfs:
-            path: /nfs/gitlab/gitlab-ce/etc/gitlab
-            server: 172.25.25.5
+          persistentVolumeClaim:
+            claimName: gitlab-ce-config-pvc
         - name: gitlab-ce-logs
-          nfs:
-            path: /nfs/gitlab/gitlab-ce/var/log/gitlab
-            server: 172.25.25.5
+          persistentVolumeClaim:
+            claimName: gitlab-ce-logs-pvc
         - name: gitlab-ce-data
-          nfs:
-            path: /nfs/gitlab/gitlab-ce/var/opt/gitlab
-            server: 172.25.25.5
+          persistentVolumeClaim:
+            claimName: gitlab-ce-data-pvc
 
 ---
 
