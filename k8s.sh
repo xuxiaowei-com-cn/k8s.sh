@@ -435,12 +435,8 @@ _docker_repo() {
         sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
       fi
 
-      if [[ $ID == uos ]]; then
-        echo -e "${COLOR_BLUE}兼容 uos${COLOR_RESET}" && sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
-      fi
-
-      if [[ $VERSION == 23* ]]; then
-        echo -e "${COLOR_BLUE}兼容 ${ID} 23${COLOR_RESET}" && sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
+      if [[ $ID == uos || $ID = openEuler || $VERSION == 23* ]]; then
+        echo -e "${COLOR_BLUE}兼容 ${ID} ${VERSION}${COLOR_RESET}" && sed -i 's/$releasever/8/g' /etc/yum.repos.d/docker-ce.repo
       fi
 
       echo -e "${COLOR_BLUE}查看 docker 仓库${COLOR_RESET}" && cat /etc/yum.repos.d/docker-ce.repo
