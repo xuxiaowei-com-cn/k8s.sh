@@ -31,7 +31,7 @@ readonly kernel_target_version=3.10.0-957.el7.x86_64
 readonly lower_major=1
 readonly lower_minor=24
 readonly upper_major=1
-readonly upper_minor=28
+readonly upper_minor=29
 
 # 高可用主节点地址
 availability_master_array=()
