@@ -654,7 +654,18 @@ _kubernetes_repo() {
 
     if [[ $ID == anolis || $ID == centos || $ID == uos || $ID = openEuler ]]; then
 
-      cat <<EOF >/etc/yum.repos.d/kubernetes.repo
+      if [[ $kubernetes_repo_new_version ]]; then
+        cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://mirrors.aliyun.com/kubernetes-new/core/stable/v$kubernetes_repo_new_version/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes-new/core/stable/v$kubernetes_repo_new_version/rpm/repodata/repomd.xml.key
+
+EOF
+      else
+        cat <<EOF >/etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
 baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
@@ -667,12 +678,19 @@ repo_gpgcheck=0
 gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 
 EOF
+      fi
 
     elif [[ $ID == ubuntu || $ID == openkylin ]]; then
 
       sudo apt-get install -y apt-transport-https
-      curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
-      echo "deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+      if [[ $kubernetes_repo_new_version ]]; then
+        curl -fsSL https://mirrors.aliyun.com/kubernetes-new/core/stable/v$kubernetes_repo_new_version/deb/Release.key | sudo apt-key add -
+        echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://mirrors.aliyun.com/kubernetes-new/core/stable/v$kubernetes_repo_new_version/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+      else
+        curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
+        echo "deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+      fi
 
       echo -e "${COLOR_BLUE}kubernetes 仓库 内容：${COLOR_RESET}${COLOR_GREEN}/etc/apt/sources.list.d/kubernetes.list${COLOR_RESET}" && cat /etc/apt/sources.list.d/kubernetes.list
 
@@ -1398,6 +1416,10 @@ while [[ $# -gt 0 ]]; do
 
   kubernetes-repo-skip | -kubernetes-repo-skip | --kubernetes-repo-skip)
     kubernetes_repo_skip=true
+    ;;
+
+  kubernetes-repo-new-version=* | -kubernetes-repo-new-version=* | --kubernetes-repo-new-version=*)
+    kubernetes_repo_new_version="${1#*=}"
     ;;
 
   kubernetes-conf-skip | -kubernetes-conf-skip | --kubernetes-conf-skip)
