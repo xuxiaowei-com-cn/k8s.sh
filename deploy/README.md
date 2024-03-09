@@ -161,7 +161,7 @@ sonar                  sonarqube-service                              NodePort  
     1. 部署 jenkins
     2. 文档
         1. [GitHub](https://github.com/jenkinsci/docker/blob/master/README.md)
-        2. [JiHuLab](https://framagit.org/mirrors-github/jenkinsci/jenkins/blob/master/README.md)
+        2. [JiHuLab](https://jihulab.com/xuxiaowei-jihu/mirrors-github/jenkinsci/jenkins/blob/master/README.md)
 2. [jenkins-ingress.yaml](jenkins-ingress.yaml)
     1. 配置 jenkins 域名、证书
 

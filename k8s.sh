@@ -1021,7 +1021,7 @@ function _calico_init() {
       curl -o calico.yaml "$calico_manifests_mirror"
     else
       echo -e "${COLOR_BLUE}kubernetes 网络插件 calico 使用版本：${COLOR_RESET}${COLOR_GREEN}${calico_version}${COLOR_RESET}"
-      curl -o calico.yaml https://framagit.org/mirrors-github/projectcalico/calico/-/raw/v"$calico_version"/manifests/calico.yaml
+      curl -o calico.yaml https://jihulab.com/xuxiaowei-jihu/mirrors-github/projectcalico/calico/-/raw/v"$calico_version"/manifests/calico.yaml
     fi
 
     # 网卡
@@ -1100,7 +1100,7 @@ _ingress_nginx_install() {
     echo -e "${COLOR_BLUE}Ingress Nginx 插件 安装开始${COLOR_RESET}"
 
     echo -e "${COLOR_BLUE}Ingress Nginx 插件 下载配置文件${COLOR_RESET}"
-    curl -o deploy.yaml https://framagit.org/mirrors-github/kubernetes/ingress-nginx/-/raw/controller-v$ingress_nginx_version/deploy/static/provider/cloud/deploy.yaml
+    curl -o deploy.yaml https://jihulab.com/xuxiaowei-jihu/mirrors-github/kubernetes/ingress-nginx/-/raw/controller-v$ingress_nginx_version/deploy/static/provider/cloud/deploy.yaml
 
     echo -e "${COLOR_BLUE}Ingress Nginx 插件 修改镜像${COLOR_RESET}"
     sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.9.4@sha256:5b161f051d017e55d358435f295f5e9a297e66158f136321d9b04520ec6c48a3#$ingress_nginx_controller_mirror:v1.9.4#g" deploy.yaml
