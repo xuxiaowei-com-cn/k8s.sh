@@ -102,35 +102,35 @@
 <p></p>
 
 1. 支持 CentOS 7/8、Anolis 7/8/23 系统主流版本，[点击查看详情](https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/issues/12)
-    1. [CentOS 7.3 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.3%2Flatest)
-    2. [CentOS 7.4 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.4%2Flatest)
-    3. [CentOS 7.5 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.5%2Flatest)
-    4. [CentOS 7.6 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.6%2Flatest)
-    5. [CentOS 7.7 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.7%2Flatest)
-    6. [CentOS 7.8 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.8%2Flatest)
-    7. [CentOS 7.9 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.9%2Flatest)
-    8. [CentOS 8.1 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.1%2Flatest)
-    9. [CentOS 8.2 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.2%2Flatest)
-    10. [CentOS 8.3 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.3%2Flatest)
-    11. [CentOS 8.4 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.4%2Flatest)
-    12. [CentOS 8.5 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.5%2Flatest)
-    13. [Anolis 7.7 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.7%2Flatest)
-    14. [Anolis 7.9 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.9%2Flatest)
-    15. [Anolis 8.2 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.2%2Flatest)
-    16. [Anolis 8.4 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.4%2Flatest)
-    17. [Anolis 8.6 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.6%2Flatest)
-    18. [Anolis 8.8 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.8%2Flatest)
-    19. [Anolis 23 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-23%2Flatest)
+    1. [CentOS 7.3 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.3%2Flatest)
+    2. [CentOS 7.4 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.4%2Flatest)
+    3. [CentOS 7.5 流水线示例 - 需要升级内核 kernel 并重启系统使其生效](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.5%2Flatest)
+    4. [CentOS 7.6 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.6%2Flatest)
+    5. [CentOS 7.7 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.7%2Flatest)
+    6. [CentOS 7.8 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.8%2Flatest)
+    7. [CentOS 7.9 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.9%2Flatest)
+    8. [CentOS 8.1 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.1%2Flatest)
+    9. [CentOS 8.2 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.2%2Flatest)
+    10. [CentOS 8.3 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.3%2Flatest)
+    11. [CentOS 8.4 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.4%2Flatest)
+    12. [CentOS 8.5 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.5%2Flatest)
+    13. [Anolis 7.7 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.7%2Flatest)
+    14. [Anolis 7.9 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-7.9%2Flatest)
+    15. [Anolis 8.2 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.2%2Flatest)
+    16. [Anolis 8.4 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.4%2Flatest)
+    17. [Anolis 8.6 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.6%2Flatest)
+    18. [Anolis 8.8 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-8.8%2Flatest)
+    19. [Anolis 23 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fcentos-23%2Flatest)
 2. 支持 UOS 统信 系统主流版本，详情见：https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/issues/26
-    1. [UOS 20-1060e 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fuos-20-1060e%2Flatest)
+    1. [UOS 20-1060e 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fuos-20-1060e%2Flatest)
 3. 支持 openEuler 欧拉 系统主流版本，详情见：https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/issues/24
     1. openEuler 23.03
 4. 支持 Ubuntu 乌班图 系统主流版本，详情见：https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/issues/21
     1. Ubuntu 20.04 Focal Fossa
     2. Ubuntu 22.10 Kinetic Kudu
-    3. [Ubuntu 23.04 Lunar Lobster 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fubuntu-23.04%2Flatest)
+    3. [Ubuntu 23.04 Lunar Lobster 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2Fubuntu-23.04%2Flatest)
 5. 支持 openKylin 开放麒麟 系统主流版本，详情见：https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/issues/25
-    1. [openKylin 1.0 流水线示例](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2FopenKylin-1.0%2Flatest)
+    1. [openKylin 1.0 流水线示例](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines?page=1&scope=all&ref=test%2Fmachine%2FopenKylin-1.0%2Flatest)
 6. 一键支持 自定义 Kubernetes（k8s）、Calico 版本
 7. 一键支持 单机集群
 8. 一键支持 一主多从
@@ -186,7 +186,7 @@
 | metrics-server-install                    | 启用 Metrics Server 安装                                                                                                                                                          | false                                                                                                                                          | metrics-server-install                                                                                                                                                |
 | metrics-server-version                    | 指定 Metrics Server 版本                                                                                                                                                          | 0.6.3                                                                                                                                          | metrics-server-version=0.6.3                                                                                                                                          |
 | metrics-server-availability               | 指定 Metrics Server 使用高可用                                                                                                                                                       | false                                                                                                                                          | metrics-server-availability                                                                                                                                           |
-| metrics-server-manifests-mirror           | 自定义 Metrics Server 配置文件，优先级高于 metrics-server-version、metrics-server-availability                                                                                              | 从 GitHub 中获取                                                                                                                                   | metrics-server-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml                  |
+| metrics-server-manifests-mirror           | 自定义 Metrics Server 配置文件，优先级高于 metrics-server-version、metrics-server-availability                                                                                              | 从 GitHub 中获取                                                                                                                                   | metrics-server-manifests-mirror=https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml   |
 | ingress-nginx-install                     | 启用 Ingress Nginx 安装                                                                                                                                                           | false                                                                                                                                          | ingress-nginx-install                                                                                                                                                 |
 | ingress-nginx-version                     | 指定 Ingress Nginx 版本                                                                                                                                                           | 1.8.0                                                                                                                                          | ingress-nginx-version=1.9.0                                                                                                                                           |
 | ingress-nginx-controller-mirror           | 自定义镜像，用于替换国内不可访问的 registry.k8s.io/ingress-nginx/controller 镜像，支持 Ingress Nginx 1.8.0/1.8.1/1.8.2/1.8.4/1.9.0/1.9.1/1.9.3/1.9.4 版本的镜像加速下载                                      | xuxiaoweicomcn/ingress-nginx-controller                                                                                                        | ingress-nginx-controller-mirror=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei/ingress-nginx/controller                                   |
@@ -352,7 +352,7 @@
     # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-version=0.6.2 metrics-server-availability
     
     # 执行安装命令：自定义下载配置文件（优先级高于 metrics-server-version、metrics-server-availability，可指定高可用）
-    # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-manifests-mirror=https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml
+    # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-manifests-mirror=https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml
     ```
 
 9. k8s 集群（一主多从，无高可用，仅用于学习、测试）
@@ -564,15 +564,15 @@
     1. 快照分支
 - images-mirrors/\*.\*.\*-0
     1. docker 镜像加速计划，镜像地址：https://jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud/container_registry
-    2. docker 镜像离线安装计划：可在 [流水线](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines) 产物中，下载所需
+    2. docker 镜像离线安装计划：可在 [流水线](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines) 产物中，下载所需
        Docker 镜像文件
-    3. 有效期默认 30 天，可重试 [流水线](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines) 重新生成
+    3. 有效期默认 30 天，可重试 [流水线](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines) 重新生成
     4. 可自行 fork 本项目，修改配置，生成自己所需 Docker 镜像文件
     5. 可创建议题、PR，生成所需 Docker 镜像文件
 - yum/\*.\*.\*-0
-    1. yum 离线安装计划：可在 [流水线](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines) 产物中，下载所需安装
+    1. yum 离线安装计划：可在 [流水线](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines) 产物中，下载所需安装
        k8s、docker 等相关软件的 yum 离线安装包
-    2. 有效期默认 30 天，可重试 [流水线](https://jihulab.com/xuxiaowei-com-cn/k8s.sh/-/pipelines) 重新生成
+    2. 有效期默认 30 天，可重试 [流水线](https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/pipelines) 重新生成
     3. 可自行 fork 本项目，修改配置，生成自己所需安装 k8s、docker 等相关软件的 yum 离线安装包
     4. 可创建议题、PR，生成所需 yum 离线安装包
 - xuxiaowei/*
