@@ -156,7 +156,7 @@ centos-7.3:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_7_3_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_7_3_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-7.3
   only:
@@ -329,7 +329,7 @@ centos-7.4:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_7_4_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_7_4_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-7.4
   only:
@@ -502,7 +502,7 @@ centos-7.5:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_7_5_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_7_5_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-7.5
   only:
@@ -582,7 +582,7 @@ centos-7.6:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_7_6_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_7_6_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-7.6
   only:
@@ -662,7 +662,7 @@ centos-7.7:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_7_7_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_7_7_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-7.7
   only:
@@ -742,7 +742,7 @@ centos-7.8:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_7_8_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_7_8_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-7.8
   only:
@@ -822,7 +822,7 @@ centos-7.9:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_7_9_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_7_9_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-7.9
   only:
@@ -902,7 +902,7 @@ centos-8.0:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_8_0_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_8_0_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-8.0
   only:
@@ -982,7 +982,7 @@ centos-8.1:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_8_1_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_8_1_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-8.1
   only:
@@ -1062,7 +1062,7 @@ centos-8.2:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_8_2_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_8_2_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-8.2
   only:
@@ -1142,7 +1142,7 @@ centos-8.3:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_8_3_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_8_3_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-8.3
   only:
@@ -1222,7 +1222,7 @@ centos-8.4:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_8_4_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_8_4_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-8.4
   only:
@@ -1302,7 +1302,7 @@ centos-8.5:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$CENTOS_8_5_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$CENTOS_8_5_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-centos-8.5
   only:
@@ -1382,7 +1382,7 @@ anolisos-7.7:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$ANOLISOS_7_7_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$ANOLISOS_7_7_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-anolisos-7.7
   only:
@@ -1462,7 +1462,7 @@ anolisos-7.9:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$ANOLISOS_7_9_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$ANOLISOS_7_9_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-anolisos-7.9
   only:
@@ -1542,7 +1542,7 @@ anolisos-8.2:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$ANOLISOS_8_2_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$ANOLISOS_8_2_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-anolisos-8.2
   only:
@@ -1622,7 +1622,7 @@ anolisos-8.4:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$ANOLISOS_8_4_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$ANOLISOS_8_4_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-anolisos-8.4
   only:
@@ -1702,7 +1702,7 @@ anolisos-8.6:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$ANOLISOS_8_6_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$ANOLISOS_8_6_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-anolisos-8.6
   only:
@@ -1782,7 +1782,7 @@ anolisos-8.8:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$ANOLISOS_8_8_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$ANOLISOS_8_8_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-anolisos-8.8
   only:
@@ -1862,7 +1862,7 @@ anolisos-23:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$ANOLISOS_23_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$ANOLISOS_23_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-anolisos-23
   only:
@@ -1942,7 +1942,7 @@ uos-20-1060e:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$UOS_20_1060E_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$UOS_20_1060E_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-uos-20-1060e
   only:
@@ -2022,7 +2022,7 @@ ubuntu-23.04:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$UBUNTU_23_04_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud && ./check.sh"
+    - echo "$UBUNTU_23_04_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei && ./check.sh"
   tags:
     - ssh-ubuntu-23.04
   only:
@@ -2102,7 +2102,7 @@ ubuntu-22.10:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$UBUNTU_22_10_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud docker-ce-install-skip && ./check.sh"
+    - echo "$UBUNTU_22_10_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei docker-ce-install-skip && ./check.sh"
   tags:
     - ssh-ubuntu-22.10
   only:
@@ -2182,7 +2182,7 @@ openKylin-1.0:
     - cat /etc/hosts
     - chmod +x k8s.sh
     - chmod +x check.sh
-    - echo "$OPENKYLIN_1_0_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-cloud/xuxiaowei-cloud docker-ce-install-skip && ./check.sh"
+    - echo "$OPENKYLIN_1_0_PASSWORD" | script -qec "sudo -S ./k8s.sh kubernetes-taint calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei docker-ce-install-skip && ./check.sh"
   tags:
     - ssh-openKylin-1.0
   only:
