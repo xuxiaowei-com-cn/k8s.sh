@@ -1103,16 +1103,9 @@ _ingress_nginx_install() {
     curl -o deploy.yaml https://jihulab.com/xuxiaowei-jihu/mirrors-github/kubernetes/ingress-nginx/-/raw/controller-v$ingress_nginx_version/deploy/static/provider/cloud/deploy.yaml
 
     echo -e "${COLOR_BLUE}Ingress Nginx 插件 修改镜像${COLOR_RESET}"
-    sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.9.4@sha256:5b161f051d017e55d358435f295f5e9a297e66158f136321d9b04520ec6c48a3#$ingress_nginx_controller_mirror:v1.9.4#g" deploy.yaml
-    sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.9.3@sha256:8fd21d59428507671ce0fb47f818b1d859c92d2ad07bb7c947268d433030ba98#$ingress_nginx_controller_mirror:v1.9.3#g" deploy.yaml
-    sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.9.1@sha256:605a737877de78969493a4b1213b21de4ee425d2926906857b98050f57a95b25#$ingress_nginx_controller_mirror:v1.9.1#g" deploy.yaml
-    sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.9.0@sha256:c15d1a617858d90fb8f8a2dd60b0676f2bb85c54e3ed11511794b86ec30c8c60#$ingress_nginx_controller_mirror:v1.9.0#g" deploy.yaml
-    sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.8.4@sha256:8d8ddf32b83ca3e74bd5f66369fa60d85353e18ff55fa7691b321aa4716f5ba9#$ingress_nginx_controller_mirror:v1.8.4#g" deploy.yaml
-    sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.8.2@sha256:74834d3d25b336b62cabeb8bf7f1d788706e2cf1cfd64022de4137ade8881ff2#$ingress_nginx_controller_mirror:v1.8.2#g" deploy.yaml
-    sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.8.1@sha256:e5c4824e7375fcf2a393e1c03c293b69759af37a9ca6abdb91b13d78a93da8bd#$ingress_nginx_controller_mirror:v1.8.1#g" deploy.yaml
-    sudo sed -i "s#registry.k8s.io/ingress-nginx/controller:v1.8.0@sha256:744ae2afd433a395eeb13dc03d3313facba92e96ad71d9feaafc85925493fee3#$ingress_nginx_controller_mirror:v1.8.0#g" deploy.yaml
-    sudo sed -i "s#registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20231011-8b53cabe0@sha256:a7943503b45d552785aa3b5e457f169a5661fb94d82b8a3373bcd9ebaf9aac80#$ingress_nginx_kube_webhook_certgen_mirror:v20231011-8b53cabe0#g" deploy.yaml
-    sudo sed -i "s#registry.k8s.io/ingress-nginx/kube-webhook-certgen:v20230407@sha256:543c40fd093964bc9ab509d3e791f9989963021f1e9e4c9c7b6700b02bfb227b#$ingress_nginx_kube_webhook_certgen_mirror:v20230407#g" deploy.yaml
+    sudo sed -i 's/@.*$//' deploy.yaml
+    sudo sed -i "s#registry.k8s.io/ingress-nginx/controller#$ingress_nginx_controller_mirror#g" deploy.yaml
+    sudo sed -i "s#registry.k8s.io/ingress-nginx/kube-webhook-certgen#$ingress_nginx_kube_webhook_certgen_mirror#g" deploy.yaml
 
     echo -e "${COLOR_BLUE}k8s 配置 Ingress Nginx${COLOR_RESET}"
     sudo kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f deploy.yaml
