@@ -240,7 +240,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -254,7 +254,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -271,7 +271,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -285,7 +285,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令，仅安装，不进行初始化
@@ -296,7 +296,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令，仅安装、拉取镜像，不进行初始化
@@ -307,7 +307,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -325,7 +325,7 @@
     # 作者个人镜像仓库：calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei
     
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -336,7 +336,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -361,7 +361,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         # 执行安装命令
@@ -384,7 +384,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         # 执行安装命令，仅安装、拉取镜像，不进行初始化
@@ -406,7 +406,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
@@ -442,7 +442,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
@@ -460,7 +460,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
@@ -499,7 +499,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://framagit.org/xuxiaowei-com-cn/k8s.sh/-/raw/SNAPSHOT/0.2.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
