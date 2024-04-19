@@ -376,7 +376,7 @@ function hostName() {
   if [[ $CMD_HOSTNAME =~ ^[A-Za-z0-9\.\-]+$ ]]; then
     if ! [ "$ETC_HOSTNAME" ]; then
       echo "主机名符合要求"
-    elif [ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]; then
+    elif [[ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]]; then
       echo "主机名符合要求"
     else
       echo "临时主机名：$CMD_HOSTNAME"
@@ -432,7 +432,7 @@ function ntpdateInstall() {
       sudo systemctl start ntpdate
       sudo systemctl status ntpdate
       sudo systemctl enable ntpdate
-    elif [ $OS_VERSION == 8 ] || [ $OS_VERSION == 23 ]; then
+    elif [[ $OS_VERSION == 8 ]] || [[ $OS_VERSION == 23 ]]; then
       # 兼容 Anolis 23
       sudo yum -y install chrony
       sudo systemctl status chronyd -n 0
@@ -871,7 +871,7 @@ else
     # 等待 pod 就绪
     kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
 
-  elif [ "$INSTALL_MODE" == master ]; then
+  elif [[ "$INSTALL_MODE" == master ]]; then
     # 主节点
 
     # k8s 初始化
@@ -886,7 +886,7 @@ else
     # 等待 pod 就绪
     kubectl wait --for=condition=Ready --all pods --all-namespaces --timeout=600s
 
-  elif [ "$INSTALL_MODE" == node ]; then
+  elif [[ "$INSTALL_MODE" == node ]]; then
     # 工作节点
 
     echo ''
