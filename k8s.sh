@@ -682,7 +682,7 @@ _hostname() {
   if [[ $CMD_HOSTNAME =~ ^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$ ]]; then
     if ! [ "$ETC_HOSTNAME" ]; then
       echo -e "${COLOR_BLUE}主机名符合要求${COLOR_RESET}"
-    elif [ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]; then
+    elif [[ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]]; then
       echo -e "${COLOR_BLUE}主机名符合要求${COLOR_RESET}"
     else
       echo -e "${COLOR_RED}临时主机名：$CMD_HOSTNAME${COLOR_RESET}"
