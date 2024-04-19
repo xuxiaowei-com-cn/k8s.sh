@@ -429,7 +429,7 @@ _docker_repo() {
       # 空（官方，默认）、aliyun（阿里云）、tencent（腾讯云）
       if [[ $docker_repo_type == aliyun ]]; then
         sudo curl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-      elif [ $docker_repo_type == tencent ]; then
+      elif [[  $docker_repo_type == tencent ]]; then
         sudo curl -o /etc/yum.repos.d/docker-ce.repo http://mirrors.cloud.tencent.com/docker-ce/linux/centos/docker-ce.repo
       else
         sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -460,7 +460,7 @@ _docker_repo() {
         # 空（官方，默认）、aliyun（阿里云）、tencent（腾讯云）
         if [[ $docker_repo_type == aliyun ]]; then
           curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-        elif [ $docker_repo_type == tencent ]; then
+        elif [[ $docker_repo_type == tencent ]]; then
           curl -fsSL http://mirrors.cloud.tencent.com/docker-ce/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
         else
           curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -469,7 +469,7 @@ _docker_repo() {
         # 空（官方，默认）、aliyun（阿里云）、tencent（腾讯云）
         if [[ $docker_repo_type == aliyun ]]; then
           curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-        elif [ $docker_repo_type == tencent ]; then
+        elif [[ $docker_repo_type == tencent ]]; then
           curl -fsSL http://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
         else
           curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
@@ -486,7 +486,7 @@ _docker_repo() {
             "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.aliyun.com/docker-ce/linux/debian \
             buster stable" |
             sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
-        elif [ $docker_repo_type == tencent ]; then
+        elif [[ $docker_repo_type == tencent ]]; then
           echo \
             "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] http://mirrors.cloud.tencent.com/docker-ce/linux/debian/ \
             buster stable" |
@@ -504,7 +504,7 @@ _docker_repo() {
             "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] http://mirrors.aliyun.com/docker-ce/linux/ubuntu \
             "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" |
             sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
-        elif [ $docker_repo_type == tencent ]; then
+        elif [[ $docker_repo_type == tencent ]]; then
           echo \
             "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] http://mirrors.cloud.tencent.com/docker-ce/linux/ubuntu/ \
             "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" |
@@ -763,7 +763,7 @@ _hostname() {
   if [[ $CMD_HOSTNAME =~ ^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$ ]]; then
     if ! [ "$ETC_HOSTNAME" ]; then
       echo -e "${COLOR_BLUE}主机名符合要求${COLOR_RESET}"
-    elif [ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]; then
+    elif [[ "$ETC_HOSTNAME" == "$CMD_HOSTNAME" ]]; then
       echo -e "${COLOR_BLUE}主机名符合要求${COLOR_RESET}"
     else
       echo -e "${COLOR_RED}临时主机名：$CMD_HOSTNAME${COLOR_RESET}"
