@@ -31,7 +31,9 @@ readonly kernel_target_version=3.10.0-957.el7.x86_64
 readonly lower_major=1
 readonly lower_minor=24
 readonly upper_major=1
-readonly upper_minor=29
+readonly upper_minor=30
+
+kubernetes_repo_new_version=1.30
 
 # 高可用主节点地址
 availability_master_array=()
@@ -42,7 +44,7 @@ availability_haproxy_username=admin
 availability_haproxy_password=password
 
 # kubernetes 网络插件 calico 版本
-calico_version=3.26.1
+calico_version=3.27.3
 
 # 高可用 VIP keepalived 镜像
 keepalived_mirror=lettore/keepalived
@@ -55,7 +57,7 @@ haproxy_mirror=haproxytech/haproxy-debian
 haproxy_version=2.8
 
 # Metrics Server 版本号
-metrics_server_version=0.6.3
+metrics_server_version=0.7.1
 # Metrics Server 镜像
 metrics_server_mirror=registry.aliyuncs.com/google_containers/metrics-server
 
@@ -69,7 +71,7 @@ uos_slirp4netns_mirror=https://mirrors.aliyun.com/centos/8.5.2111/AppStream/x86_
 docker_repo_type=
 
 # ingress nginx 版本
-ingress_nginx_version=1.8.0
+ingress_nginx_version=1.10.0
 
 # ingress nginx 相关镜像（前缀）
 # 用于替换国内不可访问的 registry.k8s.io/ingress-nginx/controller 镜像
@@ -431,6 +433,7 @@ _docker_repo() {
         sudo curl -o /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
       elif [[  $docker_repo_type == tencent ]]; then
         sudo curl -o /etc/yum.repos.d/docker-ce.repo http://mirrors.cloud.tencent.com/docker-ce/linux/centos/docker-ce.repo
+        sudo sed -i "s#https://download.docker.com/linux/centos/#http://mirrors.cloud.tencent.com/docker-ce/linux/centos/#g" /etc/yum.repos.d/docker-ce.repo
       else
         sudo curl -o /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
       fi
@@ -654,8 +657,7 @@ _kubernetes_repo() {
 
     if [[ $ID == anolis || $ID == centos || $ID == uos || $ID = openEuler ]]; then
 
-      if [[ $kubernetes_repo_new_version ]]; then
-        cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
+      cat <<EOF | tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
 baseurl=https://mirrors.aliyun.com/kubernetes-new/core/stable/v$kubernetes_repo_new_version/rpm/
@@ -664,33 +666,15 @@ gpgcheck=1
 gpgkey=https://mirrors.aliyun.com/kubernetes-new/core/stable/v$kubernetes_repo_new_version/rpm/repodata/repomd.xml.key
 
 EOF
-      else
-        cat <<EOF >/etc/yum.repos.d/kubernetes.repo
-[kubernetes]
-name=Kubernetes
-baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
-# 是否开启本仓库
-enabled=1
-# 是否检查 gpg 签名文件
-gpgcheck=0
-# 是否检查 gpg 签名文件
-repo_gpgcheck=0
-gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
-
-EOF
-      fi
 
     elif [[ $ID == ubuntu || $ID == openkylin ]]; then
 
       sudo apt-get install -y apt-transport-https
 
-      if [[ $kubernetes_repo_new_version ]]; then
-        curl -fsSL https://mirrors.aliyun.com/kubernetes-new/core/stable/v$kubernetes_repo_new_version/deb/Release.key | sudo apt-key add -
-        echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://mirrors.aliyun.com/kubernetes-new/core/stable/v$kubernetes_repo_new_version/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-      else
-        curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add -
-        echo "deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-      fi
+      curl -fsSL https://mirrors.aliyun.com/kubernetes-new/core/stable/v$kubernetes_repo_new_version/deb/Release.key |
+          gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+      echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://mirrors.aliyun.com/kubernetes-new/core/stable/v$kubernetes_repo_new_version/deb/ /" |
+          tee /etc/apt/sources.list.d/kubernetes.list
 
       echo -e "${COLOR_BLUE}kubernetes 仓库 内容：${COLOR_RESET}${COLOR_GREEN}/etc/apt/sources.list.d/kubernetes.list${COLOR_RESET}" && cat /etc/apt/sources.list.d/kubernetes.list
 

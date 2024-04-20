@@ -145,12 +145,12 @@
 
 ## 参数说明
 
-| 镜像参数                  | 说明                                                                   | 原始镜像                                                                                        | 加速镜像使用示例                                                                     | 作者个人镜像                                                                                                                         |
-|-----------------------|----------------------------------------------------------------------|---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
-| calico-mirrors        | calico 网络组件加速镜像（注意此处有 s，控制多个镜像，不控制镜像名称、不控制版本号），自定义版本见 calico-version | 包含 docker.io/calico/cni、docker.io/calico/kube-controllers、docker.io/calico/kube-controllers | calico-mirrors=hub-mirror.c.163.com                                          | calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei                                      |
-| keepalived-mirror     | keepalived 镜像，只控制镜像名称、不控制版本号                                         | lettore/keepalived                                                                          | keepalived-mirror=hub-mirror.c.163.com/lettore/keepalived                    | keepalived-mirror=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei/lettore/keepalived                |
-| haproxy-mirror        | haproxy 镜像，只控制镜像名称、不控制版本号                                            | haproxytech/haproxy-debian                                                                  | haproxy-mirror=hub-mirror.c.163.com/haproxytech/haproxy-debian               | haproxy-mirror=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei/haproxytech/haproxy-debian           |
-| metrics-server-mirror | metrics-server 镜像，只控制镜像名称、不控制版本号，默认使用阿里云镜像                           | registry.k8s.io/metrics-server/metrics-server                                               | metrics-server-mirror=registry.aliyuncs.com/google_containers/metrics-server | metrics-server-mirror=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei/metrics-server/metrics-server |
+| 镜像参数                  | 说明                                                                     | 原始镜像                                                                                        | 加速镜像使用示例                                                                     | 作者个人镜像                                                                                                                         |
+|-----------------------|------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| calico-mirrors        | calico 网络组件加速镜像（注意此处有 `s`，控制多个镜像，不控制镜像名称、不控制版本号），自定义版本见 calico-version | 包含 docker.io/calico/cni、docker.io/calico/kube-controllers、docker.io/calico/kube-controllers | calico-mirrors=hub-mirror.c.163.com                                          | calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei                                      |
+| keepalived-mirror     | keepalived 镜像，只控制镜像名称、不控制版本号                                           | lettore/keepalived                                                                          | keepalived-mirror=hub-mirror.c.163.com/lettore/keepalived                    | keepalived-mirror=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei/lettore/keepalived                |
+| haproxy-mirror        | haproxy 镜像，只控制镜像名称、不控制版本号                                              | haproxytech/haproxy-debian                                                                  | haproxy-mirror=hub-mirror.c.163.com/haproxytech/haproxy-debian               | haproxy-mirror=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei/haproxytech/haproxy-debian           |
+| metrics-server-mirror | metrics-server 镜像，只控制镜像名称、不控制版本号，默认使用阿里云镜像                             | registry.k8s.io/metrics-server/metrics-server                                               | metrics-server-mirror=registry.aliyuncs.com/google_containers/metrics-server | metrics-server-mirror=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei/metrics-server/metrics-server |
 
 | 安装/配置参数                                   | 说明                                                                                                                                                                            | 默认值                                                                                                                                            | 使用示例                                                                                                                                                                  |
 |-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -170,8 +170,8 @@
 | kubernetes-install-skip                   | 跳过 kubernetes 安装                                                                                                                                                              | false                                                                                                                                          | kubernetes-install-skip                                                                                                                                               |
 | kubernetes-init-skip                      | 跳过 kubernetes 初始化                                                                                                                                                             | false                                                                                                                                          | kubernetes-init-skip                                                                                                                                                  |
 | kubernetes-taint                          | 指定 kubernetes 全部去污                                                                                                                                                            | false                                                                                                                                          | kubernetes-taint                                                                                                                                                      |
-| kubernetes-version                        | 指定 kubernetes 版本，如：1.26.0                                                                                                                                                     | 最新版                                                                                                                                            | kubernetes-version=1.26.0                                                                                                                                             |
-| kubernetes-repo-new-version               | 指定 kubernetes 新版仓库版本，例如：1.27、1.28、1.29，如果不指定此参数，最高只能安装到 1.28.x，注意此配置与 kubernetes-version 不同，仅控制使用仓库的地址，如果要控制具体 k8s 版本号，请使用 kubernetes-version                                 |                                                                                                                                                | kubernetes-repo-new-version=1.29                                                                                                                                      |
+| kubernetes-version                        | 指定 kubernetes 固定版本：包含：主版本号、次版本号、修正版本号，如：1.30.0，请与 `kubernetes-repo-new-version` 保持在同一个 主版本包 和 次版本号 下                                                                          | 最新版                                                                                                                                            | kubernetes-version=1.30.0                                                                                                                                             |
+| kubernetes-repo-new-version               | 指定 kubernetes 新版仓库版本，仅包含：主版本号、次版本号，例如：1.24、1.25、1.26、1.27、1.28、1.29、1.30，默认值：1.30                                                                                             |                                                                                                                                                | kubernetes-repo-new-version=1.30                                                                                                                                      |
 | kubernetes-images-pull                    | 拉取 kubernetes 镜像（在初始化前提前拉取）                                                                                                                                                   | false                                                                                                                                          | kubernetes-images-pull                                                                                                                                                |
 | kubernetes-init-v                         | 查看 kubernetes 堆栈跟踪，设置日志等级，同 kubeadm init --v=                                                                                                                                 | 空                                                                                                                                              | kubernetes-init-v=5                                                                                                                                                   |
 | apiserver-advertise-address               | API 服务器所公布的其正在监听的 IP 地址。如果未设置，则使用默认网络接口。                                                                                                                                      | 如果未设置，则使用默认网络接口                                                                                                                                | apiserver-advertise-address=192.168.61.147                                                                                                                            |
@@ -180,15 +180,15 @@
 | service-cidr                              | 为服务（Service）的虚拟 IP 地址另外指定 IP 地址段。注意：请勿与现实网络存在冲突                                                                                                                               | 10.96.0.0/12（即：10.96.0.0-10.111.255.255，共 1048576 个IP）                                                                                         | service-cidr=10.96.0.0/12                                                                                                                                             |
 | pod-network-cidr                          | 指明 Pod 网络可以使用的 IP 地址段。如果设置了这个参数，控制平面将会为每一个节点自动分配 CIDR。注意：请勿与现实网络存在冲突                                                                                                          | 192.168.0.0/16（calico 默认配置）                                                                                                                    | pod-network-cidr=10.128.0.0/12 （即：10.128.0.0-10.143.255.255，共 1048576 个IP）                                                                                            |
 | calico-init-skip                          | 跳过 calico 初始化                                                                                                                                                                 | false                                                                                                                                          | calico-init-skip                                                                                                                                                      |
-| calico-version                            | 指定 calico 版本                                                                                                                                                                  | 3.26.1                                                                                                                                         | calico-version=3.26.1                                                                                                                                                 |
-| calico-manifests-mirror                   | 自定义 calico 配置文件，优先级高于 calico-version                                                                                                                                          | 从 官网 中获取                                                                                                                                       | calico-manifests-mirror=https://jihulab.com/xuxiaowei-jihu/mirrors-github/projectcalico/calico/-/raw/v3.26.1/manifests/calico.yaml                                    |
+| calico-version                            | 指定 calico 版本                                                                                                                                                                  | 3.27.3                                                                                                                                         | calico-version=3.27.3                                                                                                                                                 |
+| calico-manifests-mirror                   | 自定义 calico 配置文件，优先级高于 calico-version                                                                                                                                          | 从 官网 中获取                                                                                                                                       | calico-manifests-mirror=https://jihulab.com/xuxiaowei-jihu/mirrors-github/projectcalico/calico/-/raw/v3.27.3/manifests/calico.yaml                                    |
 | interface-name                            | 指定 网卡 名称                                                                                                                                                                      | 自动获取                                                                                                                                           | interface-name=ens33                                                                                                                                                  |
 | metrics-server-install                    | 启用 Metrics Server 安装                                                                                                                                                          | false                                                                                                                                          | metrics-server-install                                                                                                                                                |
-| metrics-server-version                    | 指定 Metrics Server 版本                                                                                                                                                          | 0.6.3                                                                                                                                          | metrics-server-version=0.6.3                                                                                                                                          |
+| metrics-server-version                    | 指定 Metrics Server 版本                                                                                                                                                          | 0.6.3                                                                                                                                          | metrics-server-version=0.7.1                                                                                                                                          |
 | metrics-server-availability               | 指定 Metrics Server 使用高可用                                                                                                                                                       | false                                                                                                                                          | metrics-server-availability                                                                                                                                           |
-| metrics-server-manifests-mirror           | 自定义 Metrics Server 配置文件，优先级高于 metrics-server-version、metrics-server-availability                                                                                              | 从 GitHub 中获取                                                                                                                                   | metrics-server-manifests-mirror=https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml   |
+| metrics-server-manifests-mirror           | 自定义 Metrics Server 配置文件，优先级高于 metrics-server-version、metrics-server-availability                                                                                              | 从 GitHub 中获取                                                                                                                                   | metrics-server-manifests-mirror=https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.7.1/components.yaml   |
 | ingress-nginx-install                     | 启用 Ingress Nginx 安装                                                                                                                                                           | false                                                                                                                                          | ingress-nginx-install                                                                                                                                                 |
-| ingress-nginx-version                     | 指定 Ingress Nginx 版本                                                                                                                                                           | 1.8.0                                                                                                                                          | ingress-nginx-version=1.9.0                                                                                                                                           |
+| ingress-nginx-version                     | 指定 Ingress Nginx 版本                                                                                                                                                           | 1.10.0                                                                                                                                         | ingress-nginx-version=1.10.0                                                                                                                                          |
 | ingress-nginx-controller-mirror           | 自定义镜像，用于替换国内不可访问的 registry.k8s.io/ingress-nginx/controller 镜像，支持 Ingress Nginx 1.8.0/1.8.1/1.8.2/1.8.4/1.8.5/1.9.0/1.9.1/1.9.3/1.9.4/1.9.5/1.9.6/1.10.0 版本的镜像加速下载             | xuxiaoweicomcn/ingress-nginx-controller                                                                                                        | ingress-nginx-controller-mirror=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei/ingress-nginx/controller                                   |
 | ingress-nginx-kube-webhook-certgen-mirror | 自定义镜像，用于替换国内不可访问的 registry.k8s.io/ingress-nginx/kube-webhook-certgen 镜像，支持 Ingress Nginx 1.8.0/1.8.1/1.8.2/1.8.4/1.8.5/1.9.0/1.9.1/1.9.3/1.9.4/1.9.5/1.9.6/1.10.0 版本的镜像加速下载   | xuxiaoweicomcn/ingress-nginx-kube-webhook-certgen                                                                                              | ingress-nginx-kube-webhook-certgen-mirror=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei/ingress-nginx/kube-webhook-certgen               |
 | ingress-nginx-host-network                | 配置 Ingress Nginx 为 hostNetwork                                                                                                                                                | false                                                                                                                                          | ingress-nginx-host-network                                                                                                                                            |
@@ -240,7 +240,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -254,7 +254,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -271,7 +271,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -285,7 +285,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令，仅安装，不进行初始化
@@ -296,7 +296,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令，仅安装、拉取镜像，不进行初始化
@@ -307,14 +307,14 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
     # 指定 calico 版本号（版本号不带字母）
     # 查看 calico 发布的版本：https://docs.tigera.io/archive/
     # 查看 calico 发布的版本（作者 JiHuLab 镜像）：https://jihulab.com/xuxiaowei-jihu/mirrors-github/projectcalico/calico/-/tags
-    sudo ./k8s.sh kubernetes-taint calico-version=3.26.1
+    sudo ./k8s.sh kubernetes-taint calico-version=3.27.3 
     ```
 
 7. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），使用 calico 网络组件的加速镜像
@@ -325,7 +325,7 @@
     # 作者个人镜像仓库：calico-mirrors=registry.jihulab.com/xuxiaowei-jihu/xuxiaowei-cloud/spring-cloud-xuxiaowei
     
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -336,7 +336,7 @@
 
     ```shell
     # 下载脚本，下载后的文件名为 k8s.sh
-    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+    curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
     # 授权
     chmod +x k8s.sh
     # 执行安装命令
@@ -361,7 +361,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         # 执行安装命令
@@ -384,7 +384,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         # 执行安装命令，仅安装、拉取镜像，不进行初始化
@@ -406,7 +406,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
@@ -442,7 +442,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
@@ -460,7 +460,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
@@ -499,7 +499,7 @@
 
         ```shell
         # 下载脚本，下载后的文件名为 k8s.sh
-        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.3.0/k8s.sh
+        curl -o k8s.sh https://gitee.com/xuxiaowei-com-cn/k8s.sh/raw/SNAPSHOT/0.4.0/k8s.sh
         # 授权
         chmod +x k8s.sh
         
