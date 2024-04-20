@@ -261,10 +261,10 @@
     # 指定 k8s 版本号（版本号不带字母）
     # 在 GitHub 查看 k8s 发布的版本：https://github.com/kubernetes/kubernetes/tags
     # 在 JiHuLab 查看 k8s 发布的版本（作者个人镜像）：https://framagit.org/mirrors-github/kubernetes/kubernetes/-/tags
-    sudo ./k8s.sh kubernetes-taint kubernetes-version=1.26.0
+    sudo ./k8s.sh kubernetes-taint kubernetes-version=
     
     # 安装 ingress nginx
-    # sudo ./k8s.sh kubernetes-taint kubernetes-version=1.26.0 ingress-nginx-install ingress-nginx-host-network
+    # sudo ./k8s.sh kubernetes-taint kubernetes-version= ingress-nginx-install ingress-nginx-host-network
     ```
 
 3. k8s 单节点安装（只有一个主节点，无高可用，仅用于学习、测试），不安装 docker-ce（k8s 使用 containerd）
