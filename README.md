@@ -343,13 +343,13 @@
     sudo ./k8s.sh kubernetes-taint metrics-server-install
     
     # 执行安装命令：自定义版本
-    # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-version=0.6.2
+    # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-version=0.7.1
     
     # 执行安装命令：使用高可用
     # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-availability
     
     # 执行安装命令：自定义版本、使用高可用
-    # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-version=0.6.2 metrics-server-availability
+    # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-version=0.7.1 metrics-server-availability
     
     # 执行安装命令：自定义下载配置文件（优先级高于 metrics-server-version、metrics-server-availability，可指定高可用）
     # sudo ./k8s.sh kubernetes-taint metrics-server-install metrics-server-manifests-mirror=https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/k8s.sh/-/raw/main/mirrors/kubernetes-sigs/metrics-server/v0.6.3/components.yaml
