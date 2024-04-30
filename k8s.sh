@@ -936,9 +936,23 @@ _kubernetes_init() {
     # https://kubernetes.io/zh-cn/docs/tasks/tools/install-kubectl-linux/#optional-kubectl-configurations
 
     echo -e "${COLOR_BLUE}启动 kubectl 自动补全功能${COLOR_RESET}"
-    sudo mkdir -p /etc/bash_completion.d
-    kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl >/dev/null
-    sudo chmod a+r /etc/bash_completion.d/kubectl
+
+    if [[ $ID == anolis || $ID == centos || $ID == uos || $ID = openEuler ]]; then
+      echo -e "${COLOR_BLUE}bash-completion 安装开始${COLOR_RESET}"
+      sudo yum -y install bash-completion
+      source /etc/profile
+      . /etc/os-release
+      echo -e "${COLOR_BLUE}bash-completion 安装完成${COLOR_RESET}"
+
+      source <(kubectl completion bash)
+      echo "source <(kubectl completion bash)" >> ~/.bashrc
+      source ~/.bashrc
+    else
+      sudo mkdir -p /etc/bash_completion.d
+      kubectl completion bash | sudo tee /etc/bash_completion.d/kubectl >/dev/null
+      sudo chmod a+r /etc/bash_completion.d/kubectl
+    fi
+
     echo -e "${COLOR_BLUE}源引 ~/.bashrc 文件${COLOR_RESET}"
     source ~/.bashrc
     . /etc/os-release
