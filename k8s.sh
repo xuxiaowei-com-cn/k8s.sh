@@ -346,8 +346,8 @@ _bash_completion_install() {
     if [[ $ID == anolis || $ID == centos || $ID = openEuler ]]; then
       echo -e "${COLOR_BLUE}bash-completion 安装开始${COLOR_RESET}"
       sudo yum -y install bash-completion
-      source /etc/profile
-      . /etc/os-release
+      source /etc/profile && echo -e "${COLOR_BLUE}完成环境变量刷新${COLOR_RESET}"
+      . /etc/os-release && echo -e "${COLOR_BLUE}完成系统信息刷新${COLOR_RESET}"
       echo -e "${COLOR_BLUE}bash-completion 安装完成${COLOR_RESET}"
     fi
   fi
@@ -930,8 +930,8 @@ _kubernetes_init() {
     echo -e "${COLOR_BLUE}授权 ${COLOR_RESET}${COLOR_GREEN}/etc/kubernetes/admin.conf${COLOR_RESET} 文件其他人能访问${COLOR_RESET}"
     sudo chmod a+r /etc/kubernetes/admin.conf
     echo -e "${COLOR_BLUE}刷新环境变量${COLOR_RESET}"
-    source /etc/profile
-    . /etc/os-release
+    source /etc/profile && echo -e "${COLOR_BLUE}完成环境变量刷新${COLOR_RESET}"
+    . /etc/os-release && echo -e "${COLOR_BLUE}完成系统信息刷新${COLOR_RESET}"
 
     # https://kubernetes.io/zh-cn/docs/tasks/tools/install-kubectl-linux/#optional-kubectl-configurations
 
@@ -940,8 +940,8 @@ _kubernetes_init() {
     if [[ $ID == anolis || $ID == centos || $ID == uos || $ID = openEuler ]]; then
       echo -e "${COLOR_BLUE}bash-completion 安装开始${COLOR_RESET}"
       sudo yum -y install bash-completion
-      source /etc/profile
-      . /etc/os-release
+      source /etc/profile && echo -e "${COLOR_BLUE}完成环境变量刷新${COLOR_RESET}"
+      . /etc/os-release && echo -e "${COLOR_BLUE}完成系统信息刷新${COLOR_RESET}"
       echo -e "${COLOR_BLUE}bash-completion 安装完成${COLOR_RESET}"
 
       source <(kubectl completion bash)
@@ -955,7 +955,7 @@ _kubernetes_init() {
 
     echo -e "${COLOR_BLUE}源引 ~/.bashrc 文件${COLOR_RESET}"
     source ~/.bashrc
-    . /etc/os-release
+    . /etc/os-release && echo -e "${COLOR_BLUE}完成系统信息刷新${COLOR_RESET}"
 
     echo -e "${COLOR_BLUE}显示群集信息${COLOR_RESET}" && kubectl cluster-info
     echo -e "${COLOR_BLUE}显示 node 信息${COLOR_RESET}" && kubectl get nodes -o wide
@@ -973,7 +973,7 @@ _kubernetes_taint() {
   if [[ $kubernetes_taint == true ]]; then
     echo -e "${COLOR_BLUE}kubernetes 去污开始${COLOR_RESET}"
 
-    source /etc/profile
+    source /etc/profile && echo -e "${COLOR_BLUE}完成环境变量刷新${COLOR_RESET}"
 
     echo -e "${COLOR_BLUE}kubernetes 查看污点${COLOR_RESET}"
     kubectl get no -o yaml | grep taint -A 10 || echo -e "${COLOR_YELLOW}kubernetes 查看污点 失败${COLOR_RESET}"
